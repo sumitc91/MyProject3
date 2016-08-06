@@ -6750,8 +6750,8 @@ input:focus ~ .bar:after {
     }
 
     .imageThumbnailSize {
-        height: 80px;
-        width: 80px;
+        height: 50px;
+        width: 100px !important;
     }
 
     .hover_div {
@@ -7518,4 +7518,13 @@ article {
 }
 .menu-highlighted {
     font-weight: bold;
+}
+
+.panel {
+    background: #fff none repeat scroll 0 0;
+    border: 0 none;
+    box-shadow: none;
+    margin-bottom: 0 !important;
+    padding: 0 30px !important;
+    position: relative;
 }

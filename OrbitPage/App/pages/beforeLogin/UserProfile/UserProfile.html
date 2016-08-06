@@ -18,32 +18,30 @@
                 </div>
             </div>
         </div>
+        <hr />
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default panel-friends">
                     <div class="panel-heading">
-                        <a href="#" class="pull-right">View all&nbsp;<i class="fa fa-share-square-o"></i></a>
-                        <h3 class="panel-title"><i class="fa fa-users"></i>&nbsp; Friends</h3>
+                        <i class="fa fa-users"></i>&nbsp; <span style="font-size:small"> Friends</span> <a href="#" class="pull-right" style="font-size: small;">All&nbsp;<i class="fa fa-share-square-o"></i></a>
+                        
                     </div>
                     <div class="panel-body text-center">
                         <ul class="friends">
-                            <li><a href="#"><img src="http://demos.bootdey.com/dee-dee/img/Friends/woman-4.jpg" title="Jhoanath matew" class="img-responsive tip imageThumbnailSize"> </a></li>
-                            <li><a href="#"><img src="http://demos.bootdey.com/dee-dee/img/Friends/woman-3.jpg" title="Martha creawn" class="img-responsive tip imageThumbnailSize"> </a></li>
-                            <li><a href="#"><img src="http://demos.bootdey.com/dee-dee/img/Friends/guy-2.jpg" title="Jeferh smith" class="img-responsive tip imageThumbnailSize"> </a></li>
-                            <li><a href="#"><img src="http://demos.bootdey.com/dee-dee/img/Friends/woman-9.jpg" title="Linda palma" class="img-responsive tip imageThumbnailSize"> </a></li>
-                            <li><a href="#"><img src="http://demos.bootdey.com/dee-dee/img/Friends/guy-9.jpg" title="Lindo polmo" class="img-responsive tip imageThumbnailSize"> </a></li>
-                            <li><a href="#"><img src="http://demos.bootdey.com/dee-dee/img/Friends/guy-5.jpg" title="andrew cartson" class="img-responsive tip imageThumbnailSize"> </a></li>
+                            <li ng-repeat="friend in UserNetworkDetail.isFriend">
+                                <a href="#/userprofile/{{friend._id}}"><img ng-src="{{friend.ImageUrl}}" title="{{friend.FirstName+' '+friend.LastName}}" class="img-responsive tip imageThumbnailSize"> </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
+        <hr />
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default panel-photos">
                     <div class="panel-heading">
-                        <a href="#" class="pull-right">View all&nbsp;<i class="fa fa-share-square-o"></i></a>
-                        <h3 class="panel-title"><i class="fa fa-image"></i>&nbsp;Photos</h3>
+                        <i class="fa fa-image"></i>&nbsp;<span style="font-size:small">Photos</span><a href="#" class="pull-right" style="font-size:small">View all&nbsp;<i class="fa fa-share-square-o"></i></a>
                     </div>
                     <div class="panel-body text-center">
                         <ul class="photos">

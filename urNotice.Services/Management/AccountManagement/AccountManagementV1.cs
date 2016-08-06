@@ -630,10 +630,10 @@ namespace urNotice.Services.Management.AccountManagement
 
             string gremlinQuery = string.Empty;
             gremlinQuery += "g.V(" + userVertexId + ").as('userInfo').match(";
-            gremlinQuery += "__.as('userInfo').in('AssociateRequest').has('Username','" + session.UserName + "').fold().as('associateRequestSent'),";
-            gremlinQuery += "__.as('userInfo').out('AssociateRequest').has('Username','" + session.UserName + "').fold().as('associateRequestReceived'),";
-            gremlinQuery += "__.as('userInfo').in('Follow').has('Username','" + session.UserName + "').fold().as('followRequestSent'),";
-            gremlinQuery += "__.as('userInfo').in('Friend').has('Username','" + session.UserName + "').fold().as('isFriend'),";
+            gremlinQuery += "__.as('userInfo').in('AssociateRequest').range("+ from + ","+ to +").fold().as('associateRequestSent'),";
+            gremlinQuery += "__.as('userInfo').out('AssociateRequest').range(" + from + "," + to + ").fold().as('associateRequestReceived'),";
+            gremlinQuery += "__.as('userInfo').in('Follow').range(" + from + "," + to + ").fold().as('followRequestSent'),";
+            gremlinQuery += "__.as('userInfo').in('Friend').range(" + from + "," + to + ").fold().as('isFriend'),";
             gremlinQuery += ").select('associateRequestSent','associateRequestReceived','followRequestSent','isFriend')";
             //string gremlinQuery = "g.v(" + userVertexId + ").transform{[associateRequestSent:it.in('AssociateRequest').has('Username','" + session.UserName + "'),associateRequestReceived:it.out('AssociateRequest').has('Username','" + session.UserName + "'),followRequestSent:it.in('Follow').has('Username','" + session.UserName + "'),isFriend:it.in('Friend').has('Username','" + session.UserName + "')]}";
             IGraphVertexDb graphVertexDb = new GremlinServerGraphVertexDb();

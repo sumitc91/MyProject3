@@ -1,8 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{2242FB60-B51C-4860-80A3-5860AA5BB6F2}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "urNotice.Tests", "urNotice.Tests\urNotice.Tests.csproj", "{BA6287D3-25B5-4169-94FA-083A7D311962}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{87AA0BE7-8EE3-4F93-8410-1A72177F28A7}"
@@ -24,13 +31,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "urNoticeSolr", "urNoticeSolr\urNoticeSolr.csproj", "{D761A081-1AD9-4ACA-9413-DFF8B48DEA73}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "urNoticeUser", "urNoticeUser\urNoticeUser.csproj", "{F58C13E0-A938-4153-944D-2EF25D1708CC}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{2242FB60-B51C-4860-80A3-5860AA5BB6F2}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "urNoticeDynamoDb", "urNoticeDynamoDb\urNoticeDynamoDb.csproj", "{DBE5D38C-6E2D-4EEF-9C4C-82ACBF41D2E4}"
 EndProject

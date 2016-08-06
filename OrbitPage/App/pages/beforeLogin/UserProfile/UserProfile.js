@@ -32,6 +32,7 @@ define([appLocation.preLogin], function (app) {
         };
 
         getUserInformation();
+        getUserNetworkDetail($scope.visitedUserVertexId,0,5);
         //getUserPost($scope.UserPostListInfoAngular.after, $scope.UserPostListInfoAngular.after + $scope.UserPostListInfoAngular.itemPerPage);
 
         $scope.createNewUserPost = function () {
@@ -173,6 +174,32 @@ define([appLocation.preLogin], function (app) {
                     $scope.UserPostLikes.push(data.results[i]);
                 }
                 //$scope.UserPostLikes = data.results;
+                if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+                    $scope.$apply();
+                }
+            });
+        };
+
+        function getUserNetworkDetail(vertexId, from, to) {
+            var url = ServerContextPath.userServer + '/User/GetUserNetworkDetail?from=' + from + '&to=' + to + '&vertexId=' + vertexId;
+            var headers = {
+                'Content-Type': 'application/json',
+                'UTMZT': $.cookie('utmzt'),
+                'UTMZK': $.cookie('utmzk'),
+                'UTMZV': $.cookie('utmzv'),
+            };
+            //startBlockUI('wait..', 3);  
+            $scope.UserNetworkDetailLoading = true;
+            $.ajax({
+                url: url,
+                method: "GET",
+                headers: headers
+            }).done(function (data, status) {
+                //stopBlockUI();
+                //console.log(data.results);
+                $scope.UserNetworkDetailLoading = false;
+                $scope.UserNetworkDetail = data.results[0];
+                console.log($scope.UserNetworkDetail);
                 if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
                     $scope.$apply();
                 }
