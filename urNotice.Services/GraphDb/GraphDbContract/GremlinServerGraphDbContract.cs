@@ -121,7 +121,14 @@ namespace urNotice.Services.GraphDb.GraphDbContract
             //TODO: Query need to be changed.
             //string gremlinQuery = "g.v(" + companyVertexId + ").transform{[salaryInfo:it.outE('Salary'),designationInfo:it.out('Salary')]}";
 
-            string gremlinQuery = "g.V(" + companyVertexId + ").as('company').outE('Salary').as('salaryInfo').select('company').out('Salary').as('designationInfo').select('designationInfo','salaryInfo');";
+            //string gremlinQuery = "g.V(" + companyVertexId + ").as('company').outE('Salary').as('salaryInfo').select('company').out('Salary').as('designationInfo').select('designationInfo','salaryInfo');";
+
+            string gremlinQuery = string.Empty;
+            gremlinQuery += "g.V(" + companyVertexId + ").as('company').match(";
+            gremlinQuery += "__.as('company').out('Salary').fold().as('designationInfo'),";
+            gremlinQuery += "__.as('company').outE('Salary').fold().as('salaryInfo'),";
+            gremlinQuery += ").select('designationInfo','salaryInfo')";
+
 
             IGraphVertexDb graphVertexDb = new GremlinServerGraphVertexDb();
             string response = graphVertexDb.ExecuteGremlinQuery(gremlinQuery); //graphVertexDb.GetVertexDetail(gremlinQuery, companyVertexId, TitanGraphConfig.Graph, null);//new GraphVertexOperations().GetVertexDetail(url, gremlinQuery, userVertexId, graphName, null);

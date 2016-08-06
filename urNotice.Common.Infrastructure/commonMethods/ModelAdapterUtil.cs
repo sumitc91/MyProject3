@@ -47,13 +47,20 @@ namespace urNotice.Common.Infrastructure.commonMethods
                 return companySalaryVertexModelResponse;
 
             companySalaryVertexModelResponse.success = true;
-            foreach (var companySalaryInfo in companySalaryVertexModelV1Response.result.data)
+            if (companySalaryVertexModelV1Response.result.data.Count == 0) return companySalaryVertexModelResponse;
+
+            for (int i=0; companySalaryVertexModelV1Response.result.data[0].salaryInfo.Count>i;i++)
             {
                 var companySalaryVertexModel = new CompanySalaryVertexModel();
-                companySalaryVertexModel.designationInfo = ParseDesignationInfo(companySalaryInfo.designationInfo);
-                companySalaryVertexModel.salaryInfo = ParseSalaryInfo(companySalaryInfo.salaryInfo);
+
+                if(companySalaryVertexModelV1Response.result.data[0].designationInfo.Count>i)
+                    companySalaryVertexModel.designationInfo = ParseDesignationInfo(companySalaryVertexModelV1Response.result.data[0].designationInfo[i]);
+
+                if (companySalaryVertexModelV1Response.result.data[0].salaryInfo.Count > i)
+                    companySalaryVertexModel.salaryInfo = ParseSalaryInfo(companySalaryVertexModelV1Response.result.data[0].salaryInfo[i]);
 
                 companySalaryVertexModelResponse.results.Add(companySalaryVertexModel);
+                i++;
             }
 
             return companySalaryVertexModelResponse;

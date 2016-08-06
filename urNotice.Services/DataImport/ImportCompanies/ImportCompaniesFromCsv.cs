@@ -17,7 +17,7 @@ namespace urNotice.Services.DataImport.ImportCompanies
     {
         public bool ImportAllCompanies(string serverMapPath)
         {
-            using (CsvReader reader = new CsvReader(@"C:\code\svn\final.csv"))
+            using (CsvReader reader = new CsvReader(@"C:\POC\orbitpage\final.csv"))
             {
                 int flag = 0;
                 foreach (string[] values in reader.RowEnumerator)

@@ -8,7 +8,7 @@ namespace urNotice.Services.DataImport.ImportDesignations
     {
         public bool ImportAllDesignations()
         {
-            var reader = new StreamReader(System.IO.File.OpenRead(@"C:\code\svn\AllDesignations.csv"));
+            var reader = new StreamReader(System.IO.File.OpenRead(@"C:\POC\orbitpage\AllDesignations.csv"));
             
             while (!reader.EndOfStream)
             {

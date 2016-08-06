@@ -13,7 +13,7 @@ namespace urNotice.Services.DataImport.ImportCompanyDesignationSalaries
     {
         public bool ImportCompanyDesignationAllSalaries()
         {
-            var reader = new StreamReader(System.IO.File.OpenRead(@"C:\code\svn\salary.csv"));
+            var reader = new StreamReader(System.IO.File.OpenRead(@"C:\POC\orbitpage\salary.csv"));
             var companyName = string.Empty;
             while (!reader.EndOfStream)
             {
