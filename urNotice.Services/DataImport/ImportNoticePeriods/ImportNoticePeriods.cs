@@ -14,17 +14,20 @@ namespace urNotice.Services.DataImport.ImportNoticePeriods
     {
         public bool ImportCompanyAllDesignationNoticePeriods()
         {
-            var reader = new StreamReader(System.IO.File.OpenRead(@"C:\code\svn\OrbitPage\salary.csv"));
+            var reader = new StreamReader(System.IO.File.OpenRead(@"C:\POC\orbitpage\salary.csv"));
             IPerson adminModel = new Admin();
             double salary = 0.0;
             var companyName = string.Empty;
+            var flag = false;
             while (!reader.EndOfStream)
             {
                 var readLine = reader.ReadLine();
                 if (readLine != null)
                 {
-                    string[] line = readLine.Split(',');                    
-                    
+                    string[] line = readLine.Split(',');
+
+                    if (line[0] == "Designation")
+                        continue;
                     try
                     {                        
                         salary = Convert.ToDouble(line[2]);
@@ -69,7 +72,10 @@ namespace urNotice.Services.DataImport.ImportNoticePeriods
                     }
 
                     companyName = line[1].Replace("&", "And");
-                    adminModel.CreateNewCompanyDesignationNoticePeriod(companyName, line[0], noticePeriodRange, "orbitpage@gmail.com");
+                    if (companyName.Equals("Qualcomm"))
+                        flag = true;
+                    if(flag)
+                        adminModel.CreateNewCompanyDesignationNoticePeriod(companyName, line[0], noticePeriodRange, "orbitpage@gmail.com");
                 }
             }
 

@@ -8,7 +8,7 @@ namespace urNotice.Common.Infrastructure.Model.urNoticeModel.GraphModel.V1
 {
     public class CompanyNoticePeriodVertexModelV1ResultDataResponse
     {
-        public VertexModelV1 designationInfo { get; set; }
-        public EdgeModelV1 range { get; set; }
+        public List<VertexModelV1> designationInfo { get; set; }
+        public List<EdgeModelV1> range { get; set; }
     }
 }

@@ -15,6 +15,7 @@ namespace urNotice.Services.DataImport.ImportCompanyDesignationSalaries
         {
             var reader = new StreamReader(System.IO.File.OpenRead(@"C:\POC\orbitpage\salary.csv"));
             var companyName = string.Empty;
+          
             while (!reader.EndOfStream)
             {
                 var readLine = reader.ReadLine();
@@ -23,6 +24,7 @@ namespace urNotice.Services.DataImport.ImportCompanyDesignationSalaries
                     string[] line = readLine.Split(',');
                     IPerson adminModel = new Admin();
                     companyName = line[1].Replace("&", "And");
+                    
                     adminModel.CreateNewCompanyDesignationSalary(companyName, line[0], line[2], "orbitpage@gmail.com");
                 }
             }

@@ -24,11 +24,17 @@ namespace urNotice.Common.Infrastructure.commonMethods
                     return companyNoticePeriodVertexModelResponse;
             
             companyNoticePeriodVertexModelResponse.success = true;
-            foreach (var companyNoticePeriodInfo in companyNoticePeriodVertexModelV1Response.result.data)
+            if (companyNoticePeriodVertexModelV1Response.result.data.Count == 0) return companyNoticePeriodVertexModelResponse;
+
+            for (int i = 0; companyNoticePeriodVertexModelV1Response.result.data[0].range.Count > i; i++)
             {
                 var companyNoticePeriodVertexModel = new CompanyNoticePeriodVertexModel();
-                companyNoticePeriodVertexModel.designationInfo = ParseDesignationInfo(companyNoticePeriodInfo.designationInfo);
-                companyNoticePeriodVertexModel.range = ParseNoticePeriodRangeInfo(companyNoticePeriodInfo.range);
+
+                if (companyNoticePeriodVertexModelV1Response.result.data[0].designationInfo.Count > i)
+                    companyNoticePeriodVertexModel.designationInfo = ParseDesignationInfo(companyNoticePeriodVertexModelV1Response.result.data[0].designationInfo[i]);
+
+                if (companyNoticePeriodVertexModelV1Response.result.data[0].range.Count > i)
+                    companyNoticePeriodVertexModel.range = ParseNoticePeriodRangeInfo(companyNoticePeriodVertexModelV1Response.result.data[0].range[i]);
 
                 companyNoticePeriodVertexModelResponse.results.Add(companyNoticePeriodVertexModel);
             }

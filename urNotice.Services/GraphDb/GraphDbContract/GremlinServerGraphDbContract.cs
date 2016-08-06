@@ -140,7 +140,14 @@ namespace urNotice.Services.GraphDb.GraphDbContract
         {           
             //TODO: Query need to be changed.
             //string gremlinQuery = "g.v(" + companyVertexId + ").transform{[range:it.outE('NoticePeriodRange'),designationInfo:it.out('NoticePeriodRange')]}";
-            string gremlinQuery = "g.V(" + companyVertexId + ").as('company').outE('NoticePeriodRange').as('range').select('company').out('NoticePeriodRange').as('designationInfo').select('designationInfo','range');";
+            //string gremlinQuery = "g.V(" + companyVertexId + ").as('company').outE('NoticePeriodRange').as('range').select('company').out('NoticePeriodRange').as('designationInfo').select('designationInfo','range');";
+
+            string gremlinQuery = string.Empty;
+            gremlinQuery += "g.V(" + companyVertexId + ").as('company').match(";
+            gremlinQuery += "__.as('company').out('NoticePeriodRange').fold().as('designationInfo'),";
+            gremlinQuery += "__.as('company').outE('NoticePeriodRange').fold().as('range'),";
+            gremlinQuery += ").select('designationInfo','range')";
+
             IGraphVertexDb graphVertexDb = new GremlinServerGraphVertexDb();
             string response = graphVertexDb.ExecuteGremlinQuery(gremlinQuery);//new GraphVertexOperations().GetVertexDetail(url, gremlinQuery, userVertexId, graphName, null);
 
