@@ -12,5 +12,7 @@ namespace urNotice.Common.Infrastructure.Model.urNoticeModel.GraphModel
         public List<UserVertexModel> associateRequestReceived { get; set; }
         public List<UserVertexModel> followRequestSent { get; set; }
         public List<UserVertexModel> isFriend { get; set; }
+        public long friendCount { get; set; }
+        public List<UserVertexModel> friendList { get; set; }
     }
 }

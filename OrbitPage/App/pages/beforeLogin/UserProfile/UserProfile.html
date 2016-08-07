@@ -23,12 +23,12 @@
             <div class="col-md-12">
                 <div class="panel panel-default panel-friends">
                     <div class="panel-heading">
-                        <i class="fa fa-users"></i>&nbsp; <span style="font-size:small"> Friends</span> <a href="#" class="pull-right" style="font-size: small;">All&nbsp;<i class="fa fa-share-square-o"></i></a>
+                        <i class="fa fa-users"></i>&nbsp; <span style="font-size:small"> Friends (<span ng-bind="UserNetworkDetail.friendCount"></span>)</span> <a href="#" class="pull-right" style="font-size: small;">All&nbsp;<i class="fa fa-share-square-o"></i></a>
                         
                     </div>
                     <div class="panel-body text-center">
                         <ul class="friends">
-                            <li ng-repeat="friend in UserNetworkDetail.isFriend">
+                            <li ng-repeat="friend in UserNetworkDetail.friendList">
                                 <a href="#/userprofile/{{friend._id}}"><img ng-src="{{friend.ImageUrl}}" title="{{friend.FirstName+' '+friend.LastName}}" class="img-responsive tip imageThumbnailSize"> </a>
                             </li>
                         </ul>
@@ -106,7 +106,8 @@
                 </div>
                 <a href="#" class="fb-user-mail" ng-bind="CurrentUserDetails.Email"></a>
                 <div style="float:right" ng-show="(!UserNetworkDetailHelper.UserNetworkDetailHelperDataLoaded && visitedUserVertexId != clientDetailResponse.VertexId)">
-                    <img src="../../App/img/loading/loading123.gif" style="height: 30px; float: right; margin: 10px 0px 0px;" />
+                    <img ng-show="isUserLoggedIn" src="../../App/img/loading/loading123.gif" style="height: 30px; float: right; margin: 10px 0px 0px;" />
+                    <span ng-hide="isUserLoggedIn">Please login to view Associations</span>
                 </div>
                 <div style="float:right" ng-show="UserNetworkDetailHelper.UserNetworkDetailHelperDataLoaded" ng-cloak>
                     <button type="button" class="btn btn-info" ng-show="!UserNetworkDetailHelper.isFriendRequestSent && !UserNetworkDetailHelper.isFriendRequestReceived && !UserNetworkDetailHelper.isFriend" ng-click="makeConnectionRequest(visitedUserVertexId,UserConnectionRequestModel.AssociateUsers,UserConnectionRequestModel.AssociateRequest)"><i ng-show="UserConnectionRequestModel.AssociateRequestLoading" class='fa fa-spinner fa-spin'></i> Associate</button>

@@ -133,7 +133,7 @@ namespace urNoticeAuth.Controllers
         {
             IImportNoticePeriods importNoticePeriodsModel = new ImportNoticePeriods();
             bool response = false;
-            response = importNoticePeriodsModel.ImportCompanyAllDesignationNoticePeriods();
+            //response = importNoticePeriodsModel.ImportCompanyAllDesignationNoticePeriods();
             return Json(response, JsonRequestBehavior.AllowGet);
         }
 

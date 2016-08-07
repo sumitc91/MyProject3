@@ -190,6 +190,8 @@ namespace urNotice.Common.Infrastructure.commonMethods
                 userPostNetworkDetailModel.associateRequestSent = ParseUserListVertex(getUserNetworkDetail.associateRequestSent);
                 userPostNetworkDetailModel.followRequestSent = ParseUserListVertex(getUserNetworkDetail.followRequestSent);
                 userPostNetworkDetailModel.isFriend = ParseUserListVertex(getUserNetworkDetail.isFriend);
+                userPostNetworkDetailModel.friendCount = getUserNetworkDetail.friendCount;
+                userPostNetworkDetailModel.friendList = ParseUserListVertex(getUserNetworkDetail.friendList);
                 response.results.Add(userPostNetworkDetailModel);
             }
             return response;
