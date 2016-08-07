@@ -215,10 +215,10 @@ define([appLocation.preLogin], function (app) {
                 'UTMZV': $.cookie('utmzv'),
             };
 
-            if (!$rootScope.isUserLoggedIn || $scope.visitedUserVertexId == $rootScope.clientDetailResponse.VertexId) {
-                //only fetch this info if user is logged in.
-                return;
-            }
+            //if (!$rootScope.isUserLoggedIn || $scope.visitedUserVertexId == $rootScope.clientDetailResponse.VertexId) {
+            //    //only fetch this info if user is logged in.
+            //    return;
+            //}
 
             //startBlockUI('wait..', 3);
             //$scope.UserNetworkDetailHelper.UserNetworkDetailHelperDataLoading = true;
@@ -957,7 +957,7 @@ define([appLocation.preLogin], function (app) {
                 stopBlockUI();
                 $scope.$apply(function () {
                     $scope.CurrentUserDetails = data.Payload[0];
-                    loadUserNetworkDetail($scope.visitedUserVertexId, 0, 1);
+                    loadUserNetworkDetail($scope.visitedUserVertexId, 0, 6);
                     //console.log($scope.CurrentUserDetails);
                 });
                 
