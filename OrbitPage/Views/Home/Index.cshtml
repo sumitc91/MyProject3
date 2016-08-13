@@ -813,7 +813,7 @@ div.middle-div-mobile {
             </script>
 
             <ul class="chat-conversations list-unstyled">
-                <li class="browse-more">
+                @*<li class="browse-more">
                     <a class="chat-user" href="#"> <i class="linecons-comment"></i> <span>3</span> </a> <ul class="other-conversations-list">
                         <li>
                             <a href="#">
@@ -834,7 +834,7 @@ div.middle-div-mobile {
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li>*@
                 <li id="sample-chat-window">
                     <a class="chat-user" href="#">
                         <span class="user-status is-online"></span>
@@ -847,7 +847,7 @@ div.middle-div-mobile {
                         <ul class="conversation-messages ps-scrollbar ps-container ps-active-y" style="overflow: auto;">
                             @*<li ng-show="isTimeBlock" class="time" ng-repeat="chatMessage in chatList[0].messages"><span ng-bind="Message"></span></li>*@
                             <li ng-show="!chatListUserRegisteredOnline" style="background-color: rgb(247, 192, 178);">
-                                <div class="message-entry"> <p> Something is wrong you status is offline. Please refresh the page.</p> </div>
+                                <div class="message-entry"> <p> Something is wrong your status is offline. Please refresh the page.</p> </div>
                             </li>
                             <li ng-class="{true:'me', false:''}[chatMessage.VertexId==clientDetailResponse.VertexId]" ng-repeat="chatMessage in chatList[0].messages">
                                 <div class="col-md-3">
@@ -865,7 +865,7 @@ div.middle-div-mobile {
                         </form>
                     </div>
                 </li>
-                <li>
+                @*<li>
                     <a class="chat-user" href="#">
                         <span class="user-status is-idle"></span>
                         Ylli Pylla
@@ -876,7 +876,7 @@ div.middle-div-mobile {
                         <span class="user-status is-busy"></span>
                         Arlind Nushi
                     </a>
-                </li>
+                </li>*@
             </ul> <a class="mobile-chat-toggle" href="#"> <i class="linecons-comment"></i> <span class="num">6</span> <span class="badge badge-purple">4</span> </a>
         </div>
         <script src="../../App/js/chat_index.js"></script>

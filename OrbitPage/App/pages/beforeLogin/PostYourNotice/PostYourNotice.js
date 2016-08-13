@@ -6,8 +6,6 @@ define([appLocation.preLogin], function (app) {
 
         //Range slider config
         $scope.minRangeSlider = {
-            minValue: 0,
-            maxValue: 0,
             options: {
                 floor: 0,
                 ceil: 100,
@@ -130,12 +128,20 @@ define([appLocation.preLogin], function (app) {
                 employmentStatusSelect: 'REGULAR',
                 reviewTitle: '',
                 reviewDescription: '',
-                lookingForChange: 'Yes',
-                amount: '',
-                currency: 'INR',
-                salaryFrequency: 'ANNUAL',
+                lookingForChange: 'No',
+                
                 suggestionToBoss: '',
-                suggestionToCompany:'',
+                suggestionToCompany: '',
+                buyoutOption: "No",
+                noticePeriod: {
+                    minValue: 0,
+                    maxValue: 0,
+                },
+                salary: {
+                    currency: 'INR',
+                    amount: '',
+                    frequency: 'ANNUAL',
+                },
                 openPage: function (page) {
                     $('#button-step-'+page).click();
                     //console.log($scope.postYourNoticeFormData.companyReview);

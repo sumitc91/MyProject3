@@ -166,6 +166,7 @@
   <ItemGroup>
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="Controllers\AuthController.cs" />
+    <Compile Include="Controllers\CompanyReviewController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SocialAuthController.cs" />
     <Compile Include="Controllers\StoryController.cs" />

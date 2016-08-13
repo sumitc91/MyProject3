@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using urNotice.Common.Infrastructure.Model.urNoticeModel.User;
 
 namespace urNotice.Common.Infrastructure.Model.urNoticeModel.RequestWrapper.NoticePeriod
 {
@@ -17,11 +18,10 @@ namespace urNotice.Common.Infrastructure.Model.urNoticeModel.RequestWrapper.Noti
         public string reviewTitle { get; set; }
         public string reviewDescription { get; set; }
         public string lookingForChange { get; set; }
-        public string amount { get; set; }
-        public string currency { get; set; }
-        public string salaryFrequency { get; set; }
         public string suggestionToBoss { get; set; }
         public string suggestionToCompany { get; set; }
         public string employerLogoImage { get; set; }
+        public NoticePeriodUserInputReviewNoticePeriodRequest noticePeriod { get; set; }
+        public NoticePeriodUserInputReviewSalaryRequest salary { get; set; }
     }
 }

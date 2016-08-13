@@ -322,6 +322,8 @@
     <Compile Include="Model\urNoticeModel\Solr\UnWorkgraphySolr.cs" />
     <Compile Include="Model\urNoticeModel\Swagger\SwaggerApiCommonDetail.cs" />
     <Compile Include="Model\urNoticeModel\Swagger\SwaggerAuth.cs" />
+    <Compile Include="Model\urNoticeModel\User\NoticePeriodUserInputReviewNoticePeriodRequest.cs" />
+    <Compile Include="Model\urNoticeModel\User\NoticePeriodUserInputReviewSalaryRequest.cs" />
     <Compile Include="Model\urNoticeModel\User\TaggedVertexIdModel.cs" />
     <Compile Include="Model\urNoticeModel\User\UserNewPostRequest.cs" />
     <Compile Include="Model\urNoticeModel\User\UserNotificationGraphModel.cs" />
