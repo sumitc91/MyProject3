@@ -69,7 +69,7 @@ define([appLocation.preLogin], function (app) {
         $rootScope.$on("$locationChangeStart", function (event, next, current) {
 
             //detectIfUserLoggedIn();
-
+            $rootScope.userOrbitFeedList.show = false;
             gaWeb("BeforeLogin-Page Visited", "Page Visited", next);
             var path = next.split('#');            
             var contextPath = path[1];
@@ -206,6 +206,7 @@ define([appLocation.preLogin], function (app) {
         $scope.loadingUserDetails = false;
         $rootScope.clientDetailResponse = {};
         $rootScope.userOrbitFeedList = [];
+        $rootScope.userOrbitFeedList.show = false;
         
         $rootScope.clientNotificationDetailResponseInfo = {
             busy: false,
