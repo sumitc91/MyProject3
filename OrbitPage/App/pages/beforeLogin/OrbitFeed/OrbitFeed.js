@@ -307,7 +307,7 @@ define([appLocation.preLogin], function (app) {
                     $scope.UserPostListInfoAngular.after = $scope.UserPostListInfoAngular.after + $scope.UserPostListInfoAngular.itemPerPage;
                     //$scope.UserPostList.push(data.Payload);
                     $scope.UserPostMessage = "";
-
+                    showToastMessage("Success", "Successfully Posted on your wall.");
                     
 
                 }).error(function (data, status, headers, config) {

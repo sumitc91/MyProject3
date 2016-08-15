@@ -136,9 +136,9 @@
                           ng-model="UserPostMessage"
                           ng-change="updateUserNewPostMessageHtml()"
                           placeholder="Whats in your mind today?"></textarea>
-                Preview:
-                <hr />
-                <div ng-bind-html="UserPostMessageHtml"></div>
+                <div ng-show="UserPostMessage">
+                    Preview: <div ng-bind-html="UserPostMessageHtml"></div>
+                </div>
                 
                 <script type="text/ng-template" id="/people-mentions.tpl">
                         <ul class="list-group user-search">
@@ -237,7 +237,7 @@
                         <input type="file" ng-file-select="onEditFileSelectLogoUrl($files,$index)">
                     </div>
                     <div class="editable-buttons" ng-show="post.postInfo.editableMode"><button type="button" ng-click="submitEditOnUserPost($index)" class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-ok"></i></button><button type="button" ng-click="cancelEditOnUserPost($index)" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-remove"></i></button></div>
-                    <div class="row" ng-show="post.postInfo.editableMode">
+                    <div class="row" ng-show="post.postInfo.editableMode && post.postInfo.PostMessage">
                         Preview : &nbsp;&nbsp; <span ng-bind-html="post.postInfo.PostMessageHtml"></span>
                     </div>
                     <div class="fb-status-container fb-border">
@@ -284,7 +284,7 @@
 
                                         </div>
                                         
-                                        <div class="row">
+                                        <div class="row" ng-show="comment.commentInfo.PostMessage">
                                             Preview : &nbsp;&nbsp; <span ng-bind-html="comment.commentInfo.PostMessageHtml"></span>
                                         </div>
                                     </div>
@@ -338,7 +338,7 @@
                                             </a>                                    
                                         </span>
                                     </div>
-                                    <div class="row">
+                                    <div class="row" ng-show="post.postInfo.postUserComment">
                                         
                                         Preview :&nbsp;&nbsp; <span ng-bind-html="post.postInfo.postUserCommentHtml"></span>
                                     </div>
