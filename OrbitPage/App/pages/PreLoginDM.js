@@ -203,6 +203,9 @@ appRequire = require
             beforeLoginPostYourNotice: {
                 deps: ["jquery", "beforeLoginApp", "angular", "restangular", "configureBlockUI", "toastMessage", "angular_input_stars", "bootstrap_ui", "rzslider"]
             },
+            beforeLoginAbout: {
+                deps: ["jquery", "beforeLoginApp", "angular", "restangular", "configureBlockUI", "toastMessage"]
+            },
         },
         paths: {
             //==============================================================================================================
@@ -282,6 +285,7 @@ appRequire = require
             beforeLoginSingleWorkgraphy: "../../App/pages/beforeLogin/SingleWorkgraphy/SingleWorkgraphy",
             beforeLoginUrnotice: "../../App/pages/beforeLogin/Urnotice/Urnotice",
             beforeLoginPostYourNotice: "../../App/pages/beforeLogin/PostYourNotice/PostYourNotice",
+            beforeLoginAbout: "../../App/pages/beforeLogin/AboutUs/AboutUs",
             //TweenMax_min: "http://cdnjs.cloudflare.com/ajax/libs/gsap/1.9.7/TweenMax.min",
             
         },
@@ -299,7 +303,7 @@ appRequire(["jquery", "angular", "jquery_toastmessage", "toastMessage","sanitize
     "angularjs_fileUpload_shim", "angularjs_fileUpload", "AngularFileUploadController", "motionCaptcha", "ngtimeago",
     "beforeLoginViewPostDetail", "ng_infinite_scroll", "filedrop", "fileDropScript", "beforeLoginPostStory", "beforeLoginWorkgraphy",
     "beforeLoginSingleBlog", "beforeLoginUrnotice", "beforeLoginPostYourNotice", "beforeLoginPostBlog", "beforeLoginAllBlogs",
-    "beforeLoginSingleWorkgraphy", "jquery_totemticker", "beforeLoginOrbitFeed", "rzslider", "mentio"
+    "beforeLoginSingleWorkgraphy", "jquery_totemticker", "beforeLoginOrbitFeed", "rzslider", "mentio", "beforeLoginAbout"
 ], function() {
     angular.bootstrap(document.getElementById("main"), ["beforeLoginApp"]);
 });

@@ -192,15 +192,15 @@ define([appLocation.preLogin], function (app) {
         $rootScope.IsMobileDevice = (mobileDevice || isAndroidDevice) ? true : false;
         $rootScope.logoImage = { url: logoImage };
         $rootScope.isUserLoggedIn = false;
-        $rootScope.sitehosturl = ServerContextPath.solrServer;//"www.orbitpage.com/searchapi";
+        $rootScope.sitehosturl = ServerContextPath.solrServer;
         $scope.chatListUserRegisteredOnline = false;
 
         $rootScope.profileDropDownCss = "hideFromCss";
 
         $rootScope.logourl = "https://s3-ap-southeast-1.amazonaws.com/urnotice/landing_page_logo/logo_final_with_text_732x12.png";
         //$rootScope.logourl = "https://s3-ap-southeast-1.amazonaws.com/urnotice/orbitpage/LandingPageLogo/orbitPagelogo_indian_flag.png";
-        //$rootScope.landingPageLogourl = "https://s3-ap-southeast-1.amazonaws.com/urnotice/orbitpage/LandingPageLogo/orbitPagelogo_indian_flag.png";
-        $rootScope.landingPageLogourl = "https://s3-ap-southeast-1.amazonaws.com/urnotice/landing_page_logo/logo_final_with_text_732x12.png";
+        $rootScope.landingPageLogourl = "https://s3-ap-southeast-1.amazonaws.com/urnotice/orbitpage/LandingPageLogo/orbitPagelogo_indian_flag.png";
+        //$rootScope.landingPageLogourl = "https://s3-ap-southeast-1.amazonaws.com/urnotice/landing_page_logo/logo_final_with_text_732x12.png";
 
         $scope.searchBoxText = window.madetoearn.i18n.beforeLoginIndexSearchBoxText;
         $scope.loadingUserDetails = false;
@@ -238,6 +238,7 @@ define([appLocation.preLogin], function (app) {
         $rootScope.searchOptions.selectOption = function(optionName) {
             $rootScope.searchOptions.selected = optionName;            
         };
+
 
         $rootScope.clientFriendRequestNotificationDetailResponse = [];
         $rootScope.clientFriendRequestNotificationDetailResponseInfo = {

@@ -1,64 +1,124 @@
 ﻿<div class="row" style="min-height: 90px;"></div>
 <!--container start-->
-<div class="container">
+<div class="container" ng-controller="beforeLoginAbout">
     <div class="row">
-        <div class="col-md-6">
-
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-8">
-                            <h2>Ruhina Khan</h2>
-                            <p><strong>About: </strong> Software Engineer. </p>
-                            <p><strong>Hobbies: </strong> Read, out with friends, listen to music, draw and learn new things. </p>
-                            <p>
-                                <strong>Skills: </strong>
-                                <span class="label label-info tags">Pega</span>
-                                <span class="label label-info tags">Java</span>
-                                <span class="label label-info tags">jquery</span>
-                                <span class="label label-info tags">C#</span>
-                            </p>
-                        </div><!--/col-->
-                        <div class="col-xs-12 col-sm-4 text-center">
-                            <img src="https://s3-ap-southeast-1.amazonaws.com/urnotice/images/images.jpeg" alt="user pic" class="center-block img-circle img-responsive">
-                            <ul class="list-inline ratings text-center" title="Ratings">
-                                <li><a href="#"><span class="fa fa-star fa-lg"></span></a></li>
-                                <li><a href="#"><span class="fa fa-star fa-lg"></span></a></li>
-                                <li><a href="#"><span class="fa fa-star fa-lg"></span></a></li>
-                                <li><a href="#"><span class="fa fa-star fa-lg"></span></a></li>
-                                <li><a href="#"><span class="fa fa-star fa-lg"></span></a></li>
-                            </ul>
-                        </div><!--/col-->
-
-                        <div class="col-xs-12 col-sm-4">
-                            <h2><strong> 20,7K </strong></h2>
-                            <p><small>Followers</small></p>
-                            <button class="btn btn-success btn-block"><span class="fa fa-plus-circle"></span> Follow </button>
-                        </div><!--/col-->
-                        <div class="col-xs-12 col-sm-4">
-                            <h2><strong>245</strong></h2>
-                            <p><small>Following</small></p>
-                            <button class="btn btn-info btn-block"><span class="fa fa-user"></span> View Profile </button>
-                        </div><!--/col-->
-                        <div class="col-xs-12 col-sm-4">
-                            <h2><strong>43</strong></h2>
-                            <p><small>Snippets</small></p>
-                            <button type="button" class="btn btn-primary btn-block"><span class="fa fa-gear"></span> Options </button>
-                        </div><!--/col-->
-                    </div><!--/row-->
-                </div><!--/panel-body-->
-            </div><!--/panel-->
-
-
-
+        <div class="col-lg-12 col-md-12">
+            <div class="bootstrap-panel bootstrap-panel-primary">
+                <div class="bootstrap-panel-heading">
+                    <h3 class="bootstrap-panel-title">Product1<span class="fa fa-dollar pull-right medium"></span></h3>
+                </div>
+                <div class="bootstrap-panel-body">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse aliquam, augue vitae pulvinar feugiat, magna ipsum varius tellus,
+                    quis lobortis est nulla nec ligula. Aenean cursus enim sit amet tortor rutrum lobortis.
+                    Vestibulum mattis mauris fringilla mauris volutpat, in euismod arcu ultricies.
+                    Nunc eget hendrerit lectus. Proin rutrum elit ut orci fringilla, sit amet ornare turpis molestie.
+                    Proin nec neque eget nulla scelerisque rhoncus sit amet vitae augue.
+                    Vivamus ipsum eros, sodales sed enim ac, malesuada iaculis mi.
+                    Morbi ut orci sit amet tellus posuere convallis.
+                    Cras rhoncus tincidunt ultrices.
+                </div>
+            </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-lg-8 col-md-8 text-center">
+            <img src="http://placehold.it/600x150" class="customimage">
+        </div>
+        <div class="col-lg-4 col-md-4">
+            <div class="bootstrap-panel bootstrap-panel-primary">
+                <div class="bootstrap-panel-body text-center big">
+                    <span class="fa fa-money"></span>
+                    <span class="big">Buy now</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="hrcustom" />
+
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="bootstrap-panel bootstrap-panel-primary">
+                <div class="bootstrap-panel-heading">
+                    <h3 class="bootstrap-panel-title">Product2<span class="fa fa-dollar pull-right medium"></span></h3>
+                </div>
+                <div class="bootstrap-panel-body">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse aliquam, augue vitae pulvinar feugiat, magna ipsum varius tellus,
+                    quis lobortis est nulla nec ligula. Aenean cursus enim sit amet tortor rutrum lobortis.
+                    Vestibulum mattis mauris fringilla mauris volutpat, in euismod arcu ultricies.
+                    Nunc eget hendrerit lectus. Proin rutrum elit ut orci fringilla, sit amet ornare turpis molestie.
+                    Proin nec neque eget nulla scelerisque rhoncus sit amet vitae augue.
+                    Vivamus ipsum eros, sodales sed enim ac, malesuada iaculis mi.
+                    Morbi ut orci sit amet tellus posuere convallis.
+                    Cras rhoncus tincidunt ultrices.
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    <hr class="hrcustom" />
 </div>
 
+<style>
+    .big {
+        font-size: 37px;
+        color: #5CB85C;
+    }
 
+    .medium {
+        font-size: 23px;
+    }
 
-<!--container end-->
+    .hrcustom {
+        padding: 30px;
+    }
 
-<!-- js placed at the end of the document so the pages load faster -->
+    .customimage {
+        width: 100%;
+        height: 100%;
+    }
+
+    .bootstrap-panel-primary {
+        border-color: #337ab7;
+    }
+
+    .bootstrap-panel {
+        background-color: #fff;
+        border-color: #337ab7;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+        margin-bottom: 20px;
+    }
+
+    .bootstrap-panel-primary > .bootstrap-panel-heading {
+        background-color: #337ab7;
+        border-color: #337ab7;
+        color: #fff;
+    }
+    .bootstrap-panel-heading {
+        border-bottom: 1px solid transparent;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        padding: 10px 15px;
+    }
+
+    .bootstrap-panel-title {
+        color: inherit;
+        font-size: 16px;
+        margin-bottom: 0;
+        margin-top: 0;
+    }
+
+    .bootstrap-panel-body {
+        padding: 15px;
+    }
+</style>
+
+<script>
+    $(function () {
+        window.madetoearn.i18nLocalizePage();
+    });
+</script>
 
 
