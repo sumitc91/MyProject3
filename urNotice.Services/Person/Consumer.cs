@@ -32,6 +32,10 @@ using urNotice.Services.Person.PersonContract.LoginOperation;
 using urNotice.Services.Person.PersonContract.RegistrationOperation;
 using urNotice.Services.Solr.SolrCompany;
 using urNotice.Services.Solr.SolrUser;
+using urNotice.Services.Factory.AccountManagement;
+using urNotice.Services.Factory.PostManagement;
+using urNotice.Services.Factory.NotificationManagement;
+using urNotice.Services.Factory.CompanyManagement;
 
 namespace urNotice.Services.Person
 {
@@ -42,17 +46,20 @@ namespace urNotice.Services.Person
         //Account Management.
         public ResponseModel<LoginResponse> RegisterMe(RegisterationRequest req, HttpRequestBase request)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.RegisterMe(req,request);
         }
         public ResponseModel<LoginResponse> SocialRegisterMe(RegisterationRequest req, HttpRequestBase request)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.SocialRegisterMe(req,request);
         }
         public ResponseModel<LoginResponse> Login(string userName, string password, bool isSocialLogin)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.Login(userName, password, isSocialLogin);            
         }
         public ResponseModel<OrbitPageUser> GetFullUserDetail(string userEmail)
@@ -61,150 +68,177 @@ namespace urNotice.Services.Person
         }
         public ResponseModel<ClientDetailsModel> GetPersonDetails(string userEmail)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.GetPersonDetails(userEmail);
         }
         public ResponseModel<EditPersonModel> EditPersonDetails(urNoticeSession session, EditPersonModel editPersonModel)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.EditPersonDetails(session,editPersonModel);
         }
 
         // Account Management - For Gremling Query
         public string GetUserNotification(urNoticeSession session, string from, string to)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.GetUserNotification(session, from, to);
         }
 
         public string GetAllFollowers(string vertexId)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.GetAllFollowers(vertexId);
         }
 
         public string GetUserFriendRequestNotification(urNoticeSession session, string from, string to)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.GetUserFriendRequestNotification(session, from, to);
         }
 
         public string GetUserPost(string userVertexId, string @from, string to, string userEmail)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.GetUserPost(userVertexId, from, to, userEmail);
         }
         public string GetUserOrbitFeedPost(string userVertexId, string @from, string to, string userEmail)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.GetUserOrbitFeedPost(userVertexId, from, to, userEmail);
         }
         public string GetUserPostMessages(string userVertexId, string @from, string to, string userEmail)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.GetUserPostMessages(userVertexId, from, to, userEmail);
         }
         public string GetUserPostLikes(string userVertexId, string @from, string to)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.GetUserPostLikes(userVertexId, from, to);
         }
         public string GetPostByVertexId(string vertexId, string userEmail)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.GetPostByVertexId(vertexId, userEmail);
         }
 
         public string GetUserNetworkDetail(urNoticeSession session,string vertexId, string @from, string to)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.GetUserNetworkDetail(session, vertexId, from, to);
         }
 
         public long GetUserUnreadNotificationCount(urNoticeSession session)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.GetUserUnreadNotificationCount(session);
         }
         public long GetUserUnreadFriendRequestNotificationCount(urNoticeSession session)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.GetUserUnreadFriendRequestNotificationCount(session);
         }
         public ResponseModel<IDictionary<string, string>> UserConnectionRequest(urNoticeSession session, UserConnectionRequestModel userConnectionRequestModel, out HashSet<string> sendNotificationHashSetResponse)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.UserConnectionRequest(session, userConnectionRequestModel, out sendNotificationHashSetResponse);
         }
 
         //Post Management.
         public ResponseModel<string> EditMessageDetails(urNoticeSession session, EditMessageRequest messageReq)
         {
-            IPostManagement postManagementModel = new PostManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IPostManagement postManagementModel = PostManagementFactory.GetPostManagementInstance(version);
             return postManagementModel.EditMessageDetails(session,messageReq);
         }
         public ResponseModel<UserPostVertexModel> CreateNewUserPost(urNoticeSession session, string message, string image, string userWallVertexId, List<TaggedVertexIdModel> taggedVertexId, out HashSet<string> sendNotificationResponse)
         {
-            IPostManagement postManagementModel = new PostManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IPostManagement postManagementModel = PostManagementFactory.GetPostManagementInstance(version);
             return postManagementModel.CreateNewUserPost(session,message,image,userWallVertexId,taggedVertexId,out sendNotificationResponse);  
         }
 
 
         public HashSet<string> SendNotificationToUser(urNoticeSession session, string userWallVertexId, string postVertexId, string commentVertexId, string postPostedByVertexId, string notificationType, List<TaggedVertexIdModel> taggedVertexId)
         {
-            INotificationManagement notificationManagement = new NotificationManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            INotificationManagement notificationManagement = NotificationManagementFactory.GetNotificationManagement(version);
             return notificationManagement.SendNotificationToUser(session, userWallVertexId, postVertexId, commentVertexId, postPostedByVertexId, notificationType, taggedVertexId);
         }
         public ResponseModel<UserPostCommentModel> CreateNewCommentOnUserPost(urNoticeSession session, string message, string image, string postVertexId, string userWallVertexId, string postPostedByVertexId,List<TaggedVertexIdModel> taggedVertexId, out HashSet<string> sendNotificationResponse)
         {
-            IPostManagement postManagementModel = new PostManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IPostManagement postManagementModel = PostManagementFactory.GetPostManagementInstance(version);
             return postManagementModel.CreateNewCommentOnUserPost(session,message,image,postVertexId,userWallVertexId,postPostedByVertexId, taggedVertexId,out sendNotificationResponse);
         }
         public ResponseModel<String> DeleteCommentOnPost(urNoticeSession session, string vertexId)
         {
-            IPostManagement postManagementModel = new PostManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IPostManagement postManagementModel = PostManagementFactory.GetPostManagementInstance(version);
             return postManagementModel.DeleteCommentOnPost(session,vertexId);
         }
         public ResponseModel<UserVertexModel> CreateNewReactionOnUserPost(urNoticeSession session, UserNewReactionRequest userNewReactionRequest,List<TaggedVertexIdModel> taggedVertexId, out HashSet<string> sendNotificationResponse)
         {
-            IPostManagement postManagementModel = new PostManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IPostManagement postManagementModel = PostManagementFactory.GetPostManagementInstance(version);
             return postManagementModel.CreateNewReactionOnUserPost(session,userNewReactionRequest,taggedVertexId,out sendNotificationResponse);
         }
         public ResponseModel<String> RemoveReactionOnUserPost(urNoticeSession session, string vertexId)
         {
-            IPostManagement postManagementModel = new PostManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IPostManagement postManagementModel = PostManagementFactory.GetPostManagementInstance(version);
             return postManagementModel.RemoveReactionOnUserPost(session,vertexId);
         }
         
 
         public ResponseModel<string> ValidateAccountService(ValidateAccountRequest req)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.ValidateAccountService(req);
         }
         public ResponseModel<string> ResendValidationCodeService(ValidateAccountRequest req, HttpRequestBase request)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.ResendValidationCodeService(req,request);
         }
         public ResponseModel<string> ForgetPasswordService(string id, HttpRequestBase request)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.ForgetPasswordService(id,request);
         }
         public ResponseModel<string> ResetPasswordService(ResetPasswordRequest req)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.ResetPasswordService(req);
         }
         public ResponseModel<string> ContactUsService(ContactUsRequest req)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.ContactUsService(req);
         }
         public ResponseModel<string> SeenNotification(string userName)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.SeenNotification(userName);
         }
 
@@ -212,7 +246,8 @@ namespace urNotice.Services.Person
         //Company Management
         public SolrQueryResults<UnCompanySolr> CompanyDetailsById(string userVertexId, string cid)
         {
-            ICompanyManagement companyManagementModel = new CompanyManagement();
+            string version = OrbitPageVersionConstants.v1;
+            ICompanyManagement companyManagementModel = CompanyManagementFactory.GetCompanyManagementInstance(version);
             return companyManagementModel.CompanyDetailsById(userVertexId, cid);
         }
         public Dictionary<string, string> CreateNewCompanyDesignationEdge(urNoticeSession session, string designation, string salary,

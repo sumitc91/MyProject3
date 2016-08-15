@@ -23,6 +23,8 @@ using urNotice.Services.Management.CompanyManagement;
 using urNotice.Services.NoSqlDb.DynamoDb;
 using urNotice.Services.Solr.SolrCompany;
 using urNotice.Services.Solr.SolrDesignation;
+using urNotice.Services.Factory.AccountManagement;
+using urNotice.Services.Factory.CompanyManagement;
 
 namespace urNotice.Services.Person
 {
@@ -45,7 +47,8 @@ namespace urNotice.Services.Person
 
         public ResponseModel<OrbitPageUser> GetFullUserDetail(string userEmail)
         {
-            IAccountManagement accountManagementModel = new AccountManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.GetFullUserDetail(userEmail);
         }
 
@@ -199,29 +202,34 @@ namespace urNotice.Services.Person
         public Dictionary<string, string> CreateNewCompanyDesignationEdge(urNoticeSession session, string designation,
             string salary, string jobFromYear, string jobToYear, string companyVertexId)
         {
-            ICompanyManagement companyManagementModel = new CompanyManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            ICompanyManagement companyManagementModel = CompanyManagementFactory.GetCompanyManagementInstance(version);
             return companyManagementModel.CreateNewCompanyDesignationEdge(session,designation,salary,jobFromYear,jobToYear,companyVertexId);
         }
         public bool CreateNewDesignation(string designationName, string createdBy)
         {
-            ICompanyManagement companyManagementModel = new CompanyManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            ICompanyManagement companyManagementModel = CompanyManagementFactory.GetCompanyManagementInstance(version);
             return companyManagementModel.CreateNewDesignation(designationName,createdBy);
         }
         public bool CreateNewCompanyDesignationSalary(string companyName, string designationName, string salary,
             string createdBy)
         {
-            ICompanyManagement companyManagementModel = new CompanyManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            ICompanyManagement companyManagementModel = CompanyManagementFactory.GetCompanyManagementInstance(version);
             return companyManagementModel.CreateNewCompanyDesignationSalary(companyName,designationName,salary,createdBy);
         }
         public bool CreateNewCompanyDesignationNoticePeriod(string companyName, string designationName, string noticePeriodRange,
             string createdBy)
         {
-            ICompanyManagement companyManagementModel = new CompanyManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            ICompanyManagement companyManagementModel = CompanyManagementFactory.GetCompanyManagementInstance(version);
             return companyManagementModel.CreateNewCompanyDesignationNoticePeriod(companyName,designationName,noticePeriodRange,createdBy);
         }
         public bool CreateNewCompany(OrbitPageCompany company, string createdBy)
         {
-            ICompanyManagement companyManagementModel = new CompanyManagementV1();
+            string version = OrbitPageVersionConstants.v1;
+            ICompanyManagement companyManagementModel = CompanyManagementFactory.GetCompanyManagementInstance(version);
             return companyManagementModel.CreateNewCompany(company,createdBy);
         }
     }
