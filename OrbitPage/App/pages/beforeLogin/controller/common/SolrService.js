@@ -19,4 +19,24 @@ define([appLocation.preLogin], function (app) {
             }
         });
     });
+
+    app.factory('SolrServiceGetLatestBlogs', function ($resource) {
+        var headers = {
+            'Content-Type': 'application/json',
+            'UTMZT': $.cookie('utmzt'),
+            'UTMZK': $.cookie('utmzk'),
+            'UTMZV': $.cookie('utmzv'),
+        };
+
+        return $resource(
+            ServerContextPath.solrServer + '/Search/GetLatestBlogs?page=:currentPage&perpage=:perpage&totalMatch=:totalMatch',
+            { currentPage: '@currentPage', perpage: '@perpage', totalMatch: '@totalMatch' },
+            {
+                get: {
+                    method: 'GET',
+                    headers: headers
+                }
+            }
+       );
+    });
 });

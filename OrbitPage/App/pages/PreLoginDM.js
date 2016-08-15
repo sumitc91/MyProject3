@@ -289,7 +289,7 @@ appRequire = require
             //TweenMax_min: "http://cdnjs.cloudflare.com/ajax/libs/gsap/1.9.7/TweenMax.min",
             
         },
-        urlArgs: "v=325"
+        urlArgs: "v=1"
     });
 
 appRequire(["jquery", "angular", "jquery_toastmessage", "toastMessage","sanitize","jquery_cookie",

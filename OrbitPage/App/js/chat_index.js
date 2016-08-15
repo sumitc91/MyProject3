@@ -321,7 +321,7 @@
             $(this).addClass('active');
             setModal('add');
             $('#contact-modal').one('click', '.btn.save', function() {
-                $('.list-account > .list').prepend('<li><img src="http://lorempixel.com/100/100/people/1/"><span class="name">' + $('#new-user').val() + '</span><i class="mdi mdi-menu-down"></i></li>');
+                $('.list-account > .list').prepend('<li><img src="http://placehold.it/100x100"><span class="name">' + $('#new-user').val() + '</span><i class="mdi mdi-menu-down"></i></li>');
                 closeModal();
             });
         }

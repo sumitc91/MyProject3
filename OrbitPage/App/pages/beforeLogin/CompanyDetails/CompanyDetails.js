@@ -7,8 +7,8 @@ define([appLocation.preLogin], function (app) {
         $scope.averageRatingInDoubleFormat = 0.0;
         $scope.userRatingData = {
             overAllRating:0
-    };
-        //$scope.showUserInputRatingStar = false;
+        };
+
         $scope.selected = {
             item: $scope.items[0]
         };
@@ -24,21 +24,21 @@ define([appLocation.preLogin], function (app) {
 
     google.charts.load('current', { packages: ['corechart', 'bar'] });
 
-    app.run([
-        '$route', '$rootScope', '$location', function($route, $rootScope, $location) {
-            var original = $location.path;
-            $location.path = function(path, reload) {
-                if (reload === false) {
-                    var lastRoute = $route.current;
-                    var un = $rootScope.$on('$locationChangeSuccess', function() {
-                        $route.current = lastRoute;
-                        un();
-                    });
-                }
-                return original.apply($location, [path]);
-            };
-        }
-    ]);
+    //app.run([
+    //    '$route', '$rootScope', '$location', function($route, $rootScope, $location) {
+    //        var original = $location.path;
+    //        $location.path = function(path, reload) {
+    //            if (reload === false) {
+    //                var lastRoute = $route.current;
+    //                var un = $rootScope.$on('$locationChangeSuccess', function() {
+    //                    $route.current = lastRoute;
+    //                    un();
+    //                });
+    //            }
+    //            return original.apply($location, [path]);
+    //        };
+    //    }
+    //]);
 
     app.controller('beforeLoginCompanyDetails', function ($scope, $http, $route,$uibModal,$log, $rootScope, $routeParams, $location, $timeout, CookieUtil) {
         $('title').html("indexcd"); //TODO: change the title so cann't be tracked in log
