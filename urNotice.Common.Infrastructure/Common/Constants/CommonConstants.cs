@@ -66,6 +66,9 @@ namespace urNotice.Common.Infrastructure.Common.Constants
         public const string All = "All";
         public const string Company = "Company";
         public const string Users = "Users";
-        public const string Workgraphy = "Workgraphy";        
+        public const string Workgraphy = "Workgraphy";
+
+        public const string Gmail = "Gmail";
+        public const string Mandrill = "Mandrill";
     }
 }

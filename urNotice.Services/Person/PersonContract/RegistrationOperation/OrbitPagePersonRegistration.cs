@@ -18,6 +18,7 @@ using urNotice.Common.Infrastructure.Model.urNoticeModel.ResponseWrapper;
 using urNotice.Services.Email;
 using urNotice.Services.Email.EmailFromGmail;
 using urNotice.Services.Email.EmailFromMandrill;
+using urNotice.Services.Factory.Email;
 using urNotice.Services.GraphDb.GraphDbContract;
 using urNotice.Services.NoSqlDb.DynamoDb;
 using urNotice.Services.Person.PersonContract.LoginOperation;
@@ -164,9 +165,8 @@ namespace urNotice.Services.Person.PersonContract.RegistrationOperation
         protected override ResponseModel<string> SendAccountVerificationEmail(OrbitPageUser user, HttpRequestBase request)
         {            
             if (request != null && request.Url != null)
-            {
-                //IEmail emailModel = new EmailFromGmail();
-                IEmail emailModel = new EmailFromMandrill();
+            {                
+                IEmail emailModel = EmailFactory.GetEmailInstance(CommonConstants.Mandrill);
                 emailModel.SendEmail(user.email,
                     SmptCreateAccountConstants.SenderName,
                     SmptCreateAccountConstants.EmailTitle,
@@ -174,7 +174,7 @@ namespace urNotice.Services.Person.PersonContract.RegistrationOperation
                     null,
                     null,
                     SmptCreateAccountConstants.SenderName,
-                    SmtpConfig.SmtpEmailFromDoNotReply
+                    SmtpConfig.MandrillSmtpEmailFromDoNotReply
                     );
             }
             return OrbitPageResponseModel.SetOk("email sent successfully.", String.Empty);

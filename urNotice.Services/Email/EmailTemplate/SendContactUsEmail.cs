@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Text;
 using urNotice.Common.Infrastructure.Common.Config;
+using urNotice.Common.Infrastructure.Common.Constants;
 using urNotice.Common.Infrastructure.Common.Constants.EmailConstants;
 using urNotice.Common.Infrastructure.commonMethods;
 using urNotice.Common.Infrastructure.Model.urNoticeModel.RequestWrapper;
+using urNotice.Services.Factory.Email;
 
 namespace urNotice.Services.Email.EmailTemplate
 {
@@ -11,7 +13,7 @@ namespace urNotice.Services.Email.EmailTemplate
     {
         public static void SendContactUsEmailMessage(String toMail, ContactUsRequest req)
         {
-            IEmail emailModel = new EmailFromMandrill.EmailFromMandrill();
+            IEmail emailModel = EmailFactory.GetEmailInstance(CommonConstants.Mandrill);
 
             emailModel.SendEmail(toMail,
                SmtpContactUsEmailContants.SenderName,
@@ -20,7 +22,7 @@ namespace urNotice.Services.Email.EmailTemplate
                 null,
                 null,
                 SmtpContactUsEmailContants.SenderName,
-                SmtpConfig.SmtpEmailFrom
+                SmtpConfig.MandrillSmtpEmailFrom
                 );
 
         }

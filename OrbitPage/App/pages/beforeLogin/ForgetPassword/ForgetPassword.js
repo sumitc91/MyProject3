@@ -1,6 +1,6 @@
 'use strict';
 define([appLocation.preLogin], function (app) {
-    app.controller('beforeLoginForgetPassword', function ($scope, $http, $rootScope, Restangular, CookieUtil) {
+    app.controller('beforeLoginForgetPassword', function ($scope, $http, $rootScope, Restangular, CookieUtil, AuthApi) {
         $('title').html("index"); //TODO: change the title so cann't be tracked in log
         
         $scope.ForgetPasswordContent = true;
@@ -21,40 +21,48 @@ define([appLocation.preLogin], function (app) {
         $scope.ForgetPasswordSendRequest = function() {
             if (isValidEmailAddress($('#forgetPasswordInputBoxId').val())) {
                 startBlockUI('wait..', 3);
-                $http({
-                    url: ServerContextPath.authServer + '/Auth/ForgetPassword?id=' + $('#forgetPasswordInputBoxId').val(),
-                    method: "GET"
-                }).success(function(data, status, headers, config) {
-                    stopBlockUI();
+                var inputData = { id: $('#forgetPasswordInputBoxId').val() };
+
+                AuthApi.ForgetPassword.get(inputData, function (data) {
+
                     if (data.Status == "200") {
                         location.href = "/?email=" + $('#forgetPasswordInputBoxId').val() + "#/showmessage/2/";
                     } else if (data.Status == "404") {
-                        $scope.ForgetPasswordContent = false;
-                        $scope.ForgetPasswordAlertContent.visible = true;
-                        $scope.ForgetPasswordAlertContent.message = "Entered email id is not registerd with us. Please enter your email address which is registered with us to set new password.";
+
+                        $timeout(function () {
+                            $scope.ForgetPasswordContent = false;
+                            $scope.ForgetPasswordAlertContent.visible = true;
+                            $scope.ForgetPasswordAlertContent.message = "Entered email id is not registerd with us. Please enter your email address which is registered with us to set new password.";
+                        });
+                        
                     } else if (data.Status == "402") {
-                        $scope.ForgetPasswordContent = false;
-                        $scope.ForgetPasswordForm = false;
-                        $scope.ForgetPasswordAlertContent.visible = true;
-                        $scope.ForgetPasswordAlertContent.message = "Email Address-" + $('#forgetPasswordInputBoxId').val() + " is not valideted yet. please check your email for validation.";
-                        $scope.ResendValidationOrSignup.visible = true;
-                        $scope.ResendValidationOrSignup.title = "Don't have emaill address validation Link?";
-                        $scope.ResendValidationOrSignup.buttonName = "Resend validation link";
-                        $scope.ResendValidationOrSignup.functionName = "ResendValidationCodeRequest";
+
+                        $timeout(function () {
+                            $scope.ForgetPasswordContent = false;
+                            $scope.ForgetPasswordForm = false;
+                            $scope.ForgetPasswordAlertContent.visible = true;
+                            $scope.ForgetPasswordAlertContent.message = "Email Address-" + $('#forgetPasswordInputBoxId').val() + " is not valideted yet. please check your email for validation.";
+                            $scope.ResendValidationOrSignup.visible = true;
+                            $scope.ResendValidationOrSignup.title = "Don't have emaill address validation Link?";
+                            $scope.ResendValidationOrSignup.buttonName = "Resend validation link";
+                            $scope.ResendValidationOrSignup.functionName = "ResendValidationCodeRequest";
+                        });
+                        
                     } else if (data.Status == "500") {
-                        location.href = "/?email=" + $('#forgetPasswordInputBoxId').val() + "#/showmessage/3/";
+                        //location.href = "/?email=" + $('#forgetPasswordInputBoxId').val() + "#/showmessage/3/";
                     }
-                }).error(function(data, status, headers, config) {
-                    //alert("Not Working");
-                    showToastMessage("Error", "Unable to reach the server. Refresh the page and try again");
+                }, function (error) {
+                    showToastMessage("Error", "Internal Server Error Occured!");
                 });
             }
             // Check Status, Email Id is valid or registered or not 
             else {
-                $scope.ForgetPasswordContent = false;
-                $scope.ForgetPasswordAlertContent.visible = true;
-                $scope.ForgetPasswordAlertContent.message = "Please enter a valid email address to set new password.";
-                showToastMessage("Error", "Email id field cann't be empty.");
+                $timeout(function () {
+                    $scope.ForgetPasswordContent = false;
+                    $scope.ForgetPasswordAlertContent.visible = true;
+                    $scope.ForgetPasswordAlertContent.message = "Please enter a valid email address to set new password.";
+                    showToastMessage("Error", "Email id field cann't be empty.");
+                });
             }
         };
 

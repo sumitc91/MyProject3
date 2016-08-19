@@ -5,10 +5,12 @@ using System.Reflection;
 using System.Text;
 using System.Web;
 using urNotice.Common.Infrastructure.Common.Config;
+using urNotice.Common.Infrastructure.Common.Constants;
 using urNotice.Common.Infrastructure.Common.Constants.EmailConstants;
 using urNotice.Common.Infrastructure.commonMethods;
 using urNotice.Common.Infrastructure.Model.urNoticeModel.RequestWrapper;
 using urNotice.Services.ErrorLogger;
+using urNotice.Services.Factory.Email;
 
 namespace urNotice.Services.Email.EmailTemplate
 {
@@ -26,7 +28,7 @@ namespace urNotice.Services.Email.EmailTemplate
             
             if (request.Url != null)
             {
-                IEmail emailModel = new EmailFromMandrill.EmailFromMandrill();
+                IEmail emailModel = EmailFactory.GetEmailInstance(CommonConstants.Mandrill);
                 emailModel.SendEmail(req.EmailId,
                     SmptCreateAccountConstants.SenderName,
                     SmptCreateAccountConstants.EmailTitle,
@@ -34,7 +36,7 @@ namespace urNotice.Services.Email.EmailTemplate
                     null,
                     null,
                     SmptCreateAccountConstants.SenderName,
-                    SmtpConfig.SmtpEmailFromDoNotReply
+                    SmtpConfig.MandrillSmtpEmailFromDoNotReply
                     );
             }
         }
@@ -43,8 +45,7 @@ namespace urNotice.Services.Email.EmailTemplate
         {
             if (request != null && request.Url != null)
             {
-                //IEmail emailModel = new EmailFromGmail();
-                IEmail emailModel = new EmailFromMandrill.EmailFromMandrill();
+                IEmail emailModel = EmailFactory.GetEmailInstance(CommonConstants.Gmail);
                 emailModel.SendEmail(toMail,
                     SmptCreateAccountConstants.SenderName,
                     SmptCreateAccountConstants.EmailTitle,
@@ -52,7 +53,7 @@ namespace urNotice.Services.Email.EmailTemplate
                     null,
                     null,
                     SmptCreateAccountConstants.SenderName,
-                    SmtpConfig.SmtpEmailFromDoNotReply
+                    null
                     );
             }
         }

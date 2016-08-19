@@ -23,17 +23,17 @@ namespace urNotice.Services.Email.EmailFromMandrill
             var smtpServer = new SmtpClient
             {
                 Credentials =
-                    new System.Net.NetworkCredential(SmtpConfig.SmtpEmail,
-                        SmtpConfig.SmtpPassword),
-                Port = Convert.ToInt32(SmtpConfig.SmtpPort.ToString(CultureInfo.InvariantCulture)),
-                Host = SmtpConfig.SmtpHost.ToString(CultureInfo.InvariantCulture),
-                EnableSsl = Convert.ToBoolean(SmtpConfig.SmtpEnableSsl.ToString(CultureInfo.InvariantCulture))
+                    new System.Net.NetworkCredential(SmtpConfig.MandrillSmtpEmail,
+                        SmtpConfig.MandrillSmtpPassword),
+                Port = Convert.ToInt32(SmtpConfig.MandrillSmtpPort.ToString(CultureInfo.InvariantCulture)),
+                Host = SmtpConfig.MandrillSmtpHost.ToString(CultureInfo.InvariantCulture),
+                EnableSsl = Convert.ToBoolean(SmtpConfig.MandrillSmtpEnableSsl.ToString(CultureInfo.InvariantCulture))
             };
             _mail = new MailMessage();
             var addr = toEmailAddrList.Split(',');
 
             if (sendEmailFrom == null)
-                sendEmailFrom = SmtpConfig.SmtpEmailFromDoNotReply;
+                sendEmailFrom = SmtpConfig.MandrillSmtpEmailFromDoNotReply;
 
             _mail.From = new MailAddress(sendEmailFrom, senderName, System.Text.Encoding.UTF8);
             Byte i;

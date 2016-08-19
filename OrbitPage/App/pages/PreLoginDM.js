@@ -140,6 +140,9 @@ appRequire = require
             beforeLoginUserService: {
                 deps: ["jquery", "angular", "configureBlockUI", "jquery_blockUI", "toastMessage", "angular_resource"]
             },
+            beforeLoginAuthService: {
+                deps: ["jquery", "angular", "configureBlockUI", "jquery_blockUI", "toastMessage", "angular_resource"]
+            },
             beforeLoginOrbitPageService: {
                 deps: ["jquery", "angular", "configureBlockUI", "jquery_blockUI", "toastMessage", "angular_resource"]
             },
@@ -147,7 +150,7 @@ appRequire = require
                 deps: ["jquery", "angular", "configureBlockUI", "toastMessage", "jquery_sidr_min", "bootstrap_ui", "urNoticeScript", "ngtimeago"]
             },
             beforeLoginIndex: {
-                deps: ["jquery", "beforeLoginApp", "restangular", "angular", "configureBlockUI", "toastMessage", "jquery_sidr_min", "bootstrap_ui", "urNoticeScript", "beforeLoginSolrService", "beforeLoginUserService", "beforeLoginOrbitPageService", "angular_animate"]
+                deps: ["jquery", "beforeLoginApp", "restangular", "angular", "configureBlockUI", "toastMessage", "jquery_sidr_min", "bootstrap_ui", "urNoticeScript", "beforeLoginSolrService", "beforeLoginUserService", "beforeLoginOrbitPageService", "beforeLoginAuthService", "angular_animate"]
             },
             beforeLoginLoginPage: {
                 deps: ["jquery","beforeLoginApp", "angular", "restangular", "configureBlockUI", "toastMessage"]
@@ -271,6 +274,7 @@ appRequire = require
             beforeLoginIndex: "../../App/pages/beforeLogin/Index/index",
             beforeLoginSolrService: "../../App/pages/beforeLogin/controller/common/SolrService",
             beforeLoginUserService: "../../App/pages/beforeLogin/controller/common/UserService",
+            beforeLoginAuthService: "../../App/pages/beforeLogin/controller/common/AuthService",
             beforeLoginOrbitPageService: "../../App/pages/beforeLogin/controller/common/OrbitPageService",
             beforeLoginLoginPage: "../../App/pages/beforeLogin/Login/Login",
             beforeLoginSignUpUser: "../../App/pages/beforeLogin/SignUpUser/SignUpUser",

@@ -2,8 +2,10 @@
 using System.IO;
 using System.Web;
 using urNotice.Common.Infrastructure.Common.Config;
+using urNotice.Common.Infrastructure.Common.Constants;
 using urNotice.Common.Infrastructure.Common.Constants.EmailConstants;
 using urNotice.Common.Infrastructure.commonMethods;
+using urNotice.Services.Factory.Email;
 
 namespace urNotice.Services.Email.EmailTemplate
 {
@@ -13,7 +15,8 @@ namespace urNotice.Services.Email.EmailTemplate
         {            
             if (request.Url != null)
             {
-                IEmail emailModel = new EmailFromMandrill.EmailFromMandrill();
+                IEmail emailModel = string.Equals(CommonConstants.Mandrill, SmtpConfig.ActiveEmail, StringComparison.CurrentCultureIgnoreCase) ? EmailFactory.GetEmailInstance(CommonConstants.Mandrill): EmailFactory.GetEmailInstance(CommonConstants.Gmail);
+
                 emailModel.SendEmail(toMail,
                     SmtpForgetPasswordContants.SenderName,
                     SmtpForgetPasswordContants.EmailTitle,
@@ -21,7 +24,7 @@ namespace urNotice.Services.Email.EmailTemplate
                     null,
                     null,
                     SmtpForgetPasswordContants.SenderName,
-                    SmtpConfig.SmtpEmailFromDoNotReply
+                    null
                     );
             }
         }

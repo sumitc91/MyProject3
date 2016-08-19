@@ -25,9 +25,9 @@ namespace urNotice.Services.Email.EmailFromGmail
                 Credentials =
                     new System.Net.NetworkCredential(SmtpConfig.GmailSmtpEmail,
                         SmtpConfig.GmailSmtpPassword),
-                Port = Convert.ToInt32(SmtpConfig.SmtpPort.ToString(CultureInfo.InvariantCulture)),
+                Port = Convert.ToInt32(SmtpConfig.GmailSmtpPort.ToString(CultureInfo.InvariantCulture)),
                 Host = SmtpConfig.GmailSmtpHost.ToString(CultureInfo.InvariantCulture),
-                EnableSsl = Convert.ToBoolean(SmtpConfig.SmtpEnableSsl.ToString(CultureInfo.InvariantCulture))
+                EnableSsl = Convert.ToBoolean(SmtpConfig.GmailSmtpEnableSsl.ToString(CultureInfo.InvariantCulture))
             };
             _mail = new MailMessage();
             var addr = toEmailAddrList.Split(',');
