@@ -1,7 +1,7 @@
 'use strict';
 define([appLocation.preLogin], function (app) {
 
-    app.controller('beforeLoginEditPage', function ($scope, $http,$upload, $timeout, $rootScope, CookieUtil) {
+    app.controller('beforeLoginEditPage', function ($scope, $http, $upload, $timeout, $rootScope, CookieUtil, SearchApi, OrbitPageApi) {
         $('title').html("edit page"); //TODO: change the title so cann't be tracked in log
         
         $rootScope.userOrbitFeedList.show = false;
@@ -11,58 +11,55 @@ define([appLocation.preLogin], function (app) {
         //$('title').html("index"); //TODO: change the title so cann't be tracked in log
 
         if (CookieUtil.getUTMZT() != null && CookieUtil.getUTMZT() != '' && CookieUtil.getUTMZT() != "") {
-            console.log("cookie available.");
+            //console.log("cookie available.");
             loadClientDetails();
         } else {
-            console.log("cookie not available.");
+            //console.log("cookie not available.");
         };
 
 
         function loadClientDetails() {
-            var url = ServerContextPath.solrServer + '/Search/GetDetails?userType=user';
-            //var url = ServerContextPath.userServer + '/User/GetDetails?userType=user';
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': CookieUtil.getUTMZT(),
-                'UTMZK': CookieUtil.getUTMZK(),
-                'UTMZV': CookieUtil.getUTMZV()
-            };
+
+            var inputData =
+               {
+                   userType: 'user'
+               };
+
             startBlockUI('wait..', 3);
-            $scope.loadingUserDetails = true;
-            $http({
-                url: url,
-                method: "GET",
-                headers: headers
-            }).success(function (data, status, headers, config) {
-                //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
-                stopBlockUI();
-                $scope.loadingUserDetails = false;
+            SearchApi.GetDetails.get(inputData, function (data) {
                 if (data.Status == "200") {
-                    $rootScope.clientDetailResponse = data.Payload;
-                    $scope.disabledEmailModel = $rootScope.clientDetailResponse.Email;
-                    //$scope.UserNotificationsList.Messages = data.Payload.Messages;
-                    //$scope.UserNotificationsList.Notifications = data.Payload.Notifications;
-                    CookieUtil.setUserName(data.Payload.Firstname + ' ' + data.Payload.LastName, userSession.keepMeSignedIn);
-                    CookieUtil.setUserImageUrl(data.Payload.Profilepic, userSession.keepMeSignedIn);
-                    $rootScope.isUserLoggedIn = true;
-                    if (data.Payload.isLocked == "true") {
-                        location.href = "/Auth/LockAccount?status=true";
-                    }
-                }
-                else if (data.Status == "404") {
+                    $timeout(function () {
+                        stopBlockUI();
+                        $scope.loadingUserDetails = false;
+                        if (data.Status == "200") {
+                            $rootScope.clientDetailResponse = data.Payload;
+                            $scope.disabledEmailModel = $rootScope.clientDetailResponse.Email;
+                            CookieUtil.setUserName(data.Payload.Firstname + ' ' + data.Payload.LastName, userSession.keepMeSignedIn);
+                            CookieUtil.setUserImageUrl(data.Payload.Profilepic, userSession.keepMeSignedIn);
+                            $rootScope.isUserLoggedIn = true;
+                            if (data.Payload.isLocked == "true") {
+                                location.href = "/Auth/LockAccount?status=true";
+                            }
+                        }
+                        else if (data.Status == "404") {
 
-                    alert("This template is not present in database");
-                }
-                else if (data.Status == "500") {
+                            alert("This template is not present in database");
+                        }
+                        else if (data.Status == "500") {
 
-                    alert("Internal Server Error Occured");
+                            alert("Internal Server Error Occured");
+                        }
+                        else if (data.Status == "401") {
+                            $rootScope.isUserLoggedIn = false;
+                        }
+                    });
                 }
-                else if (data.Status == "401") {
-                    $rootScope.isUserLoggedIn = false;
+                else {
+                    showToastMessage("Warning", data.Message);
                 }
-            }).error(function (data, status, headers, config) {
-                //stopBlockUI();
-                //showToastMessage("Error", "Internal Server Error Occured.");                
+
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
         };
 
@@ -86,30 +83,13 @@ define([appLocation.preLogin], function (app) {
                 Email: $rootScope.clientDetailResponse.Email
             };
 
-            var url = ServerContextPath.empty + '/User/EditPersonDetails';
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': CookieUtil.getUTMZT(),
-                'UTMZK': CookieUtil.getUTMZK(),
-                'UTMZV': CookieUtil.getUTMZV(),
-                '_ga': $.cookie('_ga')
-            };
-                
             startBlockUI('wait..', 3);
-            $http({
-                url: url,
-                method: "POST",
-                data: editPersonRequest,
-                headers: headers
-            }).success(function(data, status, headers, config) {
-                //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
-                stopBlockUI();                
+            OrbitPageApi.EditPersonDetails.post(editPersonRequest, function (data) {
+                stopBlockUI();
                 showToastMessage("Success", "Successfully Edited");
-            }).error(function(data, status, headers, config) {
-
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
-                
-            
         };
 
         $scope.onCoverPicFileSelectLogoUrl = function ($files) {
@@ -152,20 +132,6 @@ define([appLocation.preLogin], function (app) {
             }
         };
 
-        $scope.openFacebookAuthWindow = function () {
-            var win = window.open("/SocialAuth/FBLogin/facebook", "Ratting", "width=800,height=480,0,status=0,scrollbars=1");
-            win.onunload = onun;
-
-            function onun() {
-                if (win.location != "about:blank") // This is so that the function 
-                // doesn't do anything when the 
-                // window is first opened.
-                {
-                    $route.reload();
-                    //alert("closed");
-                }
-            }
-        }
     });
 
 });

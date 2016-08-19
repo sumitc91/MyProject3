@@ -11,6 +11,57 @@ define([appLocation.preLogin], function (app) {
         {size:'10001',rating:'0',speciality:'Management%20Consulting,Systems%20Integration%20and%20Technology,Business%20Process%20Outsourcing,Application%20and%20Infrastructure%20Outsourcing'}
     });*/
 
+    app.factory('SearchApi', ['$resource',
+     function ($resource) {
+
+         var headers = {
+             'Content-Type': 'application/json',
+             'UTMZT': $.cookie('utmzt'),
+             'UTMZK': $.cookie('utmzk'),
+             'UTMZV': $.cookie('utmzv'),
+         };
+
+         return {
+             GetCompanyCompetitorsDetail: $resource(
+                 ServerContextPath.solrServer + '/Search/GetCompanyCompetitorsDetail?size=:size&rating=:rating&speciality=:speciality', { id: '@id' }, {
+                 query: {
+                     isArray: false,
+                     method: 'GET'
+                 }
+                }),
+
+             GetLatestBlogs: $resource(
+                ServerContextPath.solrServer + '/Search/GetLatestBlogs?page=:currentPage&perpage=:perpage&totalMatch=:totalMatch',
+                { currentPage: '@currentPage', perpage: '@perpage', totalMatch: '@totalMatch' },
+                {
+                    get: {
+                        method: 'GET',
+                        headers: headers
+                    }
+                }),
+
+             CompanyDetailsById: $resource(
+                ServerContextPath.solrServer + '/Search/CompanyDetailsById?cid=:cid',
+                { cid: '@cid' },
+                {
+                    get: {
+                        method: 'GET',
+                        headers: headers
+                    }
+                }),
+
+             GetDetails: $resource(
+                ServerContextPath.solrServer + '/Search/GetDetails?userType=:userType',
+                { userType: '@userType'},
+                {
+                    get: {
+                        method: 'GET',
+                        headers: headers
+                    }
+                }),
+         };
+     }]);
+
     app.factory('SolrServiceUtil', function ($resource) {
         return $resource('http://www.orbitpage.com/searchapi/Search/GetCompanyCompetitorsDetail?size=:size&rating=:rating&speciality=:speciality', { id: '@id' }, {
             query: {
@@ -20,7 +71,7 @@ define([appLocation.preLogin], function (app) {
         });
     });
 
-    app.factory('SolrServiceGetLatestBlogs', function ($resource) {
+    app.factory('SolrServiceCompanyDetailsById', function ($resource) {
         var headers = {
             'Content-Type': 'application/json',
             'UTMZT': $.cookie('utmzt'),
@@ -29,8 +80,8 @@ define([appLocation.preLogin], function (app) {
         };
 
         return $resource(
-            ServerContextPath.solrServer + '/Search/GetLatestBlogs?page=:currentPage&perpage=:perpage&totalMatch=:totalMatch',
-            { currentPage: '@currentPage', perpage: '@perpage', totalMatch: '@totalMatch' },
+            ServerContextPath.solrServer + '/Search/CompanyDetailsById?cid=:cid',
+            { cid: '@cid' },
             {
                 get: {
                     method: 'GET',

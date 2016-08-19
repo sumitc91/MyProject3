@@ -24,31 +24,13 @@ define([appLocation.preLogin], function (app) {
 
     google.charts.load('current', { packages: ['corechart', 'bar'] });
 
-    //app.run([
-    //    '$route', '$rootScope', '$location', function($route, $rootScope, $location) {
-    //        var original = $location.path;
-    //        $location.path = function(path, reload) {
-    //            if (reload === false) {
-    //                var lastRoute = $route.current;
-    //                var un = $rootScope.$on('$locationChangeSuccess', function() {
-    //                    $route.current = lastRoute;
-    //                    un();
-    //                });
-    //            }
-    //            return original.apply($location, [path]);
-    //        };
-    //    }
-    //]);
-
-    app.controller('beforeLoginCompanyDetails', function ($scope, $http, $route,$uibModal,$log, $rootScope, $routeParams, $location, $timeout, CookieUtil) {
+    app.controller('beforeLoginCompanyDetails', function ($scope, $http, $route, $uibModal, $log, $rootScope, $routeParams, $location, $timeout, CookieUtil, SearchApi, UserApi) {
         $('title').html("indexcd"); //TODO: change the title so cann't be tracked in log
         
         $scope.ratingCount = 0;
         $scope.companyid = $routeParams.companyid;
         $scope.tabid = $routeParams.tabid;
-        $scope.companyDetails = {
-            
-        };
+        $scope.companyDetails = {};
 
         $scope.companyActiveTab = {
             Profile: true,
@@ -61,16 +43,19 @@ define([appLocation.preLogin], function (app) {
             $scope.companyActiveTab.Profile=true;
         } else {
             if ($scope.tabid == "Profile") {
-                $scope.companyActiveTab.Profile=true;
+                $scope.companyActiveTab.Profile = true;
             }
             else if ($scope.tabid == "Salary") {
                 $scope.companyActiveTab.Salary = true;
+                companySalaryDetailsById();
             }
             else if ($scope.tabid == "NoticePeriod") {
                 $scope.companyActiveTab.NoticePeriod = true;
+                companyNoticePeriodDetailsById();
             }
             else if ($scope.tabid == "Workgraphy") {
                 $scope.companyActiveTab.Workgraphy = true;
+                companyWorkgraphyDetailsById();
             }
         }
 
@@ -78,107 +63,89 @@ define([appLocation.preLogin], function (app) {
         CompanyDetailsById();
 
         function CompanyDetailsById() {
-            var url = ServerContextPath.solrServer + '/Search/CompanyDetailsById?cid=' + $scope.companyid;
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv')
-            };
 
-            $.ajax({
-                url: url,
-                method: "GET",
-                headers: headers
-            }).done(function (data, status) {
-                //console.log(data);
+            SearchApi.CompanyDetailsById.get({ cid: $scope.companyid }, function (data) {
+
                 if (data.Status == "200") {
-                    //showToastMessage("Success", data.Message);
-                    $scope.companyDetails = data.Payload[0];
-                    if ($scope.companyDetails.logourl == 'tps://s3-ap-southeast-1.amazonaws.com/urnotice/company/small/LogoUploadEmpty.png' || $scope.companyDetails.logourl == '')
-                        $scope.companyDetails.logourl = "http://placehold.it/350x150";
-                    $scope.averageRatingInDoubleFormat = $scope.companyDetails.averagerating;
-                    $scope.companyDetails.averagerating = Math.round($scope.companyDetails.averagerating);
-                    $scope.$apply();
-                    showGoogleChart();
-                    //console.log($scope.companyDetails);                    
-                    getCompanyCompetitorsDetail($scope.companyDetails.size, $scope.companyDetails.rating, $scope.companyDetails.speciality);
-                    companySalaryDetailsById();
-                    companyNoticePeriodDetailsById();
-                    companyWorkgraphyDetailsById();
+                    
+                    $timeout(function () {
+                        $scope.companyDetails = data.Payload[0];
+                        if ($scope.companyDetails.logourl == 'tps://s3-ap-southeast-1.amazonaws.com/urnotice/company/small/LogoUploadEmpty.png' || $scope.companyDetails.logourl == '')
+                            $scope.companyDetails.logourl = "http://placehold.it/350x150";
+                        $scope.averageRatingInDoubleFormat = $scope.companyDetails.averagerating;
+                        $scope.companyDetails.averagerating = Math.round($scope.companyDetails.averagerating);
+                        showGoogleChart();
+
+                        getCompanyCompetitorsDetail($scope.companyDetails.size, $scope.companyDetails.rating, $scope.companyDetails.speciality);
+                    });
+
                 }
                 else {
                     showToastMessage("Warning", data.Message);
                 }
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
 
         }
         
         function companySalaryDetailsById() {
-            var url = ServerContextPath.userServer + '/User/GetCompanySalaryInfo?from=0&to=2&vertexId=' + $scope.companyid;
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv')
-            };
 
-            $.ajax({
-                url: url,
-                method: "GET",
-                headers: headers
-            }).done(function (data, status) {
-                //console.log(data);
-                $scope.CompanySalaryDetails = data.results;
-                
+            var inputData = 
+                { 
+                    from:0,
+                    to:2,
+                    companyid: $scope.companyid
+                };
+
+            UserApi.GetCompanySalaryInfo.get(inputData, function (data) {
+                $timeout(function () {
+                    $scope.CompanySalaryDetails = data.results;
+                });
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
-
         }
 
         function companyNoticePeriodDetailsById() {
-            var url = ServerContextPath.userServer + '/User/GetCompanyNoticePeriodInfo?from=0&to=2&vertexId=' + $scope.companyid;
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv')
-            };
 
-            $.ajax({
-                url: url,
-                method: "GET",
-                headers: headers
-            }).done(function (data, status) {
-                //console.log(data);
-                $scope.CompanyNoticePeriodDetails = data.results;
+            var inputData =
+                {
+                    from: 0,
+                    to: 2,
+                    companyid: $scope.companyid
+                };
 
+            UserApi.GetCompanyNoticePeriodInfo.get(inputData, function (data) {
+                $timeout(function () {
+                    $scope.CompanyNoticePeriodDetails = data.results;
+                });
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
-
         }
 
         function companyWorkgraphyDetailsById() {
-            var url = ServerContextPath.userServer + '/User/GetCompanyWorkgraphyInfo?from=0&to=10&vertexId=' + $scope.companyid;
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv')
-            };
 
-            $.ajax({
-                url: url,
-                method: "GET",
-                headers: headers
-            }).done(function (data, status) {
-                //console.log(data);
-                $scope.CompanyWorkgraphyDetails = data.results[0].workgraphyInfo;
-                $scope.countVisit = data.results[0].count;
-                $scope.userCountVisit = data.results[0].userCount;
-                $scope.userCompanyAnalyticsLoaded = true;
-                if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                    $scope.$apply();
+            var inputData =
+                {
+                    from: 0,
+                    to: 2,
+                    companyid: $scope.companyid
+                };
+
+            UserApi.GetCompanyWorkgraphyInfo.get(inputData, function (data) {
+                if (data.results != null) {
+                    $timeout(function () {
+                        $scope.CompanyWorkgraphyDetails = data.results[0].workgraphyInfo;
+                        $scope.countVisit = data.results[0].count;
+                        $scope.userCountVisit = data.results[0].userCount;
+                        $scope.userCompanyAnalyticsLoaded = true;
+                    });
                 }
                 
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
 
         }
@@ -220,46 +187,33 @@ define([appLocation.preLogin], function (app) {
         //getUserRatingStatus();
 
         function getCompanyCompetitorsDetail(size, rating, speciality) {
-            var url = ServerContextPath.solrServer + '/Search/GetCompanyCompetitorsDetail?size=' + size + '&rating=' + rating + '&speciality=' + speciality;
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv'),                
-            };
 
-            $.ajax({
-                url: url,
-                method: "GET",
-                headers: headers
-            }).done(function (data, status) {
-                //console.log(data);
+            var inputData =
+               {
+                   size: size,
+                   rating: rating,
+                   speciality: speciality
+               };
+
+            SearchApi.GetCompanyCompetitorsDetail.get(inputData, function (data) {
                 if (data.Status == "200") {
-                    //showToastMessage("Success", data.Message);
-                    $scope.competitorDetails = data.Payload;
-                    /*if ($scope.companyDetails.logourl == 'tps://s3-ap-southeast-1.amazonaws.com/urnotice/company/small/LogoUploadEmpty.png')
-                        $scope.companyDetails.logourl = "http://placehold.it/350x150";*/
-
-                    $.each(data.Payload, function (i, val) {
-                        $scope.competitorDetails[i].companyname = data.Payload[i].companyname;
-                        $scope.competitorDetails[i].website = data.Payload[i].website;
-
-                        if ($scope.competitorDetails[i].logourl == 'tps://s3-ap-southeast-1.amazonaws.com/urnotice/company/small/LogoUploadEmpty.png')
-                            $scope.competitorDetails[i].logourl = "http://placehold.it/50x50";
-
-                        $scope.competitorDetails[i].linkurl = "/#companydetails/" + $scope.competitorDetails[i].companyname.replace(/ /g, "_").replace(/\//g, "_OR_") + "/" + $scope.competitorDetails[i].guid;
-                        
+                    $timeout(function () {
+                        $scope.competitorDetails = data.Payload;
+                        $.each(data.Payload, function (i, val) {
+                            $scope.competitorDetails[i].companyname = data.Payload[i].companyname;
+                            $scope.competitorDetails[i].website = data.Payload[i].website;
+                            if ($scope.competitorDetails[i].logourl == 'tps://s3-ap-southeast-1.amazonaws.com/urnotice/company/small/LogoUploadEmpty.png')
+                                $scope.competitorDetails[i].logourl = "http://placehold.it/50x50";
+                            $scope.competitorDetails[i].linkurl = "/#companydetails/" + $scope.competitorDetails[i].companyname.replace(/ /g, "_").replace(/\//g, "_OR_") + "/" + $scope.competitorDetails[i].guid;
+                        });
                     });
-                    
-                    //$scope.$apply();
-                    if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                        $scope.$apply();
-                    }
-                    //console.log($scope.competitorDetails);
                 }
                 else {
                     showToastMessage("Warning", data.Message);
                 }
+
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
         }
 

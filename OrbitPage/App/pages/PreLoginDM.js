@@ -137,11 +137,17 @@ appRequire = require
             beforeLoginSolrService: {
                 deps: ["jquery", "angular", "configureBlockUI", "jquery_blockUI", "toastMessage", "angular_resource"]
             },
+            beforeLoginUserService: {
+                deps: ["jquery", "angular", "configureBlockUI", "jquery_blockUI", "toastMessage", "angular_resource"]
+            },
+            beforeLoginOrbitPageService: {
+                deps: ["jquery", "angular", "configureBlockUI", "jquery_blockUI", "toastMessage", "angular_resource"]
+            },
             beforeLoginApp: {
                 deps: ["jquery", "angular", "configureBlockUI", "toastMessage", "jquery_sidr_min", "bootstrap_ui", "urNoticeScript", "ngtimeago"]
             },
             beforeLoginIndex: {
-                deps: ["jquery", "beforeLoginApp", "restangular", "angular", "configureBlockUI", "toastMessage", "jquery_sidr_min", "bootstrap_ui", "urNoticeScript", "beforeLoginSolrService", "angular_animate"]
+                deps: ["jquery", "beforeLoginApp", "restangular", "angular", "configureBlockUI", "toastMessage", "jquery_sidr_min", "bootstrap_ui", "urNoticeScript", "beforeLoginSolrService", "beforeLoginUserService", "beforeLoginOrbitPageService", "angular_animate"]
             },
             beforeLoginLoginPage: {
                 deps: ["jquery","beforeLoginApp", "angular", "restangular", "configureBlockUI", "toastMessage"]
@@ -264,6 +270,8 @@ appRequire = require
             beforeLoginApp: ".././../App/pages/beforeLogin/controller/beforeLoginApp",
             beforeLoginIndex: "../../App/pages/beforeLogin/Index/index",
             beforeLoginSolrService: "../../App/pages/beforeLogin/controller/common/SolrService",
+            beforeLoginUserService: "../../App/pages/beforeLogin/controller/common/UserService",
+            beforeLoginOrbitPageService: "../../App/pages/beforeLogin/controller/common/OrbitPageService",
             beforeLoginLoginPage: "../../App/pages/beforeLogin/Login/Login",
             beforeLoginSignUpUser: "../../App/pages/beforeLogin/SignUpUser/SignUpUser",
             validateEmail: "../../App/pages/beforeLogin/ValidateEmail/validateEmail",
@@ -289,7 +297,7 @@ appRequire = require
             //TweenMax_min: "http://cdnjs.cloudflare.com/ajax/libs/gsap/1.9.7/TweenMax.min",
             
         },
-        urlArgs: "v=1"
+        urlArgs: "v=3"
     });
 
 appRequire(["jquery", "angular", "jquery_toastmessage", "toastMessage","sanitize","jquery_cookie",

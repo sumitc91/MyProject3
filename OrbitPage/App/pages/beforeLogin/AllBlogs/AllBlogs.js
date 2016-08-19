@@ -1,6 +1,6 @@
 'use strict';
 define([appLocation.preLogin], function (app) {
-    app.controller('beforeLoginAllBlogs', function ($scope, $interval, $http,$timeout, $routeParams, $rootScope, $location, Restangular, CookieUtil, SolrServiceGetLatestBlogs) {
+    app.controller('beforeLoginAllBlogs', function ($scope, $interval, $http, $timeout, $routeParams, $rootScope, $location, Restangular, CookieUtil, SearchApi) {
 
         $('title').html(window.madetoearn.i18n.beforeLoginOrbitPageCompanyTitle);
         
@@ -16,9 +16,10 @@ define([appLocation.preLogin], function (app) {
             $scope.currentPage = 0;
             $scope.perpage = 10;
             $scope.totalMatch = 10;
+            var inputData = { currentPage: $scope.currentPage, perpage: $scope.perpage, totalMatch: $scope.totalMatch };
 
             startBlockUI('wait..', 3);
-            SolrServiceGetLatestBlogs.get({ currentPage: $scope.currentPage, perpage: $scope.perpage, totalMatch: $scope.totalMatch }, function (data) {
+            SearchApi.GetLatestBlogs.get(inputData, function (data) {
                 if (data.Status == 200) {
                     stopBlockUI();
                     console.log(data);

@@ -356,6 +356,8 @@
     <Content Include="App\pages\beforeLogin\Career\Career.html" />
     <Content Include="App\pages\beforeLogin\Career\Career.js" />
     <Content Include="App\pages\beforeLogin\CompanyDetails\CompanyDetails - Copy.js" />
+    <Content Include="App\pages\beforeLogin\controller\common\OrbitPageService.js" />
+    <Content Include="App\pages\beforeLogin\controller\common\UserService.js" />
     <Content Include="App\pages\beforeLogin\Login\Login2.html" />
     <Content Include="App\pages\beforeLogin\PostBlog\PostBlog.html" />
     <Content Include="App\pages\beforeLogin\PostBlog\PostBlog.js" />

@@ -24,7 +24,7 @@
                             </div>
                         </div>
 
-                        <div class="box-content nopadding" ng-controller="beforeLoginEditPage">
+                        <div class="box-content nopadding">
                             <div class="tab-content padding tab-content-inline tab-content-bottom">
                                 <uib-tabset>
                                     <uib-tab heading="Profile">
@@ -167,7 +167,7 @@
                                                         <div class="row">
                                                             <div class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
                                                                 <div class="thumbnail">
-                                                                    <img src="{{clientDetailResponse.imageUrl}}" alt="300x200">
+                                                                    <img ng-src="{{clientDetailResponse.imageUrl}}" alt="300x200">
                                                                     <br>
                                                                     <h4 class="center-align-text">UI Designer</h4>
                                                                     <p class="btn-stack center-align-text">
