@@ -23,7 +23,7 @@ define([appLocation.preLogin], function (app) {
                 }),
 
              ResendValidationCode: $resource(
-                ServerContextPath.empty + '/User/ResendValidationCode', {}, {
+                ServerContextPath.empty + '/Auth/ResendValidationCode', {}, {
                     post: {
                         method: "POST",
                         isArray: false,
