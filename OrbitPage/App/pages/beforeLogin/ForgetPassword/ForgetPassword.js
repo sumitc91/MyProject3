@@ -1,6 +1,6 @@
 'use strict';
 define([appLocation.preLogin], function (app) {
-    app.controller('beforeLoginForgetPassword', function ($scope, $http,$timeout, $rootScope, Restangular, CookieUtil, AuthApi) {
+    app.controller('beforeLoginForgetPassword', function ($scope, $http, $timeout, $rootScope, Restangular, CookieUtil, AuthApi, OrbitPageApi) {
         $('title').html("index"); //TODO: change the title so cann't be tracked in log
         
         $scope.ForgetPasswordContent = true;
