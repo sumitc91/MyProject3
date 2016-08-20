@@ -1,6 +1,6 @@
 'use strict';
 define([appLocation.preLogin], function (app) {
-    app.controller('beforeLoginForgetPassword', function ($scope, $http, $rootScope, Restangular, CookieUtil, AuthApi) {
+    app.controller('beforeLoginForgetPassword', function ($scope, $http,$timeout, $rootScope, Restangular, CookieUtil, AuthApi) {
         $('title').html("index"); //TODO: change the title so cann't be tracked in log
         
         $scope.ForgetPasswordContent = true;
@@ -49,7 +49,7 @@ define([appLocation.preLogin], function (app) {
                         });
                         
                     } else if (data.Status == "500") {
-                        //location.href = "/?email=" + $('#forgetPasswordInputBoxId').val() + "#/showmessage/3/";
+                        location.href = "/?email=" + $('#forgetPasswordInputBoxId').val() + "#/showmessage/3/";
                     }
                 }, function (error) {
                     showToastMessage("Error", "Internal Server Error Occured!");
