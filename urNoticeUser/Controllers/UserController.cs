@@ -663,7 +663,6 @@ namespace urNoticeUser.Controllers
             if (session != null)
                 userEmail = session.UserName;
             var isValidToken = TokenManager.IsValidSession(headers.AuthToken);
-            isValidToken = true;//TODO: currently hard coded.
             if (isValidToken)
             {
                 Boolean isRequestValid = true;

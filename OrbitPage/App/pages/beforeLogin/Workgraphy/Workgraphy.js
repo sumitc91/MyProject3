@@ -1,6 +1,6 @@
 'use strict';
 define([appLocation.preLogin], function (app) {
-    app.controller('beforeLoginWorkgraphy', function ($scope, $interval, $http, $routeParams, $rootScope, $location, Restangular, CookieUtil, SolrServiceUtil) {
+    app.controller('beforeLoginWorkgraphy', function ($scope, $interval, $http, $routeParams, $rootScope, $location, Restangular, CookieUtil) {
 
         $('title').html(window.madetoearn.i18n.beforeLoginOrbitPageCompanyTitle);
         

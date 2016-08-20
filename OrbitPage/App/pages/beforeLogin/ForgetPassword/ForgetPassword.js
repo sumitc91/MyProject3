@@ -108,9 +108,7 @@ define([appLocation.preLogin], function (app) {
                 }, function (error) {
                     showToastMessage("Error", "Internal Server Error Occured!");
                 });
-
             }
-
         };
 
         $scope.HomeLink = function() {

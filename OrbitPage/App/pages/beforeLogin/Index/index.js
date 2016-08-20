@@ -1,6 +1,6 @@
 'use strict';
 define([appLocation.preLogin], function (app) {
-    app.controller('beforeLoginIndex', function ($scope,$interval, $http,$routeParams, $rootScope, $location, Restangular, CookieUtil, SolrServiceUtil) {
+    app.controller('beforeLoginIndex', function ($scope, $interval, $http, $timeout, $routeParams, $rootScope, $location, Restangular, CookieUtil, SearchApi) {
 
         $rootScope.userOrbitFeedList.show = false;
         $('title').html(window.madetoearn.i18n.beforeLoginOrbitPageCompanyTitle);
@@ -47,11 +47,9 @@ define([appLocation.preLogin], function (app) {
         var hi = new Vivus('hi-there', { type: 'async', duration: 250, start: 'autostart', dashGap: 30, forceRender: false },
             function() {
                 if (window.console) {
-                    console.log('Animation finished. [log triggered from callback]');
-                    $scope.showLandingPageLogo = true;
-                    if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                        $scope.$apply();
-                    }
+                    $timeout(function () {
+                        $scope.showLandingPageLogo = true;
+                    });
                 }
             });
         
@@ -59,34 +57,25 @@ define([appLocation.preLogin], function (app) {
 
         function getSolrServiceCompetitors() {
 
-            SolrServiceUtil.get({ size: '10001', rating: '0', speciality: 'Technology (IT,Telecom,Dot Com Etc)' }, function (data) {
+            var inputData = { size: '10001', rating: '0', speciality: 'Technology (IT,Telecom,Dot Com Etc)' };
 
+            SearchApi.GetCompanyCompetitorsDetail.get(inputData, function (data) {
                 if (data.Status == 200) {
                     
-                    //showToastMessage("Success", data.Message);
-                    $scope.competitorDetails = data.Payload;
-                    
-                    $.each(data.Payload, function (i, val) {
-                        $scope.competitorDetails[i].companyname = data.Payload[i].companyname;
-                        $scope.competitorDetails[i].website = data.Payload[i].website;
+                    $timeout(function () {
+                        $scope.competitorDetails = data.Payload;
+                        $.each(data.Payload, function (i, val) {
+                            $scope.competitorDetails[i].companyname = data.Payload[i].companyname;
+                            $scope.competitorDetails[i].website = data.Payload[i].website;
+                            $scope.competitorDetails[i].linkurl = "/#companydetails/" + $scope.competitorDetails[i].companyname.replace(/ /g, "_").replace(/\//g, "_OR_") + "/" + $scope.competitorDetails[i].guid;
 
-
-                        $scope.competitorDetails[i].linkurl = "/#companydetails/" + $scope.competitorDetails[i].companyname.replace(/ /g, "_").replace(/\//g, "_OR_") + "/" + $scope.competitorDetails[i].guid;
-
+                        });
                     });
-
-                    //$scope.$apply();
-                    if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                        $scope.$apply();
-                    }
                 }
             }, function (error) {
                 // Error handler code
                 showToastMessage("Error", "Internal Server Error Occured!");
             });
-
-            
-            
         }
 
         getLatestWorkgraphy();
@@ -96,37 +85,27 @@ define([appLocation.preLogin], function (app) {
             $scope.currentPage = 0;
             $scope.perpage = 6;
             $scope.totalMatch = 10;
-            var url = ServerContextPath.solrServer + '/Search/GetLatestWorkgraphy?page=' + $scope.currentPage + '&perpage=' + $scope.perpage + '&totalMatch=' + $scope.totalMatch;
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv'),
-            };
-            //startBlockUI('wait..', 3);
-            $.ajax({
-                url: url,
-                method: "GET",
-                headers: headers
-            }).done(function (data, status) {
-                //stopBlockUI();
-                console.log(data);
-                if (data.Status == "200") {
-                   
-                    $scope.totalMatch = data.Message;                    
-                    $scope.LatestWorkGraphyList = data.Payload;
+
+            var inputData = { currentPage: $scope.currentPage, perpage: $scope.perpage, totalMatch: $scope.totalMatch };
+
+            SearchApi.GetLatestWorkgraphy.get(inputData, function (data) {
+                if (data.Status == 200) {
                     
-                    if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                        $scope.$apply();
-                    }                    
+                    if (data.Status == "200") {
+                        $timeout(function () {
+                            $scope.totalMatch = data.Message;
+                            $scope.LatestWorkGraphyList = data.Payload;
+                        });
+                    }
+                    else {
+                        showToastMessage("Warning", data.Message);
+                    }
                 }
-                else {
-                    showToastMessage("Warning", data.Message);
-                }
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
-
-
         }
+
         $scope.myFunct = function(keyEvent) {
             if (keyEvent.which === 13) {
                 location.href = "/#search/?q=" + $("#companyName_value").val() + "&page=1&perpage=10";
@@ -141,163 +120,36 @@ define([appLocation.preLogin], function (app) {
         $scope.sliderImage = "https://s3-ap-southeast-1.amazonaws.com/urnotice/App/img/indexPageSlider/slider_final_low_3_" + $scope.imageIndex + ".jpg";
 
         $scope.prevSlide = function () {
-            console.log('prevslide');
-            if( $scope.imageIndex == 1)
-                $scope.imageIndex = 3;
-            else
-                $scope.imageIndex = $scope.imageIndex - 1;
+            
+            $timeout(function () {
+                if ($scope.imageIndex == 1)
+                    $scope.imageIndex = 3;
+                else
+                    $scope.imageIndex = $scope.imageIndex - 1;
 
-            $scope.sliderImage = "https://s3-ap-southeast-1.amazonaws.com/urnotice/App/img/indexPageSlider/slider_final_low_3_" + $scope.imageIndex + ".jpg";
-            $scope.$$phase || $scope.$apply();
+                $scope.sliderImage = "https://s3-ap-southeast-1.amazonaws.com/urnotice/App/img/indexPageSlider/slider_final_low_3_" + $scope.imageIndex + ".jpg";
+            });
         };
 
 
         $scope.nextSlide = function () {
-            console.log('nextslide');
-            if( $scope.imageIndex ==3 )
-                $scope.imageIndex = 1;
-            else
-                $scope.imageIndex = $scope.imageIndex + 1;
+            
+            $timeout(function () {
+                if ($scope.imageIndex == 3)
+                    $scope.imageIndex = 1;
+                else
+                    $scope.imageIndex = $scope.imageIndex + 1;
 
-            $scope.sliderImage = "https://s3-ap-southeast-1.amazonaws.com/urnotice/App/img/indexPageSlider/slider_final_low_3_" + $scope.imageIndex + ".jpg";
-            $scope.$$phase || $scope.$apply();
+                $scope.sliderImage = "https://s3-ap-southeast-1.amazonaws.com/urnotice/App/img/indexPageSlider/slider_final_low_3_" + $scope.imageIndex + ".jpg";
+            });
         };
 
         $scope.myInterval = 5000;
         $scope.noWrapSlides = false;
-        var currIndex = 0;
-        $scope.slides = [];
-        var slides = $scope.slides;
-        $scope.slides = [
-        {
-            image: 'https://s3-ap-southeast-1.amazonaws.com/urnotice/App/img/indexPageSlider/received_909588079090414.jpeg',
-            text: ['Nice image1', 'Awesome photograph', 'That is so cool', 'I love that'][slides.length % 4],
-            id: currIndex++
-        },
-        {
-            image: 'https://s3-ap-southeast-1.amazonaws.com/urnotice/App/img/indexPageSlider/final_2.jpg',
-            text: ['Nice image2', 'Awesome photograph', 'That is so cool', 'I love that'][slides.length % 4],
-            id: currIndex++
-        },
-        {
-            image: 'https://s3-ap-southeast-1.amazonaws.com/urnotice/App/img/indexPageSlider/final_3.jpg',
-            text: ['Nice image3', 'Awesome photograph', 'That is so cool', 'I love that'][slides.length % 4],
-            id: currIndex++
-        }
-        ];
         
         
-
-        $scope.openFacebookAuthWindow = function() {
-            var url = '/SocialAuth/FBLoginGetRedirectUri';
-            startBlockUI('wait..', 3);
-            $http({
-                url: url,
-                method: "GET",
-                headers: { 'Content-Type': 'application/json' }
-            }).success(function(data, status, headers, config) {
-                //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
-                stopBlockUI();
-                if (data.Status == "199") {
-                    location.href = data.Message;
-                } else {
-                    alert("some error occured");
-                }
-
-            }).error(function(data, status, headers, config) {
-                alert("internal server error occured");
-            });
-            //            var win = window.open("/SocialAuth/FBLogin/facebook", "Ratting", "width=" + popWindow.width + ",height=" + popWindow.height + ",0,status=0,scrollbars=1");
-            //            win.onunload = onun;
-
-            //            function onun() {
-            //                if (win.location != "about:blank") // This is so that the function 
-            //                // doesn't do anything when the 
-            //                // window is first opened.
-            //                {
-            //                    //$route.reload();
-            //                    //alert("working");
-            //                    //location.reload();
-            //                    //alert("closed");
-            //                }
-            //            }
-        };
-
-        $scope.openLinkedinAuthWindow = function() {
-            var url = '/SocialAuth/LinkedinLoginGetRedirectUri';
-            startBlockUI('wait..', 3);
-            $http({
-                url: url,
-                method: "GET",
-                headers: { 'Content-Type': 'application/json' }
-            }).success(function(data, status, headers, config) {
-                //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
-                stopBlockUI();
-                if (data.Status == "199") {
-                    location.href = data.Message;
-                } else {
-                    alert("some error occured");
-                }
-
-            }).error(function(data, status, headers, config) {
-                alert("internal server error occured");
-            });
-            //            var win = window.open("/SocialAuth/LinkedinLogin", "Ratting", "width=" + popWindow.width + ",height=" + popWindow.height + ",0,status=0,scrollbars=1");
-            //            win.onunload = onun;
-
-            //            function onun() {
-            //                if (win.location != "about:blank") // This is so that the function 
-            //                // doesn't do anything when the 
-            //                // window is first opened.
-            //                {
-            //                    //$route.reload();
-            //                    //alert("working");
-            //                    //location.reload();
-            //                    //alert("closed");
-            //                }
-            //            }
-        };
-
-        $scope.openGoogleAuthWindow = function() {
-            var url = '/SocialAuth/GoogleLoginGetRedirectUri';
-            startBlockUI('wait..', 3);
-            $http({
-                url: url,
-                method: "GET",
-                headers: { 'Content-Type': 'application/json' }
-            }).success(function(data, status, headers, config) {
-                //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
-                stopBlockUI();
-                if (data.Status == "199") {
-                    location.href = data.Message;
-                } else {
-                    alert("some error occured");
-                }
-
-            }).error(function(data, status, headers, config) {
-                alert("internal server error occured");
-            });
-            //            var win = window.open("/SocialAuth/GoogleLogin/", "Ratting", "width=" + popWindow.width + ",height=" + popWindow.height + ",0,status=0,scrollbars=1");
-            //            win.onunload = onun;
-
-            //            function onun() {
-            //                if (win.location != "about:blank") // This is so that the function 
-            //                // doesn't do anything when the 
-            //                // window is first opened.
-            //                {
-            //                    //$route.reload();
-            //                    //alert("working");
-            //                    //location.reload();
-            //                    //alert("closed");
-            //                }
-            //            }
-        };
     });
 
-    function isValidEmailAddress(emailAddress) {
-        var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
-        return pattern.test(emailAddress);
-    };
 });
 
 

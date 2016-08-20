@@ -22,7 +22,6 @@ define([appLocation.preLogin], function (app) {
             SearchApi.GetLatestBlogs.get(inputData, function (data) {
                 if (data.Status == 200) {
                     stopBlockUI();
-                    console.log(data);
                     if (data.Status == "200") {
                         $timeout(function () {
                             $scope.totalMatch = data.Message;
