@@ -18,13 +18,16 @@ define([appLocation.preLogin], function (app) {
             message: ''
         };
 
-        $scope.ForgetPasswordSendRequest = function() {
+        $scope.ForgetPasswordSendRequest = function () {
+
             if (isValidEmailAddress($('#forgetPasswordInputBoxId').val())) {
-                startBlockUI('wait..', 3);
+                
                 var inputData = { id: $('#forgetPasswordInputBoxId').val() };
 
+                startBlockUI('wait..', 3);
                 AuthApi.ForgetPassword.get(inputData, function (data) {
 
+                    stopBlockUI();
                     if (data.Status == "200") {
                         location.href = "/?email=" + $('#forgetPasswordInputBoxId').val() + "#/showmessage/2/";
                     } else if (data.Status == "404") {
@@ -73,35 +76,39 @@ define([appLocation.preLogin], function (app) {
             };
 
             if (isValidEmailAddress($('#forgetPasswordInputBoxId').val())) {
+
                 startBlockUI('wait..', 3);
-                $http({
-                    url: '/Auth/ResendValidationCode/',
-                    data: resendValidationRequest,
-                    method: "POST"
-                }).success(function(data, status, headers, config) {
+                OrbitPageApi.ResendValidationCode.post(resendValidationRequest, function (data) {
                     stopBlockUI();
                     if (data.Status == "200") {
                         location.href = "/?email=" + $('#forgetPasswordInputBoxId').val() + "#/showmessage/2/";
                     } else if (data.Status == "404") {
-                        $scope.ForgetPasswordContent = false;
-                        $scope.ForgetPasswordAlertContent.visible = true;
-                        $scope.ForgetPasswordAlertContent.message = "Entered email id is not registerd with us. Please enter your email address which is registered with us to set new password.";
-                        $scope.ResendValidationOrSignup.visible = true;
-                        $scope.ResendValidationOrSignup.title = "Please go to Home page and registered yourself.";
-                        $scope.ResendValidationOrSignup.buttonName = "Home";
-                        $scope.ResendValidationOrSignup.functionName = "HomeLink()";
+                        $timeout(function () {
+                            $scope.ForgetPasswordContent = false;
+                            $scope.ForgetPasswordAlertContent.visible = true;
+                            $scope.ForgetPasswordAlertContent.message = "Entered email id is not registerd with us. Please enter your email address which is registered with us to set new password.";
+                            $scope.ResendValidationOrSignup.visible = true;
+                            $scope.ResendValidationOrSignup.title = "Please go to Home page and registered yourself.";
+                            $scope.ResendValidationOrSignup.buttonName = "Home";
+                            $scope.ResendValidationOrSignup.functionName = "HomeLink()";
+                        });
+                        
                     } else if (data.Status == "402") {
-                        $scope.ForgetPasswordContent = false;
-                        $scope.ForgetPasswordForm = false;
-                        $scope.ForgetPasswordAlertContent.visible = true;
-                        $scope.ForgetPasswordAlertContent.message = "Email Address-" + $('#forgetPasswordInputBoxId').val() + " has been already valideted. To continue, Please login into account.";
-                        $scope.ResendValidationOrSignup.visible = false;
+                        $timeout(function () {
+                            $scope.ForgetPasswordContent = false;
+                            $scope.ForgetPasswordForm = false;
+                            $scope.ForgetPasswordAlertContent.visible = true;
+                            $scope.ForgetPasswordAlertContent.message = "Email Address-" + $('#forgetPasswordInputBoxId').val() + " has been already valideted. To continue, Please login into account.";
+                            $scope.ResendValidationOrSignup.visible = false;
+                        });
+                        
                     } else if (data.Status == "500") {
                         location.href = "/?email=" + $('#forgetPasswordInputBoxId').val() + "#/showmessage/3/";
                     }
-                }).error(function(data, status, headers, config) {
-                    alert("false");
+                }, function (error) {
+                    showToastMessage("Error", "Internal Server Error Occured!");
                 });
+
             }
 
         };
