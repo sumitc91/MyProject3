@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using urNotice.Common.Infrastructure.Common.Enum;
 
 namespace urNotice.Common.Infrastructure.Common.Config
 {
     public class SmtpConfig
     {
 
-        public const string ActiveEmail = "Mandrill";
+        public const EmailSourceEnum ActiveEmailForForgetPasswordValidation = EmailSourceEnum.GMAIL;
+        public const EmailSourceEnum ActiveEmailForAccountCreationValidation = EmailSourceEnum.GMAIL;
+        public const EmailSourceEnum ActiveEmailForContactUsMail = EmailSourceEnum.GMAIL;
+        public const EmailSourceEnum ActiveEmailForAccountVerification = EmailSourceEnum.GMAIL;
 
         public const string MandrillSmtpEmail = "hi@orbitpage.com";
         public const string MandrillSmtpPassword = "i4G1QaGHJHz5pTCylnEymQ";

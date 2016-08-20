@@ -3,6 +3,7 @@ using System.Text;
 using urNotice.Common.Infrastructure.Common.Config;
 using urNotice.Common.Infrastructure.Common.Constants;
 using urNotice.Common.Infrastructure.Common.Constants.EmailConstants;
+using urNotice.Common.Infrastructure.Common.Enum;
 using urNotice.Common.Infrastructure.commonMethods;
 using urNotice.Common.Infrastructure.Model.urNoticeModel.RequestWrapper;
 using urNotice.Services.Factory.Email;
@@ -13,7 +14,7 @@ namespace urNotice.Services.Email.EmailTemplate
     {
         public static void SendContactUsEmailMessage(String toMail, ContactUsRequest req)
         {
-            IEmail emailModel = EmailFactory.GetEmailInstance(CommonConstants.Mandrill);
+            IEmail emailModel = EmailFactory.GetEmailInstance(SmtpConfig.ActiveEmailForContactUsMail);
 
             emailModel.SendEmail(toMail,
                SmtpContactUsEmailContants.SenderName,

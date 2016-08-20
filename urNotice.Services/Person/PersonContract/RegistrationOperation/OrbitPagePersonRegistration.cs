@@ -9,6 +9,7 @@ using System.Web;
 using urNotice.Common.Infrastructure.Common.Config;
 using urNotice.Common.Infrastructure.Common.Constants;
 using urNotice.Common.Infrastructure.Common.Constants.EmailConstants;
+using urNotice.Common.Infrastructure.Common.Enum;
 using urNotice.Common.Infrastructure.commonMethods;
 using urNotice.Common.Infrastructure.Encryption;
 using urNotice.Common.Infrastructure.Model.urNoticeModel.AssetClass;
@@ -166,7 +167,8 @@ namespace urNotice.Services.Person.PersonContract.RegistrationOperation
         {            
             if (request != null && request.Url != null)
             {                
-                IEmail emailModel = EmailFactory.GetEmailInstance(CommonConstants.Mandrill);
+                IEmail emailModel = EmailFactory.GetEmailInstance(SmtpConfig.ActiveEmailForAccountVerification);
+
                 emailModel.SendEmail(user.email,
                     SmptCreateAccountConstants.SenderName,
                     SmptCreateAccountConstants.EmailTitle,
