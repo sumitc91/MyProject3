@@ -31,6 +31,41 @@ define([appLocation.preLogin], function (app) {
                     },
                 }),
 
+             Login: $resource(
+                ServerContextPath.empty + '/Auth/Login', {}, {
+                    post: {
+                        method: "POST",
+                        isArray: false,
+                        headers: headers
+                    },
+                }),
+
+             FBLoginGetRedirectUri: $resource(
+                 ServerContextPath.empty + '/SocialAuth/FBLoginGetRedirectUri', { }, {
+                     query: {
+                         isArray: false,
+                         method: 'GET',
+                         headers: headers
+                     }
+                 }),
+
+             LinkedinLoginGetRedirectUri: $resource(
+                 ServerContextPath.empty + '/SocialAuth/LinkedinLoginGetRedirectUri', {}, {
+                     query: {
+                         isArray: false,
+                         method: 'GET',
+                         headers: headers
+                     }
+                 }),
+
+             GoogleLoginGetRedirectUri: $resource(
+                 ServerContextPath.empty + '/SocialAuth/GoogleLoginGetRedirectUri', {}, {
+                     query: {
+                         isArray: false,
+                         method: 'GET',
+                         headers: headers
+                     }
+                 }),
          };
      }]);
 

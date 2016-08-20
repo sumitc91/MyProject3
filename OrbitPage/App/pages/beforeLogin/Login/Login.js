@@ -1,6 +1,6 @@
 'use strict';
 define([appLocation.preLogin], function (app) {
-    app.controller('beforeLoginLoginPage', function ($scope, $http, $route, $rootScope, $routeParams,$location, $timeout, CookieUtil) {
+    app.controller('beforeLoginLoginPage', function ($scope, $http, $route, $rootScope, $routeParams, $location, $timeout, CookieUtil, OrbitPageApi) {
         $('title').html("index"); //TODO: change the title so cann't be tracked in log
         
         $scope.mobileDevice = mobileDevice != null ? true : false;
@@ -15,10 +15,7 @@ define([appLocation.preLogin], function (app) {
         } else {
             //setReturnUrlInCookie($location.path());
         }
-           
-        
-        //showToastMessage("Error", CookieUtil.getReturnUrl());
-
+          
         $scope.EmailIdAlert = {
             visible: false,
             message: ''
@@ -71,15 +68,12 @@ define([appLocation.preLogin], function (app) {
                 $('#loginUserTypeRadioButtonId').attr('checked', true);
                 $('.userTypeId').html(userConstants.name_abb);
                 $scope.userType = userConstants.name_abb;
-                //$scope.isUser = true;                
                 $scope.isUser = true;               
-                //console.log(userConstants.name_abb);
             }
             else {
                 $('#loginClientTypeRadioButtonId').attr('checked', true);
                 $('.userTypeId').html(clientConstants.name_abb);
                 $scope.userType = clientConstants.name_abb;
-                //$scope.isUser = false;                
                 $scope.isUser = false;
                 
             }
@@ -108,7 +102,6 @@ define([appLocation.preLogin], function (app) {
 
             userSession.keepMeSignedIn = $scope.KeepMeSignedInCheckBox;
 
-            var url = ServerContextPath.empty + '/Auth/Login';
             var validatePassword = false;
             var validateUsername = false;
 
@@ -131,62 +124,57 @@ define([appLocation.preLogin], function (app) {
 
             if (validateUsername && validatePassword) {
                 startBlockUI('wait..', 3);
-                $http({
-                    url: url,
-                    method: "POST",
-                    data: userLoginData,
-                    headers: { 'Content-Type': 'application/json' }
-                }).success(function(data, status, headers, config) {
-                    //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
+
+                OrbitPageApi.Login.post(userLoginData, function (data) {
                     stopBlockUI();
-                    if (data.Status == "401") {
-                        showToastMessage("Notice", "The username/password combination is incorrect !");
-                        $scope.showHeaderErrors = true;
-                        $scope.HeaderAlert.visible = true;
-                        $scope.HeaderAlert.classType = "danger";
-                        $scope.HeaderAlert.message = "The username/password combination you entered is incorrect. Please try again(make sure your caps lock is off).";
-                        $scope.ForgetPasswordAlert.visible = true;
-                        $scope.ForgetPasswordAlert.message = "Forgot your password?";
-                    } else if (data.Status == "500") {
-                        $scope.showHeaderErrors = true;
-                        $scope.HeaderAlert.visible = true;
-                        $scope.HeaderAlert.classType = "danger";
-                        $scope.HeaderAlert.message = "Internal server error occured. Please try again.";
-                        showToastMessage("Error", "Internal Server Error Occured !");
-                    } else if (data.Status == "403") {
-                        showToastMessage("Warning", "Your Account is not verified. Please check your mail !");
-                        $scope.showHeaderErrors = true;
-                        $scope.HeaderAlert.visible = true;
-                        $scope.HeaderAlert.classType = "danger";
-                        $scope.HeaderAlert.message = "Your Account is not verified yet. Please check your mail and verfiy your account.";
-                    } else if (data.Status == "200") {
-                        //showToastMessage("Success", "Successfully Logged in !");                    
-                        //console.log("data : " + data);
-                        //alert("auth token : "+data.Payload.AuthToken);
-                        CookieUtil.setUTMZT(data.Payload.UTMZT, userSession.keepMeSignedIn);
-                        CookieUtil.setUTMZK(data.Payload.UTMZK, userSession.keepMeSignedIn);
-                        CookieUtil.setUTMZV(data.Payload.UTMZV, userSession.keepMeSignedIn);
-                        CookieUtil.setUTIME(data.Payload.TimeStamp, userSession.keepMeSignedIn);
 
-                        $.cookie('uservertexid', data.Payload.VertexId, { expires: 365, path: '/', domain: ServerContextPath.cookieDomain });
-                        $.cookie('userName', data.Payload.FirstName, { expires: 365, path: '/', domain: ServerContextPath.cookieDomain });
-                        $.cookie('userImageUrl', data.Payload.imageUrl, { expires: 365, path: '/', domain: ServerContextPath.cookieDomain });
+                    $timeout(function () {
+                        if (data.Status == "401") {
+                            showToastMessage("Notice", "The username/password combination is incorrect !");
+                            $scope.showHeaderErrors = true;
+                            $scope.HeaderAlert.visible = true;
+                            $scope.HeaderAlert.classType = "danger";
+                            $scope.HeaderAlert.message = "The username/password combination you entered is incorrect. Please try again(make sure your caps lock is off).";
+                            $scope.ForgetPasswordAlert.visible = true;
+                            $scope.ForgetPasswordAlert.message = "Forgot your password?";
+                        } else if (data.Status == "500") {
+                            $scope.showHeaderErrors = true;
+                            $scope.HeaderAlert.visible = true;
+                            $scope.HeaderAlert.classType = "danger";
+                            $scope.HeaderAlert.message = "Internal server error occured. Please try again.";
+                            showToastMessage("Error", "Internal Server Error Occured !");
+                        } else if (data.Status == "403") {
+                            showToastMessage("Warning", "Your Account is not verified. Please check your mail !");
+                            $scope.showHeaderErrors = true;
+                            $scope.HeaderAlert.visible = true;
+                            $scope.HeaderAlert.classType = "danger";
+                            $scope.HeaderAlert.message = "Your Account is not verified yet. Please check your mail and verfiy your account.";
+                        } else if (data.Status == "200") {
+                            
+                            CookieUtil.setUTMZT(data.Payload.UTMZT, userSession.keepMeSignedIn);
+                            CookieUtil.setUTMZK(data.Payload.UTMZK, userSession.keepMeSignedIn);
+                            CookieUtil.setUTMZV(data.Payload.UTMZV, userSession.keepMeSignedIn);
+                            CookieUtil.setUTIME(data.Payload.TimeStamp, userSession.keepMeSignedIn);
 
-                        CookieUtil.setKMSI(userSession.keepMeSignedIn, true); // to store KMSI value for maximum possible time.
+                            $.cookie('uservertexid', data.Payload.VertexId, { expires: 365, path: '/', domain: ServerContextPath.cookieDomain });
+                            $.cookie('userName', data.Payload.FirstName, { expires: 365, path: '/', domain: ServerContextPath.cookieDomain });
+                            $.cookie('userImageUrl', data.Payload.imageUrl, { expires: 365, path: '/', domain: ServerContextPath.cookieDomain });
+
+                            CookieUtil.setKMSI(userSession.keepMeSignedIn, true); // to store KMSI value for maximum possible time.
 
 
-                        $rootScope.clientDetailResponse.FirstName = data.Payload.FirstName;
-                        $rootScope.clientDetailResponse.LastName = data.Payload.LastName;
-                        $rootScope.clientDetailResponse.Username = data.Payload.Username;
-                        $rootScope.clientDetailResponse.imageUrl = data.Payload.imageUrl;
-                        $rootScope.isUserLoggedIn = true;
-                        
-                        //$window.location.reload();
-                        redirectAfterLogin();
-                    }
+                            $rootScope.clientDetailResponse.FirstName = data.Payload.FirstName;
+                            $rootScope.clientDetailResponse.LastName = data.Payload.LastName;
+                            $rootScope.clientDetailResponse.Username = data.Payload.Username;
+                            $rootScope.clientDetailResponse.imageUrl = data.Payload.imageUrl;
+                            $rootScope.isUserLoggedIn = true;
 
-                }).error(function(data, status, headers, config) {
-
+                            redirectAfterLogin();
+                        }
+                    });
+                    
+                }, function (error) {
+                    showToastMessage("Error", "Internal Server Error Occured!");
                 });
             } else {
                 $scope.showFooterErrors = true;
@@ -196,50 +184,28 @@ define([appLocation.preLogin], function (app) {
         };
 
         $scope.openFacebookAuthWindow = function () {
-            var url = '/SocialAuth/FBLoginGetRedirectUri';
+            
             startBlockUI('wait..', 3);
-            $http({
-                url: url,
-                method: "GET",
-                headers: { 'Content-Type': 'application/json' }
-            }).success(function (data, status, headers, config) {
-                //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
+
+            OrbitPageApi.FBLoginGetRedirectUri.get({}, function (data) {
+                
                 stopBlockUI();
                 if (data.Status == "199") {
                     location.href = data.Message;
                 }
                 else {
-                    alert("some error occured");
+                    showToastMessage("Warning", "some error occured");
                 }
-
-            }).error(function (data, status, headers, config) {
-                alert("internal server error occured");
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
-            //            var win = window.open("/SocialAuth/FBLogin/facebook", "Ratting", "width=" + popWindow.width + ",height=" + popWindow.height + ",0,status=0,scrollbars=1");
-            //            win.onunload = onun;
-
-            //            function onun() {
-            //                if (win.location != "about:blank") // This is so that the function 
-            //                // doesn't do anything when the 
-            //                // window is first opened.
-            //                {
-            //                    //$route.reload();
-            //                    //alert("working");
-            //                    //location.reload();
-            //                    //alert("closed");
-            //                }
-            //            }
         }
 
         $scope.openLinkedinAuthWindow = function () {
-            var url = '/SocialAuth/LinkedinLoginGetRedirectUri';
+
             startBlockUI('wait..', 3);
-            $http({
-                url: url,
-                method: "GET",
-                headers: { 'Content-Type': 'application/json' }
-            }).success(function (data, status, headers, config) {
-                //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
+            OrbitPageApi.LinkedinLoginGetRedirectUri.get({}, function (data) {
+
                 stopBlockUI();
                 if (data.Status == "199") {
                     location.href = data.Message;
@@ -247,35 +213,16 @@ define([appLocation.preLogin], function (app) {
                 else {
                     alert("some error occured");
                 }
-
-            }).error(function (data, status, headers, config) {
-                alert("internal server error occured");
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
-            //            var win = window.open("/SocialAuth/LinkedinLogin", "Ratting", "width=" + popWindow.width + ",height=" + popWindow.height + ",0,status=0,scrollbars=1");
-            //            win.onunload = onun;
-
-            //            function onun() {
-            //                if (win.location != "about:blank") // This is so that the function 
-            //                // doesn't do anything when the 
-            //                // window is first opened.
-            //                {
-            //                    //$route.reload();
-            //                    //alert("working");
-            //                    //location.reload();
-            //                    //alert("closed");
-            //                }
-            //            }
         }
 
         $scope.openGoogleAuthWindow = function () {
-            var url = '/SocialAuth/GoogleLoginGetRedirectUri';
+
             startBlockUI('wait..', 3);
-            $http({
-                url: url,
-                method: "GET",
-                headers: { 'Content-Type': 'application/json' }
-            }).success(function (data, status, headers, config) {
-                //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
+            OrbitPageApi.GoogleLoginGetRedirectUri.get({}, function (data) {
+
                 stopBlockUI();
                 if (data.Status == "199") {
                     location.href = data.Message;
@@ -283,24 +230,9 @@ define([appLocation.preLogin], function (app) {
                 else {
                     alert("some error occured");
                 }
-
-            }).error(function (data, status, headers, config) {
-                alert("internal server error occured");
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
-            //            var win = window.open("/SocialAuth/GoogleLogin/", "Ratting", "width=" + popWindow.width + ",height=" + popWindow.height + ",0,status=0,scrollbars=1");
-            //            win.onunload = onun;
-
-            //            function onun() {
-            //                if (win.location != "about:blank") // This is so that the function 
-            //                // doesn't do anything when the 
-            //                // window is first opened.
-            //                {
-            //                    //$route.reload();
-            //                    //alert("working");
-            //                    //location.reload();
-            //                    //alert("closed");
-            //                }
-            //            }
         }
 
         $('.TextBoxBeforeLoginFormSubmitButtonClass').keypress(function (e) {
@@ -311,44 +243,26 @@ define([appLocation.preLogin], function (app) {
         //radiobutton
         $('.loginUserTypeRadioButton').on('change', function () {
             CookieUtil.setLoginType(this.value, userSession.keepMeSignedIn);
-            //var data = this.value;
             if (this.value == "user") {
-                $scope.userType = userConstants.name_abb;
-                $scope.$apply(function () {
+                
+                $timeout(function () {
+                    $scope.userType = userConstants.name_abb;
                     $scope.isUser = true;
                 });
-                //$scope.isUser = true;
+                
                 $('.userTypeId').html(userConstants.name_abb);
 
             }
             else {
                 $('.userTypeId').html(clientConstants.name_abb);
-                $scope.userType = clientConstants.name_abb;
-                $scope.$apply(function () {
+                $timeout(function () {
+                    $scope.userType = clientConstants.name_abb;
                     $scope.isUser = false;
                 });
-                //$scope.isUser = false;
+                
             }
-            //console.log(this.value);
         });
-
-        //        $('.loginUserTypeRadioButton').on('ifChecked', function (event) {
-        //            //var a = "ifChecked "+ $(this).val();
-        //            //console.log(a + "---" + this.value);
-        //            var data = this.value;
-        //            console.log("2 " + data);
-        //        });
     });
-
-    function isValidEmailAddress(emailAddress) {
-        var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
-        return pattern.test(emailAddress);
-    };
-
-    function isValidFormField(emailAddress) {
-        var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
-        return pattern.test(emailAddress);
-    };
     
 });
 
