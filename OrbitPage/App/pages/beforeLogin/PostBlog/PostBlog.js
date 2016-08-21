@@ -1,6 +1,6 @@
 'use strict';
 define([appLocation.preLogin], function (app) {
-    app.controller('beforeLoginPostBlog', function ($scope, $http, $upload, $timeout, $rootScope, $window, $location, Restangular, CookieUtil) {
+    app.controller('beforeLoginPostBlog', function ($scope, $http, $upload, $timeout, $rootScope, $window, $location, Restangular, CookieUtil, OrbitPageApi) {
         $('title').html("index"); //TODO: change the title so cann't be tracked in log
 
         $scope.PostStoryModel = {
@@ -18,6 +18,10 @@ define([appLocation.preLogin], function (app) {
 
         };
 
+        $scope.details = {
+            address_components: "",
+            formatted_address:""
+        };
         $scope.refreshModeratingPhotosListDiv = function() {
             $scope.imgurImageTemplateModeratingPhotos = userSession.imgurImageTemplateModeratingPhotos;
             $('.fancybox').fancybox();
@@ -54,6 +58,9 @@ define([appLocation.preLogin], function (app) {
 
                     userSession.imgurImageTemplateModeratingPhotos.push(data);
                     $scope.refreshModeratingPhotosListDiv();
+                    //angular.element(document.getElementById('ModeratingPhotosViewAfterUploadId')).scope().refreshModeratingPhotosListDiv(); 
+                    console.log("moderationgphotosscript");
+                    console.log(userSession.imgurImageTemplateModeratingPhotos);
 
                     $timeout(function () {
                         $scope.NewPostImageUrl = data.data;
@@ -81,8 +88,14 @@ define([appLocation.preLogin], function (app) {
 
                     stopBlockUI();
 
+                    //userSession.imgurImageTemplateModeratingPhotos.push(data);
+                    //$scope.refreshModeratingPhotosListDiv();
+                    //angular.element(document.getElementById('ModeratingPhotosViewAfterUploadId')).scope().refreshModeratingPhotosListDiv(); 
+                    //console.log("moderationgphotosscript");
+                    
+
                     $rootScope.wysiHTML5InputImageTextBoxId = data.data.link_m;
-                    //console.log($scope.wysiHTML5InputImageTextBoxId);
+                    console.log($scope.wysiHTML5InputImageTextBoxId);
 
                     $timeout(function () {
                         $scope.NewPostImageUrl = data.data;
@@ -131,14 +144,21 @@ define([appLocation.preLogin], function (app) {
         }
 
         $scope.selectedDesignation = function (selected) {
+            //console.log(selected);
             $scope.PostStoryModel.designation = selected.description.designation;
             $scope.PostStoryModel.designationVertexId = selected.description.vertexId;
+            //console.log($scope.PostStoryModel);
+            //location.href = "/#companydetails/" + selected.originalObject.companyname.replace(/ /g, "_").replace(/\//g, "_OR_") + "/" + selected.originalObject.guid;
+
         };
 
         $scope.selectedCompany = function (selected) {
-            //console.log(selected);
+            console.log(selected);
             $scope.PostStoryModel.companyName = selected.description.companyname;
             $scope.PostStoryModel.companyVertexId = selected.description.guid;
+            //console.log($scope.PostStoryModel);
+            //location.href = "/#companydetails/" + selected.originalObject.companyname.replace(/ /g, "_").replace(/\//g, "_OR_") + "/" + selected.originalObject.guid;
+
         };
 
         $scope.SubmitJobStoryToServer = function () {
@@ -215,6 +235,7 @@ define([appLocation.preLogin], function (app) {
 
             $scope.options.watchEnter = $scope.form.watchEnter;
 
+            
         };
     });
 

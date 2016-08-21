@@ -148,6 +148,15 @@ define([appLocation.preLogin], function (app) {
                         headers: headers
                     },
                 }),
+
+             CreateUrJobGraphy: $resource(
+                ServerContextPath.empty + '/Story/CreateUrJobGraphy', {}, {
+                    post: {
+                        method: "POST",
+                        isArray: false,
+                        headers: headers
+                    },
+                }),
          };
      }]);
 
