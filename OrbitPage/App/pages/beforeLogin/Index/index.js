@@ -106,14 +106,14 @@ define([appLocation.preLogin], function (app) {
             });
         }
 
-        $scope.myFunct = function(keyEvent) {
+        $scope.myFunct = function (keyEvent) {
             if (keyEvent.which === 13) {
-                location.href = "/#search/?q=" + $("#companyName_value").val() + "&page=1&perpage=10";
+                location.href = "/#search/?q=" + $("#indexSearchBar_value").val() + "&page=1&perpage=10";
             }
         };
 
         $scope.searchCompany = function() {
-            location.href = "/#search/?q=" + $("#companyName_value").val() + "&page=1&perpage=10";
+            location.href = "/#search/?q=" + $("#indexSearchBar_value").val() + "&page=1&perpage=10";
         };
 
         $scope.imageIndex = 2;
