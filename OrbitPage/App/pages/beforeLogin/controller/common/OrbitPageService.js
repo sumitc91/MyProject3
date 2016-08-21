@@ -139,6 +139,15 @@ define([appLocation.preLogin], function (app) {
                         headers: headers
                     },
                 }),
+
+             CreateBlog: $resource(
+                ServerContextPath.empty + '/Story/CreateBlog', {}, {
+                    post: {
+                        method: "POST",
+                        isArray: false,
+                        headers: headers
+                    },
+                }),
          };
      }]);
 
