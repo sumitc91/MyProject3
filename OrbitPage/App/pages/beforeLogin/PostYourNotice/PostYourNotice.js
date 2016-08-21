@@ -1,7 +1,7 @@
 'use strict';
 define([appLocation.preLogin], function (app) {
 
-    app.controller('beforeLoginPostYourNotice', function ($scope,$location, $http, $rootScope, CookieUtil) {
+    app.controller('beforeLoginPostYourNotice', function ($scope, $location, $http, $timeout, $rootScope, CookieUtil, OrbitPageApi) {
         $('title').html("index-1"); //TODO: change the title so cann't be tracked in log
 
         //Range slider config
@@ -12,10 +12,6 @@ define([appLocation.preLogin], function (app) {
                 step: 1
             }
         };
-
-        
-
-        
 
         $scope.postYourNoticeFormData = {
             constants: {
@@ -144,7 +140,6 @@ define([appLocation.preLogin], function (app) {
                 },
                 openPage: function (page) {
                     $('#button-step-'+page).click();
-                    //console.log($scope.postYourNoticeFormData.companyReview);
                 },
                 submit: function () {                    
                     console.log($scope.postYourNoticeFormData.companyReview);
@@ -167,16 +162,6 @@ define([appLocation.preLogin], function (app) {
             };
             newNoticeData.companyReview.location = "";
 
-            var url = ServerContextPath.empty + '/User/UserNewReviewPost';
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv'),
-            };
-
-            
-
             if (isNullOrEmpty(newNoticeData.companyReview.employerName)) {
                 showToastMessage("Warning", "You cannot submit Empty Post.");
                 return;
@@ -185,24 +170,19 @@ define([appLocation.preLogin], function (app) {
             if ($rootScope.isUserLoggedIn) {
                 startBlockUI('wait..', 3);
 
-                $http({
-                    url: url,
-                    method: "POST",
-                    data: newNoticeData,
-                    headers: headers
-                }).success(function (data, status, headers, config) {
-                    //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
+                OrbitPageApi.UserNewReviewPost.post(newNoticeData, function (data) {
+
                     stopBlockUI();
                     $scope.UserPostList = [];
                     $timeout(function () {
                         $scope.NewPostImageUrl = {};
                     });
 
-                    
-
-                }).error(function (data, status, headers, config) {
-
+                    showToastMessage("Success", "Successfully Edited");
+                }, function (error) {
+                    showToastMessage("Error", "Internal Server Error Occured!");
                 });
+
             } else {
                 showToastMessage("Warning", "Please Login to create a post.");
             }
@@ -215,21 +195,19 @@ define([appLocation.preLogin], function (app) {
         };
 
         $scope.postYourNoticeFormData.companyReview.toggleCompanyGoodPoint = function(index) {
-            console.log($scope.postYourNoticeFormData.constants.companyGoodPointList[index].isSelected);
-            $scope.postYourNoticeFormData.constants.companyGoodPointList[index].isSelected = $scope.postYourNoticeFormData.constants.companyGoodPointList[index].isSelected?false:true;
-            console.log($scope.postYourNoticeFormData.constants.companyGoodPointList[index].isSelected);
-            if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                $scope.$apply();
-            }
+           
+            $timeout(function () {
+                $scope.postYourNoticeFormData.constants.companyGoodPointList[index].isSelected = $scope.postYourNoticeFormData.constants.companyGoodPointList[index].isSelected ? false : true;
+            });
+           
         };
 
         $scope.postYourNoticeFormData.companyReview.toggleCompanyBadPoint = function (index) {
-            console.log($scope.postYourNoticeFormData.constants.companyBadPointList[index].isSelected);
-            $scope.postYourNoticeFormData.constants.companyBadPointList[index].isSelected = $scope.postYourNoticeFormData.constants.companyBadPointList[index].isSelected ? false : true;
-            console.log($scope.postYourNoticeFormData.constants.companyBadPointList[index].isSelected);
-            if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                $scope.$apply();
-            }
+            
+            $timeout(function () {
+                $scope.postYourNoticeFormData.constants.companyBadPointList[index].isSelected = $scope.postYourNoticeFormData.constants.companyBadPointList[index].isSelected ? false : true;
+            });
+            
         };
 
         $scope.selectedCompany = function (selected) {
@@ -237,21 +215,16 @@ define([appLocation.preLogin], function (app) {
             $scope.postYourNoticeFormData.companyReview.employerName = selected.originalObject.companyname;
             $scope.postYourNoticeFormData.companyReview.employerVertexId = selected.originalObject.guid;
             $scope.postYourNoticeFormData.companyReview.employerLogoImage = selected.originalObject.logourl;
-            //location.href = "/#companydetails/" + selected.originalObject.companyname.replace(/ /g, "_").replace(/\//g, "_OR_") + "/" + selected.originalObject.guid;
         };
 
         $scope.selectedDesignation = function (selected) {
-            //console.log(selected);
             $scope.postYourNoticeFormData.companyReview.designation = selected.description.designation;
             $scope.postYourNoticeFormData.companyReview.designationVertexId = selected.description.vertexId;
-            //console.log($scope.PostStoryModel);
-            //location.href = "/#companydetails/" + selected.originalObject.companyname.replace(/ /g, "_").replace(/\//g, "_OR_") + "/" + selected.originalObject.guid;
 
         };
 
         $scope.selectedProject = function (selected) {
             console.log(selected);
-            //location.href = "/#companydetails/" + selected.originalObject.companyname.replace(/ /g, "_").replace(/\//g, "_OR_") + "/" + selected.originalObject.guid;
         };
 
     });

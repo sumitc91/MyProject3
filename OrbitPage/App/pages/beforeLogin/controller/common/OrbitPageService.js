@@ -157,6 +157,15 @@ define([appLocation.preLogin], function (app) {
                         headers: headers
                     },
                 }),
+
+             UserNewReviewPost: $resource(
+                ServerContextPath.empty + '/User/UserNewReviewPost', {}, {
+                    post: {
+                        method: "POST",
+                        isArray: false,
+                        headers: headers
+                    },
+                }),
          };
      }]);
 
