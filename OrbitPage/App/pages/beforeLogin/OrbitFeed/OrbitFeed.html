@@ -287,9 +287,10 @@
 
                                         &nbsp;
                                         <a ng-click="enableEditcommentOnUserPost($parent.$index,$index)" ng-show="!comment.editableMode && comment.isAuthenticToEdit" class="like-link">Edit</a> &nbsp;
-                                        <a class="like-link" ng-show="comment.isAuthenticToEdit || comment.isLoggedInUserWall" confirmed-click="deleteOnUserPostComment($parent.$index,$index)" ng-confirm-click="Would you like to delete this comment?">Delete</a>
+                                        <a class="like-link" ng-show="comment.isAuthenticToEdit" confirmed-click="deleteOnUserPostComment($parent.$index,$index)" ng-confirm-click="Would you like to delete this comment?">Delete</a>
                                         <!--<a class="like-link" ng-show="comment.isAuthenticToEdit || comment.isLoggedInUserWall" ng-click="deleteOnUserPostComment($parent.$index,$index)">Delete</a>-->
                                     </p>
+
                                 </div>
                             </li>
                             <li>
@@ -336,6 +337,7 @@
                         <div class="clearfix"></div>
                     </div>
                 </div>
+                <hr />
             </section>
             <div ng-show='UserPostListInfoAngular.busy'>Loading data... <img src="../../App/img/loading/loading123.gif" style="height: 30px; margin: 10px 0px 0px;" /></div>
             <!-- Modal -->

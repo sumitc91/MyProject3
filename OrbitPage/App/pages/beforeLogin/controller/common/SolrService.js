@@ -59,6 +59,26 @@ define([appLocation.preLogin], function (app) {
                         headers: headers
                     }
                 }),
+
+             UserDetailsById: $resource(
+                ServerContextPath.solrServer + '/Search/UserDetailsById?uid=:uid',
+                { uid: '@uid' },
+                {
+                    get: {
+                        method: 'GET',
+                        headers: headers
+                    }
+                }),
+
+             SearchAll: $resource(
+                ServerContextPath.solrServer + '/Search/SearchAll?type=:type&q=:q',
+                { type: '@type', q: '@q' },
+                {
+                    get: {
+                        method: 'GET',
+                        headers: headers
+                    }
+                }),
          };
      }]);
 

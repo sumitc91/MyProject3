@@ -39,6 +39,42 @@ define([appLocation.preLogin], function (app) {
                     }
                 }),
 
+
+             GetUserPostLikes: $resource(
+                ServerContextPath.userServer + '/User/GetUserPostLikes?from=:from&to=:to&vertexId=:vertexId', { from: '@from', to: '@to', vertexId: '@vertexId' }, {
+                    query: {
+                        isArray: false,
+                        method: 'GET',
+                        headers: headers
+                    }
+                }),
+
+             GetUserNetworkDetail: $resource(
+                ServerContextPath.userServer + '/User/GetUserNetworkDetail?from=:from&to=:to&vertexId=:vertexId', { from: '@from', to: '@to', vertexId: '@vertexId' }, {
+                    query: {
+                        isArray: false,
+                        method: 'GET',
+                        headers: headers
+                    }
+                }),
+
+             GetUserPostMessages: $resource(
+                ServerContextPath.userServer + '/User/GetUserPostMessages?from=:from&to=:to&vertexId=:vertexId', { from: '@from', to: '@to', vertexId: '@vertexId' }, {
+                    query: {
+                        isArray: false,
+                        method: 'GET',
+                        headers: headers
+                    }
+                }),
+
+             GetUserOrbitFeedPost: $resource(
+                ServerContextPath.userServer + '/User/GetUserOrbitFeedPost?from=:from&to=:to&vertexId=:vertexId', { from: '@from', to: '@to', vertexId: '@vertexId' }, {
+                    query: {
+                        isArray: false,
+                        method: 'GET',
+                        headers: headers
+                    }
+                }),
          };
      }]);
 

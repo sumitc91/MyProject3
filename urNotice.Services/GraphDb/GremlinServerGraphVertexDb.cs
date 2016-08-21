@@ -279,27 +279,35 @@ namespace urNotice.Services.GraphDb
             return response;
         }
 
+
         private Dictionary<String, String> DeleteVertexNative(string graphName, string vertexId, string url)
         {
-            var uri = new StringBuilder(url + "/graphs/" + graphName + "/vertices/" + vertexId);
 
-            //graphs/<graph>/edges/3
+            var gremlinQuery = new StringBuilder("g.V("+ vertexId + ").drop()");
+            var result =  ExecuteGremlinQuery(gremlinQuery.ToString());
 
-            var client = new RestClient(uri.ToString());
-            var request = new RestRequest();
-
-            request.Method = Method.DELETE;
-            request.AddHeader("Accept", "application/json");
-            request.Parameters.Clear();
-            request.AddParameter("application/json", "", ParameterType.RequestBody);
-
-            var res = client.Execute(request);
-            var content = res.Content; // raw content as string 
-
-            //dynamic jsonResponse = JsonConvert.DeserializeObject(content);
             var response = new Dictionary<String, String>();
-            response["status"] = "200";
+            response["status"] = result;
             return response;
+            //var uri = new StringBuilder(url + "/graphs/" + graphName + "/vertices/" + vertexId);
+
+            ////graphs/<graph>/edges/3
+
+            //var client = new RestClient(uri.ToString());
+            //var request = new RestRequest();
+
+            //request.Method = Method.DELETE;
+            //request.AddHeader("Accept", "application/json");
+            //request.Parameters.Clear();
+            //request.AddParameter("application/json", "", ParameterType.RequestBody);
+
+            //var res = client.Execute(request);
+            //var content = res.Content; // raw content as string 
+
+            ////dynamic jsonResponse = JsonConvert.DeserializeObject(content);
+            //var response = new Dictionary<String, String>();
+            //response["status"] = "200";
+            //return response;
         }
     }
 }

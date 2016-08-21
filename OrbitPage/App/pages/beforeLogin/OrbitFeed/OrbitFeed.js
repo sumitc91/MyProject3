@@ -1,7 +1,7 @@
 'use strict';
 define([appLocation.preLogin], function (app) {
 
-    app.controller('beforeLoginOrbitFeed', function ($scope, $http, $upload, $timeout, $location, $routeParams, $rootScope, $q, $sce, mentioUtil, CookieUtil) {
+    app.controller('beforeLoginOrbitFeed', function ($scope, $http, $upload, $timeout, $location, $routeParams, $rootScope, $q, $sce, mentioUtil, CookieUtil, UserApi, OrbitPageApi, SearchApi) {
         $('title').html("edit page"); //TODO: change the title so cann't be tracked in log
 
         $rootScope.userOrbitFeedList.show = true;
@@ -13,7 +13,7 @@ define([appLocation.preLogin], function (app) {
 
         $scope.CurrentUserDetails = {};
         $scope.UserPostList = [];
-        
+        $scope.people = [];
         
 
         $scope.UserPostListLastPageReached = false;
@@ -32,24 +32,15 @@ define([appLocation.preLogin], function (app) {
         };
 
         getUserInformation();
-        //getUserPost($scope.UserPostListInfoAngular.after, $scope.UserPostListInfoAngular.after + $scope.UserPostListInfoAngular.itemPerPage);
 
         $scope.createNewUserPost = function () {
             createNewUserPost();
             $scope.UserPostListInfoAngular.after = 0;
-            //$scope.UserPostList = [];
         };
 
         $scope.commentOnUserPost = function (postIndex) {
-            //console.log($scope.UserPostList[postIndex].postInfo._id, $scope.UserPostList[postIndex].postInfo.postUserComment);
-            //console.log("postIndex : " + postIndex);
             createNewMessageOnUserPost(postIndex);
-
-            //$scope.UserPostList[postIndex].messageFromIndex = $scope.UserPostList[postIndex].messageToIndex - 1;
-            //console.log("$scope.UserPostList[postIndex].messageFromIndex : " + $scope.UserPostList[postIndex].messageFromIndex);
             $scope.UserPostListInfoAngular.after = 0;
-            //$scope.UserPostList = [];
-            //createNewMessageOnUserPost($scope.UserPostList[postIndex].postInfo._id, $scope.UserPostList[postIndex].postInfo.postUserComment);
         };
 
         $scope.deleteOnUserPostComment = function (postIndex, commentIndex) {
@@ -57,13 +48,11 @@ define([appLocation.preLogin], function (app) {
         };
 
         $scope.deleteUserPost = function (postIndex) {
-            //console.log("deleteUserPost : "+postIndex);
             deleteOnUserPost(postIndex);
         };
 
         $scope.reactionOnUserPost = function (postIndex) {            
             createNewReactionOnUserPost(postIndex);
-            //createNewMessageOnUserPost($scope.UserPostList[postIndex].postInfo._id, $scope.UserPostList[postIndex].postInfo.postUserComment);
         };
 
         $scope.reactionOnUserPostComment = function (postIndex,commentIndex) {
@@ -72,7 +61,6 @@ define([appLocation.preLogin], function (app) {
 
         $scope.removeReactionOnUserPost = function (postIndex) {
             removeReactionOnUserPost(postIndex);
-            //createNewMessageOnUserPost($scope.UserPostList[postIndex].postInfo._id, $scope.UserPostList[postIndex].postInfo.postUserComment);
         };
 
         $scope.removeReactionOnUserPostComment = function (postIndex, commentIndex) {
@@ -80,24 +68,19 @@ define([appLocation.preLogin], function (app) {
         };
 
         $scope.removeImageOnUserPost = function (postIndex) {
-            $scope.UserPostList[postIndex].postInfo.OriginalPostImage = $scope.UserPostList[postIndex].postInfo.PostImage;
-            $scope.UserPostList[postIndex].postInfo.PostImage = "";
-            //console.log(postIndex);
-            //console.log($scope.UserPostList[postIndex].postInfo.OriginalPostImage);
-            if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                $scope.$apply();
-            }
+            
+            $timeout(function () {
+                $scope.UserPostList[postIndex].postInfo.OriginalPostImage = $scope.UserPostList[postIndex].postInfo.PostImage;
+                $scope.UserPostList[postIndex].postInfo.PostImage = "";
+            });
         };
 
         $scope.removeImageOnUserPostComment = function (postIndex, commentIndex) {
 
-            $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.OriginalPostImage = $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.PostImage;            
-            $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.PostImage = "";
-            //console.log(postIndex);
-            //console.log($scope.UserPostList[postIndex].postInfo.OriginalPostImage);
-            if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                $scope.$apply();
-            }
+            $timeout(function () {
+                $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.OriginalPostImage = $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.PostImage;
+                $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.PostImage = "";
+            });
         };
 
         $scope.showLikedByUsers = function (postVertexId) {
@@ -123,8 +106,6 @@ define([appLocation.preLogin], function (app) {
             $scope.UserPostList[postIndex].messageFromIndex = $scope.UserPostList[postIndex].messageToIndex;
             $scope.UserPostList[postIndex].messageToIndex = $scope.UserPostList[postIndex].messageFromIndex + messagesPerCall - 1;
 
-            console.log("$scope.UserPostList[postIndex].messageFromIndex : " + $scope.UserPostList[postIndex].messageFromIndex);
-            console.log("$scope.UserPostList[postIndex].messageToIndex : " + $scope.UserPostList[postIndex].messageToIndex);
             loadMoreMessage(postVerexId, postIndex, $scope.UserPostList[postIndex].messageFromIndex, $scope.UserPostList[postIndex].messageToIndex);            
         };
 
@@ -139,73 +120,43 @@ define([appLocation.preLogin], function (app) {
         };
 
         $scope.closeModelAndNavigateTo = function (vid) {
-            //console.log("inside closeModelAndNavigateTo");  
             $(".modal-backdrop.in").hide();
             $('#closeModalId').click();
             $location.url('/userprofile/'+vid);
-            //window.location.href = "/#/userprofile/" + vid;
-            
-            //alert("Navigation not implemented yet.");
-            //console.log("#/userprofile/" + vid);
         };
         
         $scope.UserPostListInfo = {};
 
         function showLikedByUsersOnUserPost(vertexId, from, to) {
-            var url = ServerContextPath.userServer + '/User/GetUserPostLikes?from=' + from + '&to=' + to + '&vertexId=' + vertexId;
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv'),
-            };
-            //startBlockUI('wait..', 3);  
-            $scope.UserPostLikesLoading = true;
-            $.ajax({
-                url: url,
-                method: "GET",
-                headers: headers
-            }).done(function (data, status) {
-                //stopBlockUI();
-                //console.log(data.results);
-                $scope.UserPostLikesLoading = false;
-                for (var i = 0; i < data.results.length; i++) {
-                    $scope.UserPostLikes.push(data.results[i]);
-                }
-                //$scope.UserPostLikes = data.results;
-                if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                    $scope.$apply();
-                }
+
+            var inputData = { from: from, to: to, vertexId: vertexId };
+            UserApi.GetUserPostLikes.get(inputData, function (data) {
+
+                $timeout(function () {
+                   $scope.UserPostLikesLoading = false;
+                   for (var i = 0; i < data.results.length; i++) {
+                       $scope.UserPostLikes.push(data.results[i]);
+                   }
+               });
+                
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
         };
 
         function loadUserNetworkDetail(vertexId, from, to) {
-            var url = ServerContextPath.userServer + '/User/GetUserNetworkDetail?from=' + from + '&to=' + to + '&vertexId=' + vertexId;
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv'),
-            };
 
             if (!$rootScope.isUserLoggedIn || $scope.visitedUserVertexId == $rootScope.clientDetailResponse.VertexId) {
                 //only fetch this info if user is logged in.
                 return;
             }
 
-            //startBlockUI('wait..', 3);
-            //$scope.UserNetworkDetailHelper.UserNetworkDetailHelperDataLoading = true;
-            $.ajax({
-                url: url,
-                method: "GET",
-                headers: headers
-            }).done(function (data, status) {
-                //stopBlockUI();
-                //console.log(data.results);
-                $scope.UserNetworkDetailHelper.UserNetworkDetailHelperDataLoaded = true;
-                //$scope.UserNetworkDetailHelper.UserNetworkDetailHelperDataLoading = false;
+            var inputData = { from: from, to: to, vertexId: vertexId };
+            UserApi.GetUserNetworkDetail.get(inputData, function (data) {
 
-                $scope.$apply(function () {
+                $timeout(function () {
+                    $scope.UserNetworkDetailHelper.UserNetworkDetailHelperDataLoaded = true;
+                    
                     if (data.results != null && data.results.length > 0) {
 
                         if (data.results[0].associateRequestSent != null && data.results[0].associateRequestSent.length > 0) {
@@ -220,44 +171,33 @@ define([appLocation.preLogin], function (app) {
                         if (data.results[0].isFriend != null && data.results[0].isFriend.length > 0) {
                             $scope.UserNetworkDetailHelper.isFriend = true;
                         }
-                    }                    
+                    }
                 });
-
-                
-
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
         };
 
         function loadMoreMessage(vertexId, postIndex,from, to) {
-            var url = ServerContextPath.userServer + '/User/GetUserPostMessages?from=' + from + '&to=' + to + '&vertexId=' + vertexId;
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv'),
-            };
-            //startBlockUI('wait..', 3);
+            
             $scope.UserPostList[postIndex].loadingIcon = true;
-            $.ajax({
-                url: url,
-                method: "GET",
-                headers: headers
-            }).done(function (data, status) {
-                //stopBlockUI();
-                //console.log(data.results);
-                $scope.UserPostList[postIndex].loadingIcon = false;
-                $scope.$apply(function () {
+
+            var inputData = { from: from, to: to, vertexId: vertexId };
+            UserApi.GetUserPostMessages.get(inputData, function (data) {
+
+                $timeout(function () {
+                    $scope.UserPostList[postIndex].loadingIcon = false;
+
                     if (data.results != null && data.results.length > 0) {
                         data.results = reverseCommentsInfoList(data.results);
                         $scope.UserPostList[postIndex].commentsInfo = appendOldCommentsToCommentList($scope.UserPostList[postIndex].commentsInfo, data.results);
                     }
-                    //for (var i = 0; i < data.results.length; i++) {                        
-                        //$scope.UserPostList[postIndex].commentsInfo.push(data.results[i]);
-                    //}
                     
                 });
-
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
+
         };
 
         $scope.NewPostImageUrl = {
@@ -272,47 +212,30 @@ define([appLocation.preLogin], function (app) {
                 TaggedVertexId: $scope.UserPostMessageHtmlTaggedVertexId,
             };
 
-            var url = ServerContextPath.empty + '/User/UserPost';
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv'),
-            };
-
-            console.log(userPostData);
-            
             if (isNullOrEmpty(userPostData.Message) && isNullOrEmpty(userPostData.Image)) {
                 showToastMessage("Warning", "You cannot submit Empty Post.");
                 return;
             }
             
             if ($rootScope.isUserLoggedIn) {
+
                 startBlockUI('wait..', 3);
-
-                $http({
-                    url: url,
-                    method: "POST",
-                    data: userPostData,
-                    headers: headers
-                }).success(function (data, status, headers, config) {
-                    //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
+                OrbitPageApi.UserPost.post(userPostData, function (data) {
                     stopBlockUI();
-                    $scope.UserPostList = [];
+
                     $timeout(function () {
+                        $scope.UserPostList = [];
                         $scope.NewPostImageUrl = {};
+                        getUserPost(0, $scope.UserPostListInfoAngular.after + $scope.UserPostListInfoAngular.itemPerPage);
+                        $scope.UserPostListInfoAngular.after = $scope.UserPostListInfoAngular.after + $scope.UserPostListInfoAngular.itemPerPage;
+                        $scope.UserPostMessage = "";
+                        showToastMessage("Success", "Successfully Posted on your wall.");
                     });
-
-                    getUserPost(0, $scope.UserPostListInfoAngular.after + $scope.UserPostListInfoAngular.itemPerPage);
-                    $scope.UserPostListInfoAngular.after = $scope.UserPostListInfoAngular.after + $scope.UserPostListInfoAngular.itemPerPage;
-                    //$scope.UserPostList.push(data.Payload);
-                    $scope.UserPostMessage = "";
-                    showToastMessage("Success", "Successfully Posted on your wall.");
-                    
-
-                }).error(function (data, status, headers, config) {
-
+                   
+                }, function (error) {
+                    showToastMessage("Error", "Internal Server Error Occured!");
                 });
+                
             } else {
                 showToastMessage("Warning", "Please Login to create a post.");
             }
@@ -327,65 +250,52 @@ define([appLocation.preLogin], function (app) {
                 ConnectingBody:connectingBody
             };
 
-           
-            var url = ServerContextPath.empty + '/User/UserConnectionRequest';
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv'),
-            };
-
             if ($rootScope.isUserLoggedIn) {
-                //startBlockUI('wait..', 3);
-                //$scope.makeConnectionRequestLoading = true;
+                
                 showHideConnectionRequestLoadingOnButton(connectionType, true);
-                $http({
-                    url: url,
-                    method: "POST",
-                    data: userNewConnectionData,
-                    headers: headers
-                }).success(function (data, status, headers, config) {
-                    //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
-                    //$scope.makeConnectionRequestLoading = false;
+
+                OrbitPageApi.UserConnectionRequest.post(userNewConnectionData, function (data) {
+
                     showHideConnectionRequestLoadingOnButton(connectionType, false);
-                    //stopBlockUI();                    
-                    if (connectingBody == UserConnectionRequestModel.AssociateUsers) {
-                        if (connectionType == UserConnectionRequestModel.AssociateRequest) {
-                            //friend request sent
-                            $scope.UserNetworkDetailHelper.isFriendRequestSent = true;
-                            $scope.UserNetworkDetailHelper.isFollowing = true;
-                        }
-                        else if (connectionType == UserConnectionRequestModel.AssociateFollow) {
-                            //follow
-                            $scope.UserNetworkDetailHelper.isFollowing = true;
-                        }
-                        else if (connectionType == UserConnectionRequestModel.AssociateAccept) {
-                            //friend req accept
-                            $scope.UserNetworkDetailHelper.isFriend = true;
-                            $scope.UserNetworkDetailHelper.isFollowing = true;
-                        }
-                        else if (connectionType == UserConnectionRequestModel.AssociateReject) {
-                            //reject
-                            $scope.UserNetworkDetailHelper.isFriendRequestReceived = false;
-                        }
-                        else if (connectionType == UserConnectionRequestModel.RemoveFollow) {
-                            //unfollow
-                            $scope.UserNetworkDetailHelper.isFollowing = false;
-                        }
-                        else if (connectionType == UserConnectionRequestModel.Deassociate) {
-                            //Deassociate
-                            $scope.UserNetworkDetailHelper.isFriend = false;
-                            $scope.UserNetworkDetailHelper.isFollowing = false;
-                        }
-                        else if (connectionType == UserConnectionRequestModel.AssociateRequestCancel) {
-                            //Deassociate
-                            $scope.UserNetworkDetailHelper.isFriendRequestSent = false;
-                        }
-                    }
 
-                }).error(function (data, status, headers, config) {
-
+                    $timeout(function () {
+                        if (connectingBody == UserConnectionRequestModel.AssociateUsers) {
+                            if (connectionType == UserConnectionRequestModel.AssociateRequest) {
+                                //friend request sent
+                                $scope.UserNetworkDetailHelper.isFriendRequestSent = true;
+                                $scope.UserNetworkDetailHelper.isFollowing = true;
+                            }
+                            else if (connectionType == UserConnectionRequestModel.AssociateFollow) {
+                                //follow
+                                $scope.UserNetworkDetailHelper.isFollowing = true;
+                            }
+                            else if (connectionType == UserConnectionRequestModel.AssociateAccept) {
+                                //friend req accept
+                                $scope.UserNetworkDetailHelper.isFriend = true;
+                                $scope.UserNetworkDetailHelper.isFollowing = true;
+                            }
+                            else if (connectionType == UserConnectionRequestModel.AssociateReject) {
+                                //reject
+                                $scope.UserNetworkDetailHelper.isFriendRequestReceived = false;
+                            }
+                            else if (connectionType == UserConnectionRequestModel.RemoveFollow) {
+                                //unfollow
+                                $scope.UserNetworkDetailHelper.isFollowing = false;
+                            }
+                            else if (connectionType == UserConnectionRequestModel.Deassociate) {
+                                //Deassociate
+                                $scope.UserNetworkDetailHelper.isFriend = false;
+                                $scope.UserNetworkDetailHelper.isFollowing = false;
+                            }
+                            else if (connectionType == UserConnectionRequestModel.AssociateRequestCancel) {
+                                //Deassociate
+                                $scope.UserNetworkDetailHelper.isFriendRequestSent = false;
+                            }
+                        }
+                    });
+                    
+                }, function (error) {
+                    showToastMessage("Error", "Internal Server Error Occured!");
                 });
             } else {
                 showToastMessage("Warning", "Please Login to Make a connection.");
@@ -393,35 +303,39 @@ define([appLocation.preLogin], function (app) {
 
         };
 
-        function showHideConnectionRequestLoadingOnButton(connectionType,show) {
-            if (connectionType == UserConnectionRequestModel.AssociateRequest) {
-                //friend request sent
-                $scope.UserConnectionRequestModel.AssociateRequestLoading = show;
-            }
-            else if (connectionType == UserConnectionRequestModel.AssociateFollow) {
-                //follow
-                $scope.UserConnectionRequestModel.AssociateFollowLoading = show;
-            }
-            else if (connectionType == UserConnectionRequestModel.AssociateAccept) {
-                //friend req accept
-                $scope.UserConnectionRequestModel.AssociateAcceptLoading = show;
-            }
-            else if (connectionType == UserConnectionRequestModel.AssociateReject) {
-                //reject
-                $scope.UserConnectionRequestModel.AssociateRejectLoading = show;
-            }
-            else if (connectionType == UserConnectionRequestModel.RemoveFollow) {
-                //unfollow
-                $scope.UserConnectionRequestModel.RemoveFollowLoading = show;
-            }
-            else if (connectionType == UserConnectionRequestModel.Deassociate) {
-                //Deassociate
-                $scope.UserConnectionRequestModel.DeassociateLoading = show;
-            }
-            else if (connectionType == UserConnectionRequestModel.AssociateRequestCancel) {
-                //Deassociate
-                $scope.UserConnectionRequestModel.AssociateRequestCancelLoading = show;
-            }
+        function showHideConnectionRequestLoadingOnButton(connectionType, show) {
+
+            $timeout(function () {
+                if (connectionType == UserConnectionRequestModel.AssociateRequest) {
+                    //friend request sent
+                    $scope.UserConnectionRequestModel.AssociateRequestLoading = show;
+                }
+                else if (connectionType == UserConnectionRequestModel.AssociateFollow) {
+                    //follow
+                    $scope.UserConnectionRequestModel.AssociateFollowLoading = show;
+                }
+                else if (connectionType == UserConnectionRequestModel.AssociateAccept) {
+                    //friend req accept
+                    $scope.UserConnectionRequestModel.AssociateAcceptLoading = show;
+                }
+                else if (connectionType == UserConnectionRequestModel.AssociateReject) {
+                    //reject
+                    $scope.UserConnectionRequestModel.AssociateRejectLoading = show;
+                }
+                else if (connectionType == UserConnectionRequestModel.RemoveFollow) {
+                    //unfollow
+                    $scope.UserConnectionRequestModel.RemoveFollowLoading = show;
+                }
+                else if (connectionType == UserConnectionRequestModel.Deassociate) {
+                    //Deassociate
+                    $scope.UserConnectionRequestModel.DeassociateLoading = show;
+                }
+                else if (connectionType == UserConnectionRequestModel.AssociateRequestCancel) {
+                    //Deassociate
+                    $scope.UserConnectionRequestModel.AssociateRequestCancelLoading = show;
+                }
+            });
+            
         }
 
         function createNewReactionOnUserPost(postIndex) {
@@ -435,34 +349,16 @@ define([appLocation.preLogin], function (app) {
                 ParentVertexId: $scope.UserPostList[postIndex].postInfo._id
             };
 
-            var url = ServerContextPath.empty + '/User/UserReactionOnPost';
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv'),
-            };
-
             if ($rootScope.isUserLoggedIn) {                
-                //startBlockUI('wait..', 3);
+
                 $scope.UserPostList[postIndex].alreadyLiked = true;
                 $scope.UserPostList[postIndex].likeInfoHtml = appentToCommentLikeString($scope.UserPostList[postIndex].likeInfoHtml, $scope.UserPostList[postIndex].likeInfoCount);
                 $scope.UserPostList[postIndex].likeInfoCount = $scope.UserPostList[postIndex].likeInfoCount + 1;
-                $http({
-                    url: url,
-                    method: "POST",
-                    data: userPostReactionData,
-                    headers: headers
-                }).success(function(data, status, headers, config) {
-                    //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
-                    //stopBlockUI();                    
-                    //$scope.UserPostList[postIndex].likeInfoHtml = appentToCommentLikeString($scope.UserPostList[postIndex].likeInfoHtml);
-                    //$timeout(function() {
-                    //    $scope.NewPostImageUrl.link_s = "";
-                    //});
 
-                }).error(function(data, status, headers, config) {
-
+                OrbitPageApi.UserReactionOnPost.post(userPostReactionData, function (data) {
+                    
+                }, function (error) {
+                    showToastMessage("Error", "Internal Server Error Occured!");
                 });
             } else {
                 showToastMessage("Warning", "Please Login to Make your reaction on post.");
@@ -481,38 +377,19 @@ define([appLocation.preLogin], function (app) {
                 ParentVertexId: $scope.UserPostList[postIndex].postInfo._id
             };
 
-            var url = ServerContextPath.empty + '/User/UserReactionOnPost';
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv'),
-            };
-
             if ($rootScope.isUserLoggedIn) {
-                //startBlockUI('wait..', 3);
                 $scope.UserPostList[postIndex].commentsInfo[commentIndex].alreadyLiked = true;
                 $scope.UserPostList[postIndex].commentsInfo[commentIndex].likeCount = $scope.UserPostList[postIndex].commentsInfo[commentIndex].likeCount+1;
-                $http({
-                    url: url,
-                    method: "POST",
-                    data: userPostReactionData,
-                    headers: headers
-                }).success(function (data, status, headers, config) {
-                    //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
-                    //stopBlockUI();                    
-                    //$scope.UserPostList[postIndex].likeInfoHtml = appentToCommentLikeString($scope.UserPostList[postIndex].likeInfoHtml);
-                    //$timeout(function() {
-                    //    $scope.NewPostImageUrl.link_s = "";
-                    //});
 
-                }).error(function (data, status, headers, config) {
+                OrbitPageApi.UserReactionOnPost.post(userPostReactionData, function (data) {
 
+                }, function (error) {
+                    showToastMessage("Error", "Internal Server Error Occured!");
                 });
+                
             } else {
                 showToastMessage("Warning", "Please Login to Make your reaction on post.");
             }
-
         };
 
         function removeReactionOnUserPost(postIndex) {
@@ -524,36 +401,18 @@ define([appLocation.preLogin], function (app) {
                 PostPostedByVertexId: $scope.UserPostList[postIndex].userInfo[0]._id
             };
 
-            var url = ServerContextPath.empty + '/User/RemoveReactionOnPost?vertexId=' + $scope.UserPostList[postIndex].postInfo._id;
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv'),
-            };
-
             if ($rootScope.isUserLoggedIn) {
                 //startBlockUI('wait..', 3);
                 $scope.UserPostList[postIndex].alreadyLiked = false;
                 $scope.UserPostList[postIndex].likeInfoHtml = removeFromCommentLikeString($scope.UserPostList[postIndex].likeInfoHtml, $scope.UserPostList[postIndex].likeInfoCount);
                 $scope.UserPostList[postIndex].likeInfoCount = $scope.UserPostList[postIndex].likeInfoCount - 1;
 
-                $http({
-                    url: url,
-                    method: "POST",
-                    data: userPostReactionData,
-                    headers: headers
-                }).success(function (data, status, headers, config) {
-                    //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
-                    //stopBlockUI();                    
-                    //$scope.UserPostList[postIndex].likeInfoHtml = appentToCommentLikeString($scope.UserPostList[postIndex].likeInfoHtml);
-                    //$timeout(function() {
-                    //    $scope.NewPostImageUrl.link_s = "";
-                    //});
+                OrbitPageApi.RemoveReactionOnPost.post({ vertexId: $scope.UserPostList[postIndex].postInfo._id }, userPostReactionData, function (data) {
 
-                }).error(function (data, status, headers, config) {
-
+                }, function (error) {
+                    showToastMessage("Error", "Internal Server Error Occured!");
                 });
+
             } else {
                 showToastMessage("Warning", "Please Login to Make your reaction on post.");
             }
@@ -569,36 +428,16 @@ define([appLocation.preLogin], function (app) {
                 PostPostedByVertexId: $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentedBy[0]._id
             };
 
-            var url = ServerContextPath.empty + '/User/RemoveReactionOnPost?vertexId=' + $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo._id;
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv'),
-            };
-
             if ($rootScope.isUserLoggedIn) {
-                //startBlockUI('wait..', 3);
                 $scope.UserPostList[postIndex].commentsInfo[commentIndex].alreadyLiked = false;
                 $scope.UserPostList[postIndex].commentsInfo[commentIndex].likeCount = $scope.UserPostList[postIndex].commentsInfo[commentIndex].likeCount - 1;
-                //$scope.UserPostList[postIndex].likeInfoCount = $scope.UserPostList[postIndex].likeInfoCount - 1;
 
-                $http({
-                    url: url,
-                    method: "POST",
-                    data: userPostReactionData,
-                    headers: headers
-                }).success(function (data, status, headers, config) {
-                    //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
-                    //stopBlockUI();                    
-                    //$scope.UserPostList[postIndex].likeInfoHtml = appentToCommentLikeString($scope.UserPostList[postIndex].likeInfoHtml);
-                    //$timeout(function() {
-                    //    $scope.NewPostImageUrl.link_s = "";
-                    //});
+                OrbitPageApi.RemoveReactionOnPost.post({ vertexId: $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo._id }, userPostReactionData, function (data) {
 
-                }).error(function (data, status, headers, config) {
-
+                }, function (error) {
+                    showToastMessage("Error", "Internal Server Error Occured!");
                 });
+
             } else {
                 showToastMessage("Warning", "Please Login to Make your reaction on post.");
             }
@@ -614,44 +453,27 @@ define([appLocation.preLogin], function (app) {
                 PostPostedByVertexId: $scope.UserPostList[postIndex].userInfo[0]._id
             };
 
-            var url = ServerContextPath.empty + '/User/DeleteCommentOnPost?vertexId=' + $scope.UserPostList[postIndex].postInfo._id;
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv'),
-            };
-
-
             if ($rootScope.isUserLoggedIn) {
                 spliceOnUserPost(postIndex);
-                $http({
-                    url: url,
-                    method: "POST",
-                    data: userPostReactionData,
-                    headers: headers
-                }).success(function (data, status, headers, config) {
-                    //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
-                    //stopBlockUI();                    
-                    //$scope.UserPostList[postIndex].likeInfoHtml = appentToCommentLikeString($scope.UserPostList[postIndex].likeInfoHtml);
-                    //$timeout(function() {
-                    //    $scope.NewPostImageUrl.link_s = "";
-                    //});
 
-                }).error(function (data, status, headers, config) {
+                OrbitPageApi.DeleteCommentOnPost.post({ vertexId: $scope.UserPostList[postIndex].postInfo._id }, userPostReactionData, function (data) {
 
+                }, function (error) {
+                    showToastMessage("Error", "Internal Server Error Occured!");
                 });
+
             } else {
                 showToastMessage("Warning", "Please Login to Make your reaction on post.");
             }
 
         };
 
-        function spliceOnUserPost(postIndex) {            
-            $scope.UserPostList.splice(postIndex, 1);
-            if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                $scope.$apply();
-            }            
+        function spliceOnUserPost(postIndex) {
+
+            $timeout(function () {
+                $scope.UserPostList.splice(postIndex, 1);
+            });
+                     
         };
 
         function deleteCommentOnUserPost(postIndex, commentIndex) {
@@ -663,33 +485,15 @@ define([appLocation.preLogin], function (app) {
                 PostPostedByVertexId: $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentedBy[0]._id
             };
 
-            var url = ServerContextPath.empty + '/User/DeleteCommentOnPost?vertexId=' + $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo._id;
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv'),
-            };
-
-            
             if ($rootScope.isUserLoggedIn) {
                 spliceCommentOnUserPost(postIndex, commentIndex);
-                $http({
-                    url: url,
-                    method: "POST",
-                    data: userPostReactionData,
-                    headers: headers
-                }).success(function (data, status, headers, config) {
-                    //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
-                    //stopBlockUI();                    
-                    //$scope.UserPostList[postIndex].likeInfoHtml = appentToCommentLikeString($scope.UserPostList[postIndex].likeInfoHtml);
-                    //$timeout(function() {
-                    //    $scope.NewPostImageUrl.link_s = "";
-                    //});
 
-                }).error(function (data, status, headers, config) {
+                OrbitPageApi.DeleteCommentOnPost.post({ vertexId: $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo._id }, userPostReactionData, function (data) {
 
+                }, function (error) {
+                    showToastMessage("Error", "Internal Server Error Occured!");
                 });
+
             } else {
                 showToastMessage("Warning", "Please Login to Make your reaction on post.");
             }
@@ -698,10 +502,9 @@ define([appLocation.preLogin], function (app) {
 
         function spliceCommentOnUserPost(postIndex, commentIndex) {
             
-            $scope.UserPostList[postIndex].commentsInfo.splice(commentIndex, 1);
-            if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                $scope.$apply();
-            }            
+            $timeout(function () {
+                $scope.UserPostList[postIndex].commentsInfo.splice(commentIndex, 1);
+            });
         };
 
         function createNewMessageOnUserPost(postIndex) {
@@ -748,13 +551,6 @@ define([appLocation.preLogin], function (app) {
                 "isLiked":[]
         };
 
-            var url = ServerContextPath.empty + '/User/UserCommentOnPost';
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv'),
-            };
             if ($rootScope.isUserLoggedIn) {
                 
                 $scope.UserPostList[postIndex].postInfo.postUserComment = "";
@@ -766,29 +562,20 @@ define([appLocation.preLogin], function (app) {
                 $scope.UserPostList[postIndex].commentsInfo[commentAddedAtIndex].loadingIcon = true;                
                 $scope.UserPostList[postIndex].commentsInfo[0].disableInputBox = true;
                 //startBlockUI('wait..', 3);
-                $http({
-                    url: url,
-                    method: "POST",
-                    data: userPostCommentData,
-                    headers: headers
-                }).success(function (data, status, headers, config) {
-                    //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
-                    //stopBlockUI();
-                    //$scope.UserPostList = [];
-                    //getUserPost(0, $scope.UserPostListInfoAngular.after + $scope.UserPostListInfoAngular.itemPerPage);
-                    //$scope.UserPostList[postIndex].commentsInfo.push(newCommentPosted);
-                    $scope.UserPostList[postIndex].commentsInfo[commentAddedAtIndex].loadingIcon = false;
-                    $scope.UserPostList[postIndex].commentsInfo[commentAddedAtIndex].commentInfo._id = data.Payload.commentInfo._id;
-                    $scope.UserPostList[postIndex].commentsInfo[0].disableInputBox = false;
-                    $scope.userPostCommentData = "";
 
+                OrbitPageApi.UserCommentOnPost.post(userPostCommentData, function (data) {
+                    
                     $timeout(function () {
+                        $scope.UserPostList[postIndex].commentsInfo[commentAddedAtIndex].loadingIcon = false;
+                        $scope.UserPostList[postIndex].commentsInfo[commentAddedAtIndex].commentInfo._id = data.Payload.commentInfo._id;
+                        $scope.UserPostList[postIndex].commentsInfo[0].disableInputBox = false;
+                        $scope.userPostCommentData = "";
                         $scope.NewPostImageUrl.link_s = "";
                     });
-
-                }).error(function (data, status, headers, config) {
-
+                }, function (error) {
+                    showToastMessage("Error", "Internal Server Error Occured!");
                 });
+                
             }
             else {
                 showToastMessage("Warning", "Please Login to reply on post.");
@@ -908,64 +695,48 @@ define([appLocation.preLogin], function (app) {
         };
 
         function getUserInformation() {
-            var url = ServerContextPath.solrServer + '/Search/UserDetailsById?uid=' + $scope.visitedUserVertexId;
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv'),
-            };
+            
+            var inputData = { uid: $scope.visitedUserVertexId };
+
             startBlockUI('wait..', 3);
-            $.ajax({
-                url: url,
-                method: "GET",
-                headers: headers
-            }).done(function (data, status) {
+            SearchApi.UserDetailsById.get(inputData, function (data) {
                 stopBlockUI();
-                $scope.$apply(function () {
+                $timeout(function () {
                     $scope.CurrentUserDetails = data.Payload[0];
                     loadUserNetworkDetail($scope.visitedUserVertexId, 0, 1);
-                    //console.log($scope.CurrentUserDetails);
                 });
-                
+
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
         };
 
         function getUserPost(from,to) {
-            var url = ServerContextPath.userServer + '/User/GetUserOrbitFeedPost?from='+from+'&to='+to+'&vertexId=' + $scope.visitedUserVertexId;
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv'),
-            };
+            
+            var inputData = { from: from, to: to, vertexId: $scope.visitedUserVertexId };
             //startBlockUI('wait..', 3);
             $scope.UserPostListInfoAngular.busy = true;
-            $.ajax({
-                url: url,
-                method: "GET",
-                headers: headers
-            }).done(function (data, status) {
-                //stopBlockUI();
-                $scope.UserPostListInfoAngular.busy = false;
-                $scope.$apply(function () {
+
+            UserApi.GetUserOrbitFeedPost.get(inputData, function (data) {
+                $timeout(function () {
+                    $scope.UserPostListInfoAngular.busy = false;
                     //$scope.UserPostList = data.results;
                     var absoluteIndex = 0;
-                    if ($scope.UserPostList != null && data.results.length>0) {
+                    if ($scope.UserPostList != null && data.results.length > 0) {
                         for (var i = 0; i < data.results.length; i++) {
 
                             data.results[i].postInfo.editableMode = false;
                             data.results[i].tagInfoCount = data.results[i].edgeInfo.length;
                             data.results[i].postInfo.PostMessageHtml = replaceTextWithLinks(data.results[i].postInfo.PostMessage);
                             if (data.results[i].commentsInfo != null && data.results[i].commentsInfo.length > 0) {
-                                data.results[i].commentsInfo = reverseCommentsInfoList(data.results[i].commentsInfo);                                
+                                data.results[i].commentsInfo = reverseCommentsInfoList(data.results[i].commentsInfo);
                             }
 
                             $scope.UserPostList.push(data.results[i]);
                             //console.log("commentinfo2 new : " + $scope.UserPostList[0].commentsInfo[0].editableMode);
                             absoluteIndex = from + i;
                             //console.log("LN: 961 absoluteIndex : "+absoluteIndex);
-                            $scope.UserPostList[absoluteIndex].likeInfoHtml = parseCommentLikeString($scope.UserPostList[absoluteIndex].likeInfo,$scope.UserPostList[absoluteIndex].likeInfoCount);
+                            $scope.UserPostList[absoluteIndex].likeInfoHtml = parseCommentLikeString($scope.UserPostList[absoluteIndex].likeInfo, $scope.UserPostList[absoluteIndex].likeInfoCount);
                             $scope.UserPostList[absoluteIndex].messageFromIndex = 0;
                             $scope.UserPostList[absoluteIndex].messageToIndex = $scope.UserPostList[absoluteIndex].messageFromIndex + messagesPerCall - 1;
                             if ($scope.UserPostList[absoluteIndex].isLiked != null && $scope.UserPostList[absoluteIndex].isLiked.length > 0) {
@@ -975,15 +746,17 @@ define([appLocation.preLogin], function (app) {
                             }
 
                         }
-                    } else {                        
+                    } else {
                         $scope.UserPostListLastPageReached = true;
                     }
-
-                    //console.log($scope.UserPostList);
                 });
 
                 initializeHoverCard();
+
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
+
         };
 
         function appendOldCommentsToCommentList(oldList, newList) {
@@ -1079,29 +852,31 @@ define([appLocation.preLogin], function (app) {
         };
 
         $scope.enableEditOnUserPost = function (postIndex) {
-            $scope.UserPostList[postIndex].postInfo.editableMode = true;
-            $scope.UserPostList[postIndex].postInfo.OriginalPostMessage = $scope.UserPostList[postIndex].postInfo.PostMessage;
-            $scope.UserPostList[postIndex].postInfo.OriginalPostImage = $scope.UserPostList[postIndex].postInfo.PostImage;
-            if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                $scope.$apply();
-            }
+            
+            $timeout(function () {
+                $scope.UserPostList[postIndex].postInfo.editableMode = true;
+                $scope.UserPostList[postIndex].postInfo.OriginalPostMessage = $scope.UserPostList[postIndex].postInfo.PostMessage;
+                $scope.UserPostList[postIndex].postInfo.OriginalPostImage = $scope.UserPostList[postIndex].postInfo.PostImage;
+
+            });
+            
         };
 
         $scope.cancelEditOnUserPost = function (postIndex) {
-            $scope.UserPostList[postIndex].postInfo.editableMode = false;
-            $scope.UserPostList[postIndex].postInfo.PostMessage = $scope.UserPostList[postIndex].postInfo.OriginalPostMessage;
-            $scope.UserPostList[postIndex].postInfo.PostImage = $scope.UserPostList[postIndex].postInfo.OriginalPostImage;
-            if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                $scope.$apply();
-            }
+            $timeout(function () {
+                $scope.UserPostList[postIndex].postInfo.editableMode = false;
+                $scope.UserPostList[postIndex].postInfo.PostMessage = $scope.UserPostList[postIndex].postInfo.OriginalPostMessage;
+                $scope.UserPostList[postIndex].postInfo.PostImage = $scope.UserPostList[postIndex].postInfo.OriginalPostImage;
+            });
+            
         };
 
         $scope.submitEditOnUserPost = function (postIndex) {
-            $scope.UserPostList[postIndex].postInfo.editableMode = false;
-            if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                $scope.$apply();
-            }
 
+            $timeout(function () {
+                $scope.UserPostList[postIndex].postInfo.editableMode = false;
+            });
+            
             submitEditPost(postIndex);
         };
 
@@ -1112,11 +887,6 @@ define([appLocation.preLogin], function (app) {
                 return;
             }
 
-            //if ($scope.UserPostList[postIndex].postInfo.PostMessage == $scope.UserPostList[postIndex].postInfo.OriginalPostMessage) {
-            //    //showToastMessage("Warning", "You cann't submit empty message.");
-            //    return;
-            //}
-
             var editMessageRequest = {
                 message: $scope.UserPostList[postIndex].postInfo.PostMessage,
                 imageUrl: $scope.UserPostList[postIndex].postInfo.PostImage,
@@ -1126,70 +896,56 @@ define([appLocation.preLogin], function (app) {
                 wallVertex: $scope.visitedUserVertexId
             };
 
-            var url = ServerContextPath.empty + '/User/EditMessageDetails';
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': CookieUtil.getUTMZT(),
-                'UTMZK': CookieUtil.getUTMZK(),
-                'UTMZV': CookieUtil.getUTMZV(),
-                '_ga': $.cookie('_ga')
-            };
-
-            //startBlockUI('wait..', 3);
             $scope.UserPostList[postIndex].postInfo.loadingIcon = true;
-            $http({
-                url: url,
-                method: "POST",
-                data: editMessageRequest,
-                headers: headers
-            }).success(function (data, status, headers, config) {
-                //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
-                $scope.UserPostList[postIndex].postInfo.loadingIcon = false;
-                //stopBlockUI();
+
+            OrbitPageApi.EditMessageDetails.post(editMessageRequest, function (data) {
+
+                $timeout(function () {
+                    $scope.UserPostList[postIndex].postInfo.loadingIcon = false;
+                });
+                
                 showToastMessage("Success", "Successfully Edited");
-            }).error(function (data, status, headers, config) {
-
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
-
-
+            
         };
 
         $scope.uploadImageOncomment = function (postIndex) {
 
-            $scope.currentUploadingPostIndex = postIndex;
+            $timeout(function () {
+                $scope.currentUploadingPostIndex = postIndex;
+            });
             
-            //$scope.UserPostList[postIndex].commentsInfo[commentIndex].editableMode = true;
-            //$scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.OriginalPostMessage = $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.PostMessage;
-            if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                $scope.$apply();
-            }
             document.getElementById('my_comment_file').click();
         };
 
-        $scope.enableEditcommentOnUserPost = function(postIndex, commentIndex) {           
-            $scope.UserPostList[postIndex].commentsInfo[commentIndex].editableMode = true;
-            $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.OriginalPostMessage = $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.PostMessage;
-            $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.OriginalPostImage = $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.PostImage;
-            if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                $scope.$apply();
-            }           
+        $scope.enableEditcommentOnUserPost = function (postIndex, commentIndex) {
+
+            $timeout(function () {
+                $scope.UserPostList[postIndex].commentsInfo[commentIndex].editableMode = true;
+                $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.OriginalPostMessage = $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.PostMessage;
+                $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.OriginalPostImage = $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.PostImage;
+            });
+                       
         };
 
-        $scope.cancelEditcommentOnUserPost = function (postIndex, commentIndex) {            
-            $scope.UserPostList[postIndex].commentsInfo[commentIndex].editableMode = false;
-            $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.PostMessage = $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.OriginalPostMessage;
-            $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.PostImage = $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.OriginalPostImage;
-            if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                $scope.$apply();
-            }            
+        $scope.cancelEditcommentOnUserPost = function (postIndex, commentIndex) {
+
+            $timeout(function () {
+                $scope.UserPostList[postIndex].commentsInfo[commentIndex].editableMode = false;
+                $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.PostMessage = $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.OriginalPostMessage;
+                $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.PostImage = $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.OriginalPostImage;
+            });
+                       
         };
 
         $scope.submitEditcommentOnUserPost = function (postIndex, commentIndex) {
-            $scope.UserPostList[postIndex].commentsInfo[commentIndex].editableMode = false;         
-            if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                $scope.$apply();
-            }
 
+            $timeout(function () {
+                $scope.UserPostList[postIndex].commentsInfo[commentIndex].editableMode = false;
+            });
+            
             submitEditMessage(postIndex, commentIndex);
         };
 
@@ -1200,12 +956,6 @@ define([appLocation.preLogin], function (app) {
                 return;
             }
 
-            //if ($scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.PostMessage == $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.OriginalPostMessage
-            //    && $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.PostImage == $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.OriginalPostImage) {
-            //    //showToastMessage("Warning", "You cann't submit empty message.");
-            //    return;
-            //}
-
             var editMessageRequest = {
                 message: $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.PostMessage,
                 imageUrl: $scope.UserPostList[postIndex].commentsInfo[commentIndex].commentInfo.PostImage,
@@ -1215,32 +965,18 @@ define([appLocation.preLogin], function (app) {
                 wallVertex: $scope.visitedUserVertexId
             };
 
-            var url = ServerContextPath.empty + '/User/EditMessageDetails';
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': CookieUtil.getUTMZT(),
-                'UTMZK': CookieUtil.getUTMZK(),
-                'UTMZV': CookieUtil.getUTMZV(),
-                '_ga': $.cookie('_ga')
-            };
-
-            //startBlockUI('wait..', 3);
             $scope.UserPostList[postIndex].commentsInfo[commentIndex].loadingIcon = true;
-            $http({
-                url: url,
-                method: "POST",
-                data: editMessageRequest,
-                headers: headers
-            }).success(function (data, status, headers, config) {
-                //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
-                $scope.UserPostList[postIndex].commentsInfo[commentIndex].loadingIcon = false;
-                //stopBlockUI();
+
+            OrbitPageApi.EditMessageDetails.post(editMessageRequest, function (data) {
+
+                $timeout(function () {
+                    $scope.UserPostList[postIndex].commentsInfo[commentIndex].loadingIcon = false;
+                });
+
                 showToastMessage("Success", "Successfully Edited");
-            }).error(function (data, status, headers, config) {
-
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
-
-
         };
 
         $scope.UserPostListInfo.nextPage = function () {
@@ -1260,13 +996,20 @@ define([appLocation.preLogin], function (app) {
                 peopleList = [];
                 return $q.when(peopleList);
             }
-            return $http.get($rootScope.sitehosturl + '/search/SearchAll?type=All&q=' + term).then(function (response) {
 
-                peopleList = response.data.Payload;
-                $scope.people = peopleList;
+            var inputData = { type: 'All', q: term };
+
+            return SearchApi.SearchAll.get(inputData, function (data) {
+                peopleList = data.Payload;
+                $timeout(function () {
+                    $scope.people = peopleList;
+                });
+
                 return $q.when(peopleList);
-            });
 
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
+            });
         };
 
         $scope.searchCommentPeople = function (postIndex, term) {
@@ -1277,13 +1020,19 @@ define([appLocation.preLogin], function (app) {
                 return $q.when(peopleList);
             }
             $scope.UserPostList[postIndex].postInfo.startedSearch = true;
-            return $http.get($rootScope.sitehosturl + '/search/SearchAll?type=All&q=' + term).then(function (response) {
+            var inputData = { type: 'All', q: term };
 
-                peopleList = response.data.Payload;
-                $scope.people = peopleList;
+            return SearchApi.SearchAll.get(inputData, function (data) {
+                peopleList = data.Payload;
+                $timeout(function () {
+                    $scope.people = peopleList;
+                });
+
                 return $q.when(peopleList);
-            });
 
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
+            });
         };
 
         $scope.searchPostCommentPeople = function (postIndex, commentIndex, term) {
@@ -1294,13 +1043,19 @@ define([appLocation.preLogin], function (app) {
                 return $q.when(peopleList);
             }
             $scope.UserPostList[postIndex].commentsInfo[commentIndex].startedSearch = true;
-            return $http.get($rootScope.sitehosturl + '/search/SearchAll?type=All&q=' + term).then(function (response) {
+            var inputData = { type: 'All', q: term };
 
-                peopleList = response.data.Payload;
-                $scope.people = peopleList;
+            return SearchApi.SearchAll.get(inputData, function (data) {
+                peopleList = data.Payload;
+                $timeout(function () {
+                    $scope.people = peopleList;
+                });
+
                 return $q.when(peopleList);
-            });
 
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
+            });
         };
 
         $scope.getPeopleText = function (item) {

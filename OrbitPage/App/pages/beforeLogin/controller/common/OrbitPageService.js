@@ -66,6 +66,70 @@ define([appLocation.preLogin], function (app) {
                          headers: headers
                      }
                  }),
+
+
+             UserPost: $resource(
+                ServerContextPath.empty + '/User/UserPost', {}, {
+                    post: {
+                        method: "POST",
+                        isArray: false,
+                        headers: headers
+                    },
+                }),
+
+             UserConnectionRequest: $resource(
+                ServerContextPath.empty + '/User/UserConnectionRequest', {}, {
+                    post: {
+                        method: "POST",
+                        isArray: false,
+                        headers: headers
+                    },
+                }),
+
+             UserReactionOnPost: $resource(
+                ServerContextPath.empty + '/User/UserReactionOnPost', {}, {
+                    post: {
+                        method: "POST",
+                        isArray: false,
+                        headers: headers
+                    },
+                }),
+
+             RemoveReactionOnPost: $resource(
+                ServerContextPath.empty + '/User/RemoveReactionOnPost?vertexId=:vertexId', { vertexId: '@vertexId' }, {
+                    post: {
+                        method: "POST",
+                        isArray: false,
+                        headers: headers
+                    },
+                }),
+
+             DeleteCommentOnPost: $resource(
+                ServerContextPath.empty + '/User/DeleteCommentOnPost?vertexId=:vertexId', { vertexId: '@vertexId' }, {
+                    post: {
+                        method: "POST",
+                        isArray: false,
+                        headers: headers
+                    },
+                }),
+
+             UserCommentOnPost: $resource(
+                ServerContextPath.empty + '/User/UserCommentOnPost', { }, {
+                    post: {
+                        method: "POST",
+                        isArray: false,
+                        headers: headers
+                    },
+                }),
+
+             EditMessageDetails: $resource(
+                ServerContextPath.empty + '/User/EditMessageDetails', {}, {
+                    post: {
+                        method: "POST",
+                        isArray: false,
+                        headers: headers
+                    },
+                }),
          };
      }]);
 
