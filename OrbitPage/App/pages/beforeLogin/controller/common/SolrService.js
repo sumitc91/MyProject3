@@ -79,6 +79,16 @@ define([appLocation.preLogin], function (app) {
                         headers: headers
                     }
                 }),
+
+             Search: $resource(
+                ServerContextPath.solrServer + '/Search/Search?q=:q&page=:page&perpage=:perpage&totalMatch=:totalMatch',
+                { q: '@q', page: '@page', perpage: '@perpage', totalMatch: '@totalMatch' },
+                {
+                    get: {
+                        method: 'GET',
+                        headers: headers
+                    }
+                }),
          };
      }]);
 

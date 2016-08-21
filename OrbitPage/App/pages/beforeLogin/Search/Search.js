@@ -1,6 +1,6 @@
 'use strict';
 define([appLocation.preLogin], function (app) {
-    app.controller('beforeLoginSearch', function ($scope, $http, $rootScope,$routeParams,$location, Restangular, CookieUtil) {
+    app.controller('beforeLoginSearch', function ($scope, $http, $rootScope,$timeout, $routeParams, $location, Restangular, CookieUtil, SearchApi) {
         $('title').html("indexsea"); //TODO: change the title so cann't be tracked in log
         
         $scope.queryParam = {
@@ -16,17 +16,13 @@ define([appLocation.preLogin], function (app) {
             maxSize: 5,
 
         };
-        /*$scope.queryParam.q = getParameterByName('q');
-        $scope.queryParam.currentPage = getParameterByName('page');
-        $scope.queryParam.totalMatch = getParameterByName('totalMatch');
-        $scope.queryParam.perpage = getParameterByName('perpage');*/
-
+        
         $scope.queryParam.q = $location.search().q;
         $scope.queryParam.currentPage = $location.search().page;
         $scope.queryParam.totalMatch = $location.search().totalMatch;
         $scope.queryParam.perpage = $location.search().perpage;
         
-        console.log($scope.queryParam);
+        //console.log($scope.queryParam);
 
         $scope.maxSize = 5;
            
@@ -34,47 +30,42 @@ define([appLocation.preLogin], function (app) {
             getCompanySearchDetail();
 
         function getCompanySearchDetail() {
-            var url = ServerContextPath.solrServer + '/Search/Search?q=' + $scope.queryParam.q + '&page=' + $scope.queryParam.currentPage + '&perpage=' + $scope.queryParam.perpage + '&totalMatch=' + $scope.queryParam.totalMatch;
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv'),
+            
+            var inputData = {
+                q: $scope.queryParam.q,
+                page: $scope.queryParam.currentPage,
+                perpage: $scope.queryParam.perpage,
+                totalMatch: $scope.queryParam.totalMatch
             };
+
             startBlockUI('wait..', 3);
-            $.ajax({
-                url: url,
-                method: "GET",
-                headers: headers
-            }).done(function (data, status) {
+            SearchApi.Search.get(inputData, function (data) {
+
                 stopBlockUI();
-                console.log(data);
                 if (data.Status == "200") {
-                    //showToastMessage("Success", data.Message);
-                    $scope.searchResult = data.Payload.result;
-                    $scope.queryParam.totalMatch = data.Payload.count;
-                    $scope.queryParam.totalNumberOfPages = Math.ceil((data.Payload.count / $scope.queryParam.perpage));
 
-                    $.each(data.Payload.result, function (i, val) {
-                        $scope.searchResult[i].companyname = data.Payload.result[i].companyname;
-                        $scope.searchResult[i].website = data.Payload.result[i].website;
+                    $timeout(function () {
+                        $scope.searchResult = data.Payload.result;
+                        $scope.queryParam.totalMatch = data.Payload.count;
+                        $scope.queryParam.totalNumberOfPages = Math.ceil((data.Payload.count / $scope.queryParam.perpage));
 
-                        if ($scope.searchResult[i].logourl == 'tps://s3-ap-southeast-1.amazonaws.com/urnotice/company/small/LogoUploadEmpty.png')
-                            $scope.searchResult[i].logourl = "http://placehold.it/50x50";
+                        $.each(data.Payload.result, function (i, val) {
+                            $scope.searchResult[i].companyname = data.Payload.result[i].companyname;
+                            $scope.searchResult[i].website = data.Payload.result[i].website;
 
-                        $scope.searchResult[i].linkurl = "/#companydetails/" + $scope.searchResult[i].companyname.replace(/ /g, "_").replace(/\//g, "_OR_") + "/" + $scope.searchResult[i].guid;
-                        $scope.pagination.show = true;
+                            if ($scope.searchResult[i].logourl == 'tps://s3-ap-southeast-1.amazonaws.com/urnotice/company/small/LogoUploadEmpty.png')
+                                $scope.searchResult[i].logourl = "http://placehold.it/50x50";
+
+                            $scope.searchResult[i].linkurl = "/#companydetails/" + $scope.searchResult[i].companyname.replace(/ /g, "_").replace(/\//g, "_OR_") + "/" + $scope.searchResult[i].guid;
+                            $scope.pagination.show = true;
+                        });
                     });
-
-                    if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                        $scope.$apply();
-                    }
-                    //$scope.$apply();
-                    //console.log($scope.competitorDetails);
                 }
                 else {
                     showToastMessage("Warning", data.Message);
                 }
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
         }
 
