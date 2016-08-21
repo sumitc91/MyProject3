@@ -1,6 +1,6 @@
 'use strict';
 define([appLocation.preLogin], function (app) {
-    app.controller('resetPasswordTemplate', function ($scope, $http, $routeParams, $location) {
+    app.controller('resetPasswordTemplate', function ($scope, $http, $routeParams, $location, AuthApi) {
 
         var resetPasswordRequestData = {
             Username: $routeParams.userName,
@@ -36,12 +36,9 @@ define([appLocation.preLogin], function (app) {
 
             if (validatePassword) {
                 startBlockUI('wait..', 3);
-                $http({
-                    url: ServerContextPath.authServer + '/Auth/ResetPassword',
-                    method: "POST",
-                    data: resetPasswordRequestData,
-                    headers: { 'Content-Type': 'application/json' }
-                }).success(function (data, status, headers, config) {
+
+                AuthApi.ResetPassword.post(resetPasswordRequestData, function (data) {
+
                     stopBlockUI();
                     if (data.Status == "200") {
                         //showToastMessage("Success", "Password has been successfully changed.");
@@ -57,9 +54,10 @@ define([appLocation.preLogin], function (app) {
                     else if (data.Status == "500") {
                         location.href = "/?email=" + $('#forgetPasswordInputBoxId').val() + "#/showmessage/3/";
                     }
-                }).error(function (data, status, headers, config) {
-
+                }, function (error) {
+                    showToastMessage("Error", "Internal Server Error Occured!");
                 });
+                
             } else {
                 showToastMessage("Error", "Some Fields are Invalid !!!");
             }

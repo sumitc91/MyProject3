@@ -166,6 +166,7 @@ define([appLocation.preLogin], function (app) {
                         headers: headers
                     },
                 }),
+
          };
      }]);
 

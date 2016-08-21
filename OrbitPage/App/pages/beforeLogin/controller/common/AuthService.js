@@ -22,7 +22,14 @@ define([appLocation.preLogin], function (app) {
                      }
                  }),
 
-             
+             ResetPassword: $resource(
+                ServerContextPath.authServer + '/Auth/ResetPassword', {}, {
+                    post: {
+                        method: "POST",
+                        isArray: false,
+                        headers: headers
+                    },
+                }),
          };
      }]);
 
