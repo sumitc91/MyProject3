@@ -260,6 +260,12 @@ define([appLocation.preLogin], function (app) {
             UserNetworkDetailHelperDataLoaded: false
         };
 
+        $scope.topSearchBarSearchKeyPress = function (keyEvent) {
+            if (keyEvent.which === 13) {
+                location.href = "/#search/?q=" + $("#topSearchBar_value").val() + "&page=1&perpage=10";
+            }
+        };
+
         $rootScope.chatBox = {
             show: false
         };
