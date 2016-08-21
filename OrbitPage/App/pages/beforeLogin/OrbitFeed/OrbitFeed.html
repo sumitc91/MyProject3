@@ -114,7 +114,7 @@
                     <ul class="list-group user-search">
                         <li mentio-menu-item="person" ng-repeat="person in items" class="list-group-item">
                             <img ng-src=" {{person.icon}}" class="user-photo" style="max-height: 50px;">
-                            <span class="text-primary"
+                            <span class="text-none"
                                   ng-bind-html="person.name | mentioHighlight:typedTerm:'menu-highlighted' | unsafe"></span>
                             <em class="text-muted" ng-bind="person.type"></em>
                         </li>
