@@ -156,21 +156,6 @@ define([appLocation.preLogin], function (app) {
         };
     });
 
-    app.directive('myContextmenu', function ($parse) {
-        return {
-            compile: function (tElem, tAttrs) {
-                var fn = $parse(tAttrs.myContextmenu);
-                return function (scope, elem, attrs) {
-                    elem.on('contextmenu', function (evt) {
-                        scope.$apply(function () {
-                            fn(scope, { $event: evt });
-                        });
-                    });
-                };
-            }
-        };
-    });
-
     app.directive('ngConfirmClick', [
         function () {
             return {
@@ -186,7 +171,7 @@ define([appLocation.preLogin], function (app) {
             };
         }])
 
-    app.controller('beforeLoginMasterPageController', function ($scope, $location, $http, $rootScope, CookieUtil) {
+    app.controller('beforeLoginMasterPageController', function ($scope, $location, $http,$timeout, $rootScope, CookieUtil, UserApi, OrbitPageApi, SearchApi) {
 
         _.defer(function () { $scope.$apply(); });
         $rootScope.IsMobileDevice = (mobileDevice || isAndroidDevice) ? true : false;
@@ -289,22 +274,14 @@ define([appLocation.preLogin], function (app) {
         };
 
         $scope.seenNotification = function () {
-            var url = ServerContextPath.userServer + '/User/SeenNotification';
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv')
-            };
+            
             $rootScope.clientNotificationDetailResponseInfo.count = 0;
-            $.ajax({
-                url: url,
-                method: "GET",
-                headers: headers
-            }).done(function (data, status) {
-                //console.log(data);
-                //$scope.CompanyNoticePeriodDetails = data.results;
 
+            var inputData = { };
+            UserApi.SeenNotification.get(inputData, function (data) {
+
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
         };
 
@@ -407,35 +384,17 @@ define([appLocation.preLogin], function (app) {
                 ConnectingBody: connectingBody
             };
 
-
-            var url = ServerContextPath.empty + '/User/UserConnectionRequest';
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv'),
-            };
-
             if ($rootScope.isUserLoggedIn) {
-                //startBlockUI('wait..', 3);
-                //$scope.makeConnectionRequestLoading = true;
-                showHideConnectionRequestLoadingOnButton(connectionType, true,index);
-                $http({
-                    url: url,
-                    method: "POST",
-                    data: userNewConnectionData,
-                    headers: headers
-                }).success(function (data, status, headers, config) {
-                    //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
-                    //$scope.makeConnectionRequestLoading = false;
+                
+                showHideConnectionRequestLoadingOnButton(connectionType, true, index);
+
+                OrbitPageApi.UserConnectionRequest.post(userNewConnectionData, function (data) {
                     showHideConnectionRequestLoadingOnButton(connectionType, false, index);
                     spliceFriendRequestFromNotification(index);
-                    //stopBlockUI();                    
-
-
-                }).error(function (data, status, headers, config) {
-
+                }, function (error) {
+                    showToastMessage("Error", "Internal Server Error Occured!");
                 });
+
             } else {
                 showToastMessage("Warning", "Please Login to Make a connection.");
             }
@@ -443,11 +402,10 @@ define([appLocation.preLogin], function (app) {
         };
 
         function spliceFriendRequestFromNotification(index) {
-
-            $rootScope.clientFriendRequestNotificationDetailResponse.splice(index, 1);
-            if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                $scope.$apply();
-            }
+            $timeout(function () {
+                $rootScope.clientFriendRequestNotificationDetailResponse.splice(index, 1);
+            });
+            
         };
 
         function showHideConnectionRequestLoadingOnButton(connectionType, show, index) {
@@ -483,54 +441,42 @@ define([appLocation.preLogin], function (app) {
         }
 
         function loadClientDetails() {
-            var url = ServerContextPath.solrServer + '/Search/GetDetails?userType=user';
-            //var url = ServerContextPath.userServer + '/User/GetDetails?userType=user';
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': CookieUtil.getUTMZT(),
-                'UTMZK': CookieUtil.getUTMZK(),
-                'UTMZV': CookieUtil.getUTMZV()
-            };
-            //startBlockUI('wait..', 3);
+
             $scope.loadingUserDetails = true;
-            $http({
-                url: url,
-                method: "GET",
-                headers: headers
-            }).success(function (data, status, headers, config) {
-                //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
-                //stopBlockUI();
-                $scope.loadingUserDetails = false;
-                //console.log(data);
-                if (data.Status == "200") {
-                    $rootScope.clientDetailResponse = data.Payload;
-                    //$scope.UserNotificationsList.Messages = data.Payload.Messages;
-                    //$scope.UserNotificationsList.Notifications = data.Payload.Notifications;
-                    CookieUtil.setUserName(data.Payload.Firstname, userSession.keepMeSignedIn);
-                    CookieUtil.setUserImageUrl(data.Payload.Profilepic, userSession.keepMeSignedIn);
 
-                    $rootScope.isUserLoggedIn = true;                    
-                    initSidr(true);
+            var inputData = { userType: 'user' };
+            SearchApi.GetDetails.get(inputData, function (data) {
 
-                    if (data.Payload.isLocked == "true") {
-                        location.href = "/Auth/LockAccount?status=true";
+                $timeout(function () {
+                    $scope.loadingUserDetails = false;
+                    if (data.Status == "200") {
+                        $rootScope.clientDetailResponse = data.Payload;
+                        CookieUtil.setUserName(data.Payload.Firstname, userSession.keepMeSignedIn);
+                        CookieUtil.setUserImageUrl(data.Payload.Profilepic, userSession.keepMeSignedIn);
+
+                        $rootScope.isUserLoggedIn = true;
+                        initSidr(true);
+
+                        if (data.Payload.isLocked == "true") {
+                            location.href = "/Auth/LockAccount?status=true";
+                        }
                     }
-                }
-                else if (data.Status == "404") {
+                    else if (data.Status == "404") {
 
-                    alert("This template is not present in database");
-                }
-                else if (data.Status == "500") {
+                        alert("This template is not present in database");
+                    }
+                    else if (data.Status == "500") {
 
-                    alert("Internal Server Error Occured");
-                }
-                else if (data.Status == "401") {                   
-                    $rootScope.isUserLoggedIn = false;
-                    removeAllCookies(ServerContextPath.cookieDomain);
-                }
-            }).error(function (data, status, headers, config) {
-                //stopBlockUI();
-                //showToastMessage("Error", "Internal Server Error Occured.");                
+                        alert("Internal Server Error Occured");
+                    }
+                    else if (data.Status == "401") {
+                        $rootScope.isUserLoggedIn = false;
+                        removeAllCookies(ServerContextPath.cookieDomain);
+                    }
+                });
+
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
         }
 
@@ -538,22 +484,11 @@ define([appLocation.preLogin], function (app) {
             var vertexId = postVertexId;
             if (type != 1 && type != "1")
                 vertexId = commentVertexId;
-            var url = ServerContextPath.userServer + '/User/GetPostByVertexId?vertexId=' + vertexId;
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv'),
-            };
-            //startBlockUI('wait..', 3);
-            $.ajax({
-                url: url,
-                method: "GET",
-                headers: headers
-            }).done(function (data, status) {
-                //stopBlockUI();
-                $scope.$apply(function () {
-                    //$scope.UserPostList = data.results;                    
+            
+            var inputData = { vertexId: vertexId };
+            UserApi.GetPostByVertexId.get(inputData, function (data) {
+
+                $timeout(function () {
                     if (data.results.length > 0) {
                         var absoluteIndex = 0; // only 1 post available.
                         data.results[absoluteIndex].type = type;
@@ -562,66 +497,47 @@ define([appLocation.preLogin], function (app) {
                         data.results[absoluteIndex].postVertexId = postVertexId;
                         $rootScope.userOrbitFeedList.push(data.results[absoluteIndex]);
 
-                        //console.log($scope.UserPostList);
                     } else {
                         showToastMessage("Warning", "Post Not found.");
                     }
                 });
 
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
         };
 
         function loadClientNotificationDetails(from, to, isFromPushNotification) {
-            var url = ServerContextPath.userServer + '/User/GetNotificationDetails?from=' + from + '&to=' + to;
-            //var url = ServerContextPath.userServer + '/User/GetDetails?userType=user';
-            //console.log("loadClientNotificationDetails : "+from+" -- "+to);
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': CookieUtil.getUTMZT(),
-                'UTMZK': CookieUtil.getUTMZK(),
-                'UTMZV': CookieUtil.getUTMZV()
-            };
-            //startBlockUI('wait..', 3);
-            //$scope.loadingUserDetails = true;
+            
             $rootScope.clientNotificationDetailResponseInfo.busy = true;
             $scope.loadingNotificationDetails = true;
-            //if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-            //    $scope.$apply();
-            //}
+            
+            var inputData = { from: from, to: to };
+            UserApi.GetNotificationDetails.get(inputData, function (data) {
 
-            $http({
-                url: url,
-                method: "GET",
-                headers: headers
-            }).success(function (data, status, headers, config) {
-                //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
-                //stopBlockUI();
-                //console.log("loadClientNotificationDetails success : " + from + " -- " + to);
                 $scope.loadingNotificationDetails = false;
                 $rootScope.clientNotificationDetailResponseInfo.busy = false;
                 $rootScope.clientNotificationDetailResponseInfo.count = data.unread;
-                
 
-                if (isFromPushNotification || from==0) {
+                if (isFromPushNotification || from == 0) {
                     $rootScope.clientNotificationDetailResponse = [];
                 }
 
-                if (data != null && data.results != null && data.results.length>0) {                    
-                    for (var i = 0; i < data.results.length; i++) {                        
+                if (data != null && data.results != null && data.results.length > 0) {
+                    for (var i = 0; i < data.results.length; i++) {
                         if ((from + i) < data.unread) {
-                            data.results[i].class = "unread_notification";                            
+                            data.results[i].class = "unread_notification";
                         }
-                        
+
                         data.results[i].postInfo[0].PostMessageHtml = replaceTextWithLinks(data.results[i].postInfo[0].PostMessage);
-                        //console.log(data.results[i].postInfo[0].PostMessageHtml);
-                        $rootScope.clientNotificationDetailResponse.push(data.results[i]);                        
+                        $rootScope.clientNotificationDetailResponse.push(data.results[i]);
                     }
-                }                   
-                
+                }
+
                 if (isFromPushNotification) {
                     var mssg = "";
                     if ($rootScope.clientNotificationDetailResponse[0].notificationInfo.Type == "WallPostNotification") {
-                        mssg = $rootScope.clientNotificationDetailResponse[0].notificationByUser.FirstName + " " + $rootScope.clientNotificationDetailResponse[0].notificationByUser.LastName + "  Posted On your wall.";                        
+                        mssg = $rootScope.clientNotificationDetailResponse[0].notificationByUser.FirstName + " " + $rootScope.clientNotificationDetailResponse[0].notificationByUser.LastName + "  Posted On your wall.";
                     } else if ($rootScope.clientNotificationDetailResponse[0].notificationInfo.Type == "CommentedOnPostNotification") {
                         mssg = $rootScope.clientNotificationDetailResponse[0].notificationByUser.FirstName + " " + $rootScope.clientNotificationDetailResponse[0].notificationByUser.LastName + "  Commented on one of your related post.";
                     } else if ($rootScope.clientNotificationDetailResponse[0].notificationInfo.Type == "UserReaction") {
@@ -634,10 +550,6 @@ define([appLocation.preLogin], function (app) {
                     showToastMessage("Success", mssg);
                 }
 
-                //if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                //    $scope.$apply();
-                //}
-                //console.log($rootScope.clientNotificationDetailResponse);
                 if (data.Status == "500") {
 
                     alert("Internal Server Error Occured");
@@ -646,37 +558,27 @@ define([appLocation.preLogin], function (app) {
                     $rootScope.isUserLoggedIn = false;
                     removeAllCookies(ServerContextPath.cookieDomain);
                 }
-            }).error(function (data, status, headers, config) {
-                //stopBlockUI();
+
+            }, function (error) {
                 $scope.loadingNotificationDetails = false;
                 $rootScope.clientNotificationDetailResponseInfo.busy = false;
-                showToastMessage("Error", "Internal Server Error Occured.");                
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
+
         }
 
 
         function loadClientFriendRequestNotificationDetails(from, to, isFromPushNotification) {
-            var url = ServerContextPath.userServer + '/User/GetFriendRequestNotificationDetails?from=' + from + '&to=' + to;            
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': CookieUtil.getUTMZT(),
-                'UTMZK': CookieUtil.getUTMZK(),
-                'UTMZV': CookieUtil.getUTMZV()
-            };
             
             $rootScope.clientFriendRequestNotificationDetailResponseInfo.busy = true;
             $scope.loadingFriendRequestNotificationDetails = true;
             
-            $http({
-                url: url,
-                method: "GET",
-                headers: headers
-            }).success(function (data, status, headers, config) {
-                
+            var inputData = { from: from, to: to };
+            UserApi.GetFriendRequestNotificationDetails.get(inputData, function (data) {
+
                 $scope.loadingFriendRequestNotificationDetails = false;
                 $rootScope.clientFriendRequestNotificationDetailResponseInfo.busy = false;
                 $rootScope.clientFriendRequestNotificationDetailResponseInfo.count = data.unread;
-
 
                 if (isFromPushNotification || from == 0) {
                     $rootScope.clientFriendRequestNotificationDetailResponse = [];
@@ -694,26 +596,24 @@ define([appLocation.preLogin], function (app) {
                 }
 
                 if (isFromPushNotification) {
-                    var mssg = "New Friend Request.";                    
+                    var mssg = "New Friend Request.";
                     showToastMessage("Success", mssg);
                 }
 
-                
-                //console.log($rootScope.clientNotificationDetailResponse);
                 if (data.Status == "500") {
-
-                    alert("Internal Server Error Occured");
+                    showToastMessage("Error", "Internal Server Error Occured. Status 500");
                 }
                 else if (data.Status == "401") {
                     $rootScope.isUserLoggedIn = false;
                     removeAllCookies(ServerContextPath.cookieDomain);
                 }
-            }).error(function (data, status, headers, config) {
-                //stopBlockUI();
+
+            }, function (error) {
                 $scope.loadingNotificationDetails = false;
                 $rootScope.clientNotificationDetailResponseInfo.busy = false;
                 showToastMessage("Error", "Internal Server Error Occured.");
             });
+
         }
 
         function initSidr(latestUserInfoAvailable) {
@@ -800,7 +700,6 @@ define([appLocation.preLogin], function (app) {
 
         $scope.messageToUserPost = function (postIndex) {
 
-
             var userPostCommentData = {
                 Message: $scope.chatList[0].userMessage,
                 Image: "",
@@ -823,28 +722,17 @@ define([appLocation.preLogin], function (app) {
                 return;
             }
             
-            var url = ServerContextPath.empty + '/User/SendMessage';
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv'),
-            };
             if ($rootScope.isUserLoggedIn) {
                
                 $scope.chatList[0].messages.push(newChatMessage);
                 $scope.chatList[0].userMessage = "";
-                //startBlockUI('wait..', 3);
-                $http({
-                    url: url,
-                    method: "POST",
-                    data: userPostCommentData,
-                    headers: headers
-                }).success(function (data, status, headers, config) {
-                   
-                }).error(function (data, status, headers, config) {
 
+                OrbitPageApi.SendMessage.post(userPostCommentData, function (data) {
+
+                }, function (error) {
+                    showToastMessage("Error", "Internal Server Error Occured!");
                 });
+
             }
             else {
                 showToastMessage("Warning", "Please Login to reply on post.");
@@ -870,11 +758,10 @@ define([appLocation.preLogin], function (app) {
         };
         //$scope.chatListUserRegisteredOnline
         $scope.UpdateUserOnlineStatusFromPushNotification = function (message) {
-            //console.log("UpdateUserOnlineStatusFromPushNotification : "+message);
-            $scope.chatListUserRegisteredOnline = true;
-            if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                $scope.$apply();
-            }
+
+            $timeout(function () {
+                $scope.chatListUserRegisteredOnline = true;
+            });
         };
 
         $scope.toggleProfileDropDownCss = function () {
@@ -888,21 +775,6 @@ define([appLocation.preLogin], function (app) {
 
         $rootScope.wysiHTML5InputImageTextBoxId = "http://";
         
-
-        $rootScope.beforeLoginFooterInfo = {
-            requester: "Crowd Automation Requester",
-            accepter: "Crowd Automation Accepter",
-            knowMore: "Learn more about",
-            impLinks: window.madetoearn.i18n.beforeLoginMasterPageFooterImportantLinks,
-            FAQ: window.madetoearn.i18n.beforeLoginMasterPageFAQ,
-            contactUs: window.madetoearn.i18n.beforeLoginMasterPageContactUs,
-            TnC: window.madetoearn.i18n.beforeLoginMasterPageTnC,
-            developers:"Developers Section",
-            aboutus: window.madetoearn.i18n.beforeLoginMasterPageAboutUs,
-            home: window.madetoearn.i18n.beforeLoginMasterPageHome,
-            footerMost: window.madetoearn.i18n.beforeLoginMasterPageFooterMost
-        };
-
         
         if (getParameterByName("lang") == "hi_in") {
             
@@ -917,25 +789,5 @@ define([appLocation.preLogin], function (app) {
         //});
 
     });
-
-    function loadjscssfile(filename, filetype) {
-        var fileref = "";
-        if (filetype == "js") { //if filename is a external JavaScript file
-            fileref = document.createElement('script');
-            fileref.setAttribute("type", "text/javascript");
-            fileref.setAttribute("src", filename);
-        }
-        else if (filetype == "css") { //if filename is an external CSS file
-            fileref = document.createElement("link");
-            fileref.setAttribute("rel", "stylesheet");
-            fileref.setAttribute("type", "text/css");
-            fileref.setAttribute("href", filename);
-        }
-        if (typeof fileref != "undefined")
-            document.getElementsByTagName("head")[0].appendChild(fileref);
-    }
-
-    //loadjscssfile("../../App/Pages/BeforeLogin/SignUpClient/signUpClientController.js", "js"); //dynamically load and add this .js file
-    //loadjscssfile("../../App/Pages/BeforeLogin/Controller/common/CookieService.js", "js"); 
 
 });

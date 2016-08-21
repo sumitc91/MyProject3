@@ -130,6 +130,15 @@ define([appLocation.preLogin], function (app) {
                         headers: headers
                     },
                 }),
+
+             SendMessage: $resource(
+                ServerContextPath.empty + '/User/SendMessage', {}, {
+                    post: {
+                        method: "POST",
+                        isArray: false,
+                        headers: headers
+                    },
+                }),
          };
      }]);
 
