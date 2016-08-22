@@ -10,7 +10,7 @@ define([appLocation.preLogin], function (app) {
         };
 
         function sendEmailModule() {
-            var url = ServerContextPath.authServer + '/Auth/SendEmail';
+            var url = ServerContextPath.empty + '/Auth/SendEmail';
             var headers = {
                 'Content-Type': 'application/json',
                 'UTMZT': CookieUtil.getUTMZT(),

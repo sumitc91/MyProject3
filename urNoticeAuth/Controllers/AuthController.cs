@@ -193,12 +193,6 @@ namespace urNoticeAuth.Controllers
             return Json(response);
         }
 
-        [System.Web.Mvc.HttpPost]
-        public JsonResult SendEmail(CreateOrbitPageEmailRequest req)
-        {
-            IPerson adminModel = new Admin();
-            var response = adminModel.SendEmail(req, Request);
-            return Json(response);
-        }
+        
     }
 }

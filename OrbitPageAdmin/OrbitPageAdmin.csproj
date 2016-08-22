@@ -118,6 +118,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -1262,6 +1263,16 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\urNotice.Common.Infrastructure\urNotice.Common.Infrastructure.csproj">
+      <Project>{035B8905-32B9-4C17-8E6B-D7B3114328E1}</Project>
+      <Name>urNotice.Common.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\urNotice.Services\urNotice.Services.csproj">
+      <Project>{4BE58554-2672-41F9-B6FE-3A205ACF2FE6}</Project>
+      <Name>urNotice.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
