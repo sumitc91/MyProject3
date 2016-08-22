@@ -14,6 +14,7 @@ using urNotice.Common.Infrastructure.Encryption;
 using urNotice.Common.Infrastructure.Model.Person;
 using urNotice.Common.Infrastructure.Model.urNoticeModel.AssetClass;
 using urNotice.Common.Infrastructure.Model.urNoticeModel.DynamoDb;
+using urNotice.Common.Infrastructure.Model.urNoticeModel.EmailModel;
 using urNotice.Common.Infrastructure.Model.urNoticeModel.RequestWrapper;
 using urNotice.Common.Infrastructure.Model.urNoticeModel.ResponseWrapper;
 using urNotice.Common.Infrastructure.Session;
@@ -189,6 +190,14 @@ namespace urNoticeAuth.Controllers
         {
             IPerson consumerModel = new Consumer();
             var response = consumerModel.ResetPasswordService(req);
+            return Json(response);
+        }
+
+        [System.Web.Mvc.HttpPost]
+        public JsonResult SendEmail(CreateOrbitPageEmailRequest req)
+        {
+            IPerson adminModel = new Admin();
+            var response = adminModel.SendEmail(req, Request);
             return Json(response);
         }
     }

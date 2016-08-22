@@ -218,6 +218,7 @@
     <Compile Include="Model\urNoticeModel\DynamoDb\UserCompanyAnalytics.cs" />
     <Compile Include="Model\urNoticeModel\DynamoDb\UserCompanyNoticePeriodInfoAnalytics.cs" />
     <Compile Include="Model\urNoticeModel\DynamoDb\UserCompanyRatingAnalytics.cs" />
+    <Compile Include="Model\urNoticeModel\EmailModel\CreateOrbitPageEmailRequest.cs" />
     <Compile Include="Model\urNoticeModel\GoogleApiResponse\GoogleApiContactListGdemailResponse.cs" />
     <Compile Include="Model\urNoticeModel\GoogleApiResponse\GoogleApiContactListGdphoneNumberResponse.cs" />
     <Compile Include="Model\urNoticeModel\GoogleApiResponse\GoogleApiContactListResponse.cs" />

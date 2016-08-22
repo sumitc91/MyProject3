@@ -7,6 +7,7 @@ using System.Web;
 using SolrNet;
 using urNotice.Common.Infrastructure.Model.urNoticeModel.AssetClass;
 using urNotice.Common.Infrastructure.Model.urNoticeModel.DynamoDb;
+using urNotice.Common.Infrastructure.Model.urNoticeModel.EmailModel;
 using urNotice.Common.Infrastructure.Model.urNoticeModel.GraphModel;
 using urNotice.Common.Infrastructure.Model.urNoticeModel.RequestWrapper;
 using urNotice.Common.Infrastructure.Model.urNoticeModel.RequestWrapper.EditProfile;
@@ -35,6 +36,7 @@ namespace urNotice.Common.Infrastructure.Model.Person
         ResponseModel<String> DeleteCommentOnPost(urNoticeSession session, string vertexId);
         ResponseModel<UserVertexModel> CreateNewReactionOnUserPost(urNoticeSession session,UserNewReactionRequest userNewReactionRequest,List<TaggedVertexIdModel> taggedVertexId, out HashSet<string> sendNotificationResponse);
         ResponseModel<String> RemoveReactionOnUserPost(urNoticeSession session, string vertexId);
+        ResponseModel<String> SendEmail(CreateOrbitPageEmailRequest req, HttpRequestBase request);
         ResponseModel<string> SeenNotification(string userName);
 
         HashSet<string> SendNotificationToUser(urNoticeSession session, string userWallVertexId, string postVertexId, string commentVertexId, string postPostedByVertexId, string notificationType, List<TaggedVertexIdModel> taggedVertexId);

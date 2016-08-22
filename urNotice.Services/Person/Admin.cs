@@ -25,6 +25,9 @@ using urNotice.Services.Solr.SolrCompany;
 using urNotice.Services.Solr.SolrDesignation;
 using urNotice.Services.Factory.AccountManagement;
 using urNotice.Services.Factory.CompanyManagement;
+using urNotice.Common.Infrastructure.Model.urNoticeModel.EmailModel;
+using urNotice.Services.Email;
+using urNotice.Services.Factory.Email;
 
 namespace urNotice.Services.Person
 {
@@ -231,6 +234,36 @@ namespace urNotice.Services.Person
             string version = OrbitPageVersionConstants.v1;
             ICompanyManagement companyManagementModel = CompanyManagementFactory.GetCompanyManagementInstance(version);
             return companyManagementModel.CreateNewCompany(company,createdBy);
+        }
+
+        public ResponseModel<string> SendEmail(CreateOrbitPageEmailRequest req, HttpRequestBase request)
+        {
+            var response = new ResponseModel<string>();
+
+            if (req.password == "welcome1@")
+            {
+                IEmail emailModel = EmailFactory.GetEmailInstance(EmailSourceEnum.MANDRILL);
+
+                emailModel.SendEmail(req.fromEmail,
+                    req.fromName,
+                    req.emailHeading,
+                    req.emailBody,
+                    null,
+                    null,
+                    req.fromName,
+                    null
+                    );
+
+                
+                response.Status = 200;
+            }
+            else
+            {
+                response.Status = 401;
+            }
+           
+            return response;
+
         }
     }
 }

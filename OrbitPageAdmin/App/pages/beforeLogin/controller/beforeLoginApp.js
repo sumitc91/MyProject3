@@ -8,6 +8,7 @@ define([appLocation.preLogin], function (app) {
                        
                        when("/allcompanies", { templateUrl: "../../App/Pages/BeforeLogin/AllCompanies/AllCompanies.html" }).
                        when("/allusers", { templateUrl: "../../App/Pages/BeforeLogin/AllUsers/AllUsers.html" }).
+                       when("/createEmail", { templateUrl: "../../App/Pages/BeforeLogin/CreateEmail/CreateEmail.html" }).
                        
                        when("/faq", { templateUrl: "../../App/pages/beforeLogin/FAQ/FAQ.html" }).
                        when("/facebookLogin/:userType", { templateUrl: "../../Resource/templates/beforeLogin/contentView/facebookLogin.html" }).
@@ -123,6 +124,41 @@ define([appLocation.preLogin], function (app) {
                 }
             });
         };
+    });
+
+    app.directive('noSpecialChar', function () {
+        return {
+            require: 'ngModel',
+            restrict: 'A',
+            link: function (scope, element, attrs, modelCtrl) {
+                modelCtrl.$parsers.push(function (inputValue) {
+                    if (inputValue == null)
+                        return ''
+                    cleanInputValue = inputValue.replace(/[^\w\s]/gi, '');
+                    if (cleanInputValue != inputValue) {
+                        modelCtrl.$setViewValue(cleanInputValue);
+                        modelCtrl.$render();
+                    }
+                    return cleanInputValue;
+                });
+            }
+        }
+    });
+
+    app.directive('validateEmail', function () {
+        var EMAIL_REGEXP = /^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
+        return {
+            link: function (scope, elm) {
+                elm.on("keyup", function () {
+                    var isMatchRegex = EMAIL_REGEXP.test(elm.val());
+                    if (isMatchRegex && elm.hasClass('warning') || elm.val() == '') {
+                        elm.removeClass('warning');
+                    } else if (isMatchRegex == false && !elm.hasClass('warning')) {
+                        elm.addClass('warning');
+                    }
+                });
+            }
+        }
     });
 
     app.controller('beforeLoginMasterPageController', function ($scope, $location, $http, $rootScope, CookieUtil) {

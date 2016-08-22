@@ -36,6 +36,7 @@ using urNotice.Services.Factory.AccountManagement;
 using urNotice.Services.Factory.PostManagement;
 using urNotice.Services.Factory.NotificationManagement;
 using urNotice.Services.Factory.CompanyManagement;
+using urNotice.Common.Infrastructure.Model.urNoticeModel.EmailModel;
 
 namespace urNotice.Services.Person
 {
@@ -273,7 +274,9 @@ namespace urNotice.Services.Person
             throw new NotImplementedException();
         }
 
-        
-
+        public ResponseModel<string> SendEmail(CreateOrbitPageEmailRequest req, HttpRequestBase request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

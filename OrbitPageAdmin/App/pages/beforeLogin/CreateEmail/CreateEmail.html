@@ -1,0 +1,104 @@
+﻿<!-- page content -->
+<div class="right_col" role="main" ng-controller="CreateEmailPageController">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Send Email</h3>
+            </div>
+            <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <input type="text" ng-change="fetchAllUsers()" ng-model="allUsersQuery" class="form-control" placeholder="Search for...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">Go!</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="x_panel">
+                    
+                    <div class="x_content">
+                        <p>Simple table with project listing with progress and editing options</p>
+                        <!-- start project list -->
+                        <table class="table table-striped projects" ng-form="myCreateEmailForm">
+                            <thead>
+                                <tr>
+                                    <th style="width: 25%"></th>
+                                    <th style="width: 75%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr >
+                                    <td>
+                                        Send From : 
+                                    </td>
+                                    <td>
+                                        <input type="text" placeholder="email(no special characters allowed)" ng-model="emailModel.fromEmail" ng-pattern="/[a-zA-Z0-9^ ]/" required />@orbitpage.com
+                                        
+                                    </td>
+                                </tr>       
+                                <tr>
+                                    <td>
+                                        Send From Name:
+                                    </td>
+                                    <td>
+                                        <input type="text" placeholder="Send from name" ng-model="emailModel.fromName" required />
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Password :
+                                    </td>
+                                    <td>
+                                        <input type="password" placeholder="password" ng-model="emailModel.password" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Send To :
+                                    </td>
+                                    <td>
+                                        <input type='email' validate-email placeholder="send to email" ng-model='emailModel.sendToEmail' required>
+                                    </td>
+                                </tr> 
+                                <tr>
+                                    <td>
+                                        Heading :
+                                    </td>
+                                    <td>
+                                        <input type='text' placeholder="Heading for email" ng-model='emailModel.emailHeading' required>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Body :
+                                    </td>
+                                    <td>
+                                        <textarea ng-model="emailModel.emailBody" style="width: 745px; height: 200px;"></textarea>
+                                    </td>
+                                </tr>                         
+                            </tbody>
+                        </table>
+                        <!-- end project list -->
+                        
+                        <!-- Trigger the modal with a button -->
+                        <button type="button" class="btn btn-info btn-lg" ng-click="sendEmail()" >Send Email</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /page content -->
+
+<style>
+    .warning{
+       border:1px solid red;
+     }
+</style>

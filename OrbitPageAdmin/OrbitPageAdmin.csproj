@@ -277,6 +277,8 @@
     <Content Include="App\pages\beforeLogin\AboutUs\AboutUs.js" />
     <Content Include="App\pages\beforeLogin\AddNewNotice\AddNewNotice.html" />
     <Content Include="App\pages\beforeLogin\AddNewNotice\AddNewNotice.js" />
+    <Content Include="App\pages\beforeLogin\CreateEmail\CreateEmail.html" />
+    <Content Include="App\pages\beforeLogin\CreateEmail\CreateEmail.js" />
     <Content Include="App\pages\beforeLogin\Blog\Blog.html" />
     <Content Include="App\pages\beforeLogin\Blog\Blog.js" />
     <Content Include="App\pages\beforeLogin\Career\Career.html" />

@@ -14,6 +14,7 @@ using urNotice.Common.Infrastructure.Session;
 using System.Web.Mvc;
 using urNotice.Services.Person;
 using urNotice.Services.Person.PersonContract.LoginOperation;
+using urNotice.Common.Infrastructure.Model.urNoticeModel.EmailModel;
 
 namespace OrbitPage.Controllers
 {
@@ -60,5 +61,6 @@ namespace OrbitPage.Controllers
             var response = consumerModel.ResendValidationCodeService(req, Request);
             return Json(response);
         }
+        
     }
 }

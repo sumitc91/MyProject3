@@ -107,6 +107,9 @@ appRequire = require
             AllCompaniesController: {
                 deps: ["jquery", "angular", "restangular", "configureBlockUI", "toastMessage"]
             },
+            CreateEmailPageController: {
+                deps: ["jquery", "angular", "restangular", "configureBlockUI", "toastMessage"]
+            },
             validateEmail: {
                 deps: ["jquery", "angular", "restangular", "configureBlockUI", "toastMessage"]
             },
@@ -176,6 +179,7 @@ appRequire = require
             beforeLoginSolrService: "../../App/pages/beforeLogin/controller/common/SolrService",
             AllUsersPageController: "../../App/pages/beforeLogin/AllUsers/AllUsers",
             AllCompaniesController: "../../App/pages/beforeLogin/AllCompanies/AllCompanies",
+            CreateEmailPageController: "../../App/pages/beforeLogin/CreateEmail/CreateEmail",
             validateEmail: "../../App/pages/beforeLogin/ValidateEmail/validateEmail",
             showMessageTemplate: "../../App/pages/beforeLogin/ShowMessage/showMessageTemplate",
             beforeLoginForgetPassword: "../../App/pages/beforeLogin/ForgetPassword/ForgetPassword",
@@ -198,7 +202,7 @@ appRequire(["jquery", "angular", "jquery_toastmessage", "toastMessage","sanitize
     "domReady", "fancybox", "ngAutocomplete", "angucomplete_alt_min",
     "angular_input_stars", "bootstrap_ui", "AllUsersPageController", "AllCompaniesController", "validateEmail",
     "showMessageTemplate", "beforeLoginForgetPassword", "beforeLoginResetPassword", "beforeLoginEditPage",
-    "beforeLoginCompanyDetails", "beforeLoginSearch", "beforeLoginUserDetails"
+    "beforeLoginCompanyDetails", "beforeLoginSearch", "beforeLoginUserDetails", "CreateEmailPageController"
 ], function() {
     angular.bootstrap(document.getElementById("main"), ["beforeLoginApp"]);
 });
