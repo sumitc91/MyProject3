@@ -244,14 +244,14 @@ namespace urNotice.Services.Person
             {
                 IEmail emailModel = EmailFactory.GetEmailInstance(EmailSourceEnum.MANDRILL);
 
-                emailModel.SendEmail(req.fromEmail,
+                emailModel.SendEmail(req.sendToEmail,
                     req.fromName,
                     req.emailHeading,
                     req.emailBody,
                     null,
                     null,
                     req.fromName,
-                    null
+                    req.fromEmail + "@orbitpage.com"
                     );
 
                 
