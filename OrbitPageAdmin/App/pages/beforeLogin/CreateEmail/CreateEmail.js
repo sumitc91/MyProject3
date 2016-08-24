@@ -37,7 +37,7 @@ define([appLocation.preLogin], function (app) {
             }).success(function (data, status, headers, config) {
                 //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
                 stopBlockUI();
-                if(data.status=="200")
+                if(data.status== 200)
                 {
                     showToastMessage("Success", "Successfully sent mail.");
                 }
