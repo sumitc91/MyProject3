@@ -41,6 +41,9 @@ define([appLocation.preLogin], function (app) {
                 {
                     showToastMessage("Success", "Successfully sent mail.");
                 }
+                else if (data.Status == 401) {
+                    showToastMessage("Warning", "Password is Incorrect.");
+                }
                 else {
                     showToastMessage("Warning", "Some Error occured while sending mail.");
                 }
