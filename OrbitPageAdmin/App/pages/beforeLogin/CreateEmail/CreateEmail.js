@@ -29,9 +29,15 @@ define([appLocation.preLogin], function (app) {
             }).success(function (data, status, headers, config) {
                 //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
                 stopBlockUI();
-                
+                if(data.status=="200")
+                {
+                    showToastMessage("Success", "Successfully sent mail.");
+                }
+                else {
+                    showToastMessage("Warning", "Some Error occured while sending mail.");
+                }
             }).error(function (data, status, headers, config) {
-
+                showToastMessage("Warning", "Internal Server Error Occured.");
             });
         
         };
