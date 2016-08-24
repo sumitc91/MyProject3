@@ -124,11 +124,7 @@ C:\POC\orbitpage\urNoticeAnalytics\bin\System.Web.WebPages.dll
 C:\POC\orbitpage\urNoticeAnalytics\bin\System.Web.WebPages.Razor.dll
 C:\POC\orbitpage\urNoticeAnalytics\bin\urNotice.Common.Infrastructure.dll
 C:\POC\orbitpage\urNoticeAnalytics\bin\urNotice.Services.dll
-C:\POC\orbitpage\urNoticeAnalytics\bin\Microsoft.AspNet.SignalR.Core.dll
 C:\POC\orbitpage\urNoticeAnalytics\bin\RestSharp.dll
-C:\POC\orbitpage\urNoticeAnalytics\bin\Microsoft.Owin.dll
-C:\POC\orbitpage\urNoticeAnalytics\bin\Microsoft.Owin.Security.dll
-C:\POC\orbitpage\urNoticeAnalytics\bin\Owin.dll
 C:\POC\orbitpage\urNoticeAnalytics\bin\urNotice.Common.Infrastructure.pdb
 C:\POC\orbitpage\urNoticeAnalytics\bin\urNotice.Services.pdb
 C:\POC\orbitpage\urNoticeAnalytics\bin\AWSSDK.pdb

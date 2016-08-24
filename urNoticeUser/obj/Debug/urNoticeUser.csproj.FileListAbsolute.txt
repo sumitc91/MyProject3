@@ -158,6 +158,5 @@ C:\POC\orbitpage\urNoticeUser\bin\AWSSDK.pdb
 C:\POC\orbitpage\urNoticeUser\bin\RestSharp.xml
 C:\POC\orbitpage\urNoticeUser\bin\Microsoft.Practices.ServiceLocation.pdb
 C:\POC\orbitpage\urNoticeUser\bin\Microsoft.Practices.ServiceLocation.xml
-C:\POC\orbitpage\urNoticeUser\obj\Debug\urNoticeUser.csprojResolveAssemblyReference.cache
 C:\POC\orbitpage\urNoticeUser\obj\Debug\urNoticeUser.dll
 C:\POC\orbitpage\urNoticeUser\obj\Debug\urNoticeUser.pdb
