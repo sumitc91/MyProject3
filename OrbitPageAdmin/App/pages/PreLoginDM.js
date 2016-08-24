@@ -89,6 +89,12 @@ appRequire = require
             angular_resource: {
                 deps: ["jquery", "angular"]
             },
+            wysihtml5: {
+                deps: ["jquery"]
+            },
+            bootstrap_wysihtml5: { //used
+                deps: ["jquery", "wysihtml5"]
+            },
             urNoticeScript: {
                 deps: ["jquery"]
             },
@@ -108,7 +114,7 @@ appRequire = require
                 deps: ["jquery", "angular", "restangular", "configureBlockUI", "toastMessage"]
             },
             CreateEmailPageController: {
-                deps: ["jquery", "angular", "restangular", "configureBlockUI", "toastMessage"]
+                deps: ["jquery", "angular", "restangular", "configureBlockUI", "toastMessage", "wysihtml5", "bootstrap_wysihtml5"]
             },
             validateEmail: {
                 deps: ["jquery", "angular", "restangular", "configureBlockUI", "toastMessage"]
@@ -167,7 +173,9 @@ appRequire = require
             jquery_sidr_min: "../../App/third-Party/sidr-package/jquery.sidr.min",            
             domReady: "../../App/js/domReady",            
             fancybox: "../../App/third-Party/fancybox/source/jquery.fancybox.js?v=2.1.5",//new                                                
-            prettify: "../../App/third-Party/wysihtml5/lib/js/prettify",            
+            prettify: "../../App/third-Party/wysihtml5/lib/js/prettify",
+            wysihtml5: "../../App/third-Party/wysihtml5/lib/js/wysihtml5-0.3.0",
+            bootstrap_wysihtml5: "../../App/third-Party/wysihtml5/lib/js/bootstrap3-wysihtml5.all.min",
             angular_input_stars: "../../App/third-Party/angular-input-stars-master/angular-input-stars",
             urNoticeScript: "../../App/js/urNoticeScript",
             //==============================================================================================================
@@ -197,7 +205,7 @@ appRequire = require
 
 appRequire(["jquery", "angular", "jquery_toastmessage", "toastMessage","sanitize","jquery_cookie",
     "jquery_blockUI", "angular_route", "beforeLoginCookieService","restangular",
-    "beforeLoginApp", "jquery_sidr_min", "beforeLoginIndex",
+    "beforeLoginApp", "jquery_sidr_min", "beforeLoginIndex","wysihtml5",
     "prettify", "bootstrap","urNoticeScript","angular_animate",
     "domReady", "fancybox", "ngAutocomplete", "angucomplete_alt_min",
     "angular_input_stars", "bootstrap_ui", "AllUsersPageController", "AllCompaniesController", "validateEmail",

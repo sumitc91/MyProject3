@@ -19,6 +19,8 @@ define([appLocation.preLogin], function (app) {
             };
             //startBlockUI('wait..', 3);
             
+            $scope.emailModel.emailBody = $('#emailBodyId').val();
+
             $http({
                 url: url,
                 method: "POST",
