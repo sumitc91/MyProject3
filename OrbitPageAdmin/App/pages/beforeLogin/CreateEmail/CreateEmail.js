@@ -5,6 +5,14 @@ define([appLocation.preLogin], function (app) {
         
         $scope.mobileDevice = mobileDevice != null ? true : false;
         
+        $scope.emailModel = {
+            fromEmail: "",
+            fromName: "",
+            password: "",
+            sendToEmail: "",
+            emailHeading: "",
+            emailBody:""
+        };
         $scope.sendEmail = function () {
             sendEmailModule();
         };
