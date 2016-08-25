@@ -98,6 +98,147 @@ define([appLocation.preLogin], function (app) {
                 location.href = "/#search/?q=" + $scope.queryParam.q + "&page=" + $scope.queryParam.currentPage + "&perpage=10&totalMatch=" + $scope.queryParam.totalMatch + "";
         };
         
+        
+        $scope.advanceSearchCriteriaList = [
+            {
+                searchCriteriaKey: "SEARCHTYPE",
+                searchCriteriaValue: "Search Type",
+                searchSelectionType: "CHECKBOX",
+                searchCriteriaOptions: [
+                    {
+                        optionKey: "COMPANY",
+                        optionValue: " Company",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "USER",
+                        optionValue: " User",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "WORKGRAPHY",
+                        optionValue: " Workgraphy",
+                        isSelected: false
+                    }
+                ]
+            },
+            {
+                searchCriteriaKey: "RATING",
+                searchCriteriaValue: "Rating",
+                searchSelectionType: "CHECKBOX",
+                searchCriteriaOptions: [
+                    {
+                        optionKey: "RANGE4PLUS",
+                        optionValue: " 4+",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "RANGE3TO4",
+                        optionValue: " 3 - 4",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "RANGE2TO3",
+                        optionValue: " 2 - 3",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "RANGE1T02",
+                        optionValue: " 1 - 2",
+                        isSelected: false
+                    }
+                ]
+            },
+            {
+                searchCriteriaKey: "COMPANYSIZE",
+                searchCriteriaValue: "Company Size",
+                searchSelectionType: "CHECKBOX",
+                searchCriteriaOptions: [
+                    {
+                        optionKey: "RANGE10001PLUS",
+                        optionValue: " 10001+",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "RANGE5001TO10000",
+                        optionValue: " 5001 - 10000",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "RANGE1001TO5000",
+                        optionValue: " 1001 - 5000",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "RANGE501TO1000",
+                        optionValue: " 501 - 1000",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "RANGE201TO500",
+                        optionValue: " 201 - 500",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "RANGE51TO200",
+                        optionValue: " 51 - 200",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "RANGE11TO50",
+                        optionValue: " 11 - 50",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "RANGE1TO10",
+                        optionValue: "  1 - 10",
+                        isSelected: false
+                    }
+                ]
+            },
+            {
+                searchCriteriaKey: "COMPANYTURNOVER",
+                searchCriteriaValue: "Company turn over",
+                searchSelectionType: "CHECKBOX",
+                searchCriteriaOptions: [
+                    {
+                        optionKey: "RANGE10000PLUS",
+                        optionValue: "  10000+",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "RANGE5000TO10000",
+                        optionValue: " 5000 - 10000",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "RANGE2500TO5000",
+                        optionValue: " 2500 - 5000",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "RANGE1000TO2500",
+                        optionValue: " 1000 - 2500",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "RANGE500TO1000",
+                        optionValue: " 500 - 1000",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "RANGE100TO500",
+                        optionValue: "100 - 500",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "RANGE1TO100",
+                        optionValue: "1 - 100",
+                        isSelected: false
+                    }
+                ]
+            }
+        ];
     });
 
     jQuery(".block-text .success-inner-content").each(function () {

@@ -35,45 +35,16 @@
         <div class="row">
             <!--blog start-->
             <div class="col-lg-2">
-                <div class="blog-side-item">                    
+                <div class="blog-side-item" ng-repeat="advanceSearchCriteria in advanceSearchCriteriaList">                    
                     <div class="category">
                         <h6>
-                            Search Criteria
+                            <span ng-bind="advanceSearchCriteria.searchCriteriaValue"></span>
                         </h6>
                         <ul class="list-unstyled">
-                            <li>
+                            <li ng-repeat="options in advanceSearchCriteria.searchCriteriaOptions">
                                 <a href="javascript:;">
-                                    <i class="fa fa-angle-right pr-10">
-                                    </i>
-                                    Animals
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:;">
-                                    <i class="fa fa-angle-right pr-10">
-                                    </i>
-                                    Landscape
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:;">
-                                    <i class="fa fa-angle-right pr-10">
-                                    </i>
-                                    Portait
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:;">
-                                    <i class="fa fa-angle-right pr-10">
-                                    </i>
-                                    Wild Life
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:;">
-                                    <i class="fa fa-angle-right pr-10">
-                                    </i>
-                                    Video
+                                    <input type="checkbox" ng-model="options.isSelected">
+                                    <span ng-bind="options.optionValue"></span> &nbsp;{{options.isSelected}}
                                 </a>
                             </li>
                         </ul>
