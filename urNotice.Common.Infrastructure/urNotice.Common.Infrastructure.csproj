@@ -169,6 +169,8 @@
     <Compile Include="Model\GraphDb\IGraphDb.cs" />
     <Compile Include="Model\NoSqlDb\INoSqlDb.cs" />
     <Compile Include="Model\Person\IPerson.cs" />
+    <Compile Include="Model\Search\AdvanceSearch\AdvanceSearchRequest.cs" />
+    <Compile Include="Model\Search\AdvanceSearch\AdvanceSearchResponse.cs" />
     <Compile Include="Model\SourceDB\ISourceCompanyDb.cs" />
     <Compile Include="Model\SourceDB\ISourceDb.cs" />
     <Compile Include="Model\SourceDB\ISourceDesignationDb.cs" />

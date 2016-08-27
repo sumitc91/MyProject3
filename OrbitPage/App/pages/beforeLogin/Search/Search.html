@@ -42,10 +42,11 @@
                         </h6>
                         <ul class="list-unstyled">
                             <li ng-repeat="options in advanceSearchCriteria.searchCriteriaOptions">
-                                <a href="javascript:;">
-                                    <input type="checkbox" ng-model="options.isSelected">
-                                    <span ng-bind="options.optionValue"></span> &nbsp;{{options.isSelected}}
-                                </a>
+                                <label>
+                                        <input type="checkbox" ng-model="options.isSelected">
+                                        <span ng-bind="options.optionValue"></span>
+                                </label>
+                                &nbsp;{{options.isSelected}}
                             </li>
                         </ul>
                     </div>

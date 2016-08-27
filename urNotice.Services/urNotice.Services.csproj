@@ -156,6 +156,11 @@
     <Compile Include="Person\PersonContract\RegistrationOperation\OrbitPagePersonRegistration.cs" />
     <Compile Include="Person\PersonContract\RegistrationOperation\OrbitPagePersonRegistrationTemplate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Search\AdvanceSearch\IAdvanceSearch.cs" />
+    <Compile Include="Search\AdvanceSearch\SearchAll.cs" />
+    <Compile Include="Search\AdvanceSearch\SearchCompany.cs" />
+    <Compile Include="Search\AdvanceSearch\SearchUser.cs" />
+    <Compile Include="Search\AdvanceSearch\SearchWorkgraphy.cs" />
     <Compile Include="SessionService\SessionService.cs" />
     <Compile Include="SocialAuthService\Facebook\FacebookService.cs" />
     <Compile Include="SocialAuthService\google\googleService.cs" />

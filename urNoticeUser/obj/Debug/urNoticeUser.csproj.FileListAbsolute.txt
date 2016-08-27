@@ -160,3 +160,4 @@ C:\POC\orbitpage\urNoticeUser\bin\Microsoft.Practices.ServiceLocation.pdb
 C:\POC\orbitpage\urNoticeUser\bin\Microsoft.Practices.ServiceLocation.xml
 C:\POC\orbitpage\urNoticeUser\obj\Debug\urNoticeUser.dll
 C:\POC\orbitpage\urNoticeUser\obj\Debug\urNoticeUser.pdb
+C:\POC\orbitpage\urNoticeUser\obj\Debug\urNoticeUser.csprojResolveAssemblyReference.cache
