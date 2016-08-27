@@ -1,6 +1,6 @@
 'use strict';
 define([appLocation.preLogin], function (app) {
-    app.controller('beforeLoginSignUpUser', function ($scope, $http, $routeParams, CookieUtil) {
+    app.controller('beforeLoginSignUpUser', function ($scope, $http, $routeParams, CookieUtil, SearchApi, OrbitPageApi) {
         $('title').html("index"); //TODO: change the title so cann't be tracked in log
         
         //detectIfUserLoggedIn();
@@ -67,70 +67,55 @@ define([appLocation.preLogin], function (app) {
 
         $scope.UsernameTextBoxBlur = function(isUsername) {
 
-            var url = "";
+            var inputData = { q: $scope.UserFormData.EmailId };
+
             if (isUsername) {
-                url = ServerContextPath.solrServer + '/Search/IsUsernameExist?q=' + $scope.UserFormData.Username;
-                checkUsernameExists();
+                inputData.q = $scope.UserFormData.Username;
             }
-            else
-            {
-                url = ServerContextPath.solrServer + '/Search/IsUsernameExist?q=' + $scope.UserFormData.EmailId;                               
-                checkUsernameExists();
-            };
-            
-            function checkUsernameExists() {
+            checkUsernameExists(isUsername, inputData);
 
-                
-                var headers = {
-                    'Content-Type': 'application/json',
-                    'UTMZT': CookieUtil.getUTMZT(),
-                    'UTMZK': CookieUtil.getUTMZK(),
-                    'UTMZV': CookieUtil.getUTMZV()
-                };
-
-                if (isUsername)
-                    $scope.UsernameStatus.ShowLoadingImage = true;
-                else
-                    $scope.UsernameStatus.ShowLoadingImage = true;
-
-                $http({
-                    url: url,
-                    method: "GET",
-                    headers: headers
-                }).success(function (data, status, headers, config) {
-                    if (isUsername)
-                        $scope.UsernameStatus.ShowLoadingImage = false;
-                    else
-                        $scope.UsernameStatus.ShowLoadingImage = false;
-                    if (data.Status == "200") {
-                        //showToastMessage("Success", data.Message);
-                        if (isUsername) {
-                            $scope.UsernameStatus.Message = (isUsername ? $scope.UserFormData.Username : $scope.UserFormData.EmailId) + " is Availaible.";
-                            $scope.UsernameStatus.Class = "Success";
-                            $scope.UsernameStatus.Show = true;
-                        } else {
-                            $scope.EmailStatus.Message = (isUsername ? $scope.UserFormData.Username : $scope.UserFormData.EmailId) + " is Availaible.";
-                            $scope.EmailStatus.Class = "Success";
-                            $scope.EmailStatus.Show = true;
-                        }
-                    }                    
-                    else if (data.Status == "202") {
-                        if (isUsername) {
-                            $scope.UsernameStatus.Message = (isUsername ? $scope.UserFormData.Username : $scope.UserFormData.EmailId) + " is not Availaible.";
-                            $scope.UsernameStatus.Class = "Danger";
-                            $scope.UsernameStatus.Show = true;
-                        } else {
-                            $scope.EmailStatus.Message = (isUsername ? $scope.UserFormData.Username : $scope.UserFormData.EmailId) + " is not Availaible.";
-                            $scope.EmailStatus.Class = "Danger";
-                            $scope.EmailStatus.Show = true;
-                        }
-                    }
-                    
-                }).error(function (data, status, headers, config) {
-                    $scope.UsernameStatus.ShowLoadingImage = false;
-                });
-            }
         };
+
+        function checkUsernameExists(isUsername, inputData) {
+
+            if (isUsername)
+                $scope.UsernameStatus.ShowLoadingImage = true;
+            else
+                $scope.UsernameStatus.ShowLoadingImage = true;
+
+            SearchApi.IsUsernameExist.get(inputData, function (data) {
+                if (isUsername)
+                    $scope.UsernameStatus.ShowLoadingImage = false;
+                else
+                    $scope.UsernameStatus.ShowLoadingImage = false;
+                if (data.Status == "200") {
+                    //showToastMessage("Success", data.Message);
+                    if (isUsername) {
+                        $scope.UsernameStatus.Message = (isUsername ? $scope.UserFormData.Username : $scope.UserFormData.EmailId) + " is Availaible.";
+                        $scope.UsernameStatus.Class = "Success";
+                        $scope.UsernameStatus.Show = true;
+                    } else {
+                        $scope.EmailStatus.Message = (isUsername ? $scope.UserFormData.Username : $scope.UserFormData.EmailId) + " is Availaible.";
+                        $scope.EmailStatus.Class = "Success";
+                        $scope.EmailStatus.Show = true;
+                    }
+                }
+                else if (data.Status == "202") {
+                    if (isUsername) {
+                        $scope.UsernameStatus.Message = (isUsername ? $scope.UserFormData.Username : $scope.UserFormData.EmailId) + " is not Availaible.";
+                        $scope.UsernameStatus.Class = "Danger";
+                        $scope.UsernameStatus.Show = true;
+                    } else {
+                        $scope.EmailStatus.Message = (isUsername ? $scope.UserFormData.Username : $scope.UserFormData.EmailId) + " is not Availaible.";
+                        $scope.EmailStatus.Class = "Danger";
+                        $scope.EmailStatus.Show = true;
+                    }
+                }
+            }, function (error) {
+                $scope.UsernameStatus.ShowLoadingImage = false;
+                //showToastMessage("Error", "Internal Server Error Occured!");
+            });
+        }
 
         var validateEmail = false;
         var validateGender = false;
@@ -231,7 +216,6 @@ define([appLocation.preLogin], function (app) {
 
             var url = ServerContextPath.empty + '/Auth/CreateAccount';
             
-
             updateError();
 
             if (validateEmail && validatePassword && validateFirstName && validateLastName && validateGender) {
@@ -240,25 +224,13 @@ define([appLocation.preLogin], function (app) {
                     return;
                 };
 
-                startBlockUI('wait..', 3);
-
-                var headers = {
-                    //'Content-Type': 'application/json',                   
-                    '_ga': $.cookie('_ga')
-                };
-
                 if (CookieUtil.getRefKey("refKey") != null && CookieUtil.getRefKey("refKey") != "")
                     userSignUpData.Referral = CookieUtil.getRefKey("refKey");
                 else
                     userSignUpData.Referral = "NA";
 
-                $http({
-                    url: url,
-                    method: "POST",
-                    data: userSignUpData,
-                    headers: headers
-                }).success(function(data, status, headers, config) {
-                    //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
+                startBlockUI('wait..', 3);
+                OrbitPageApi.CreateAccount.post(userSignUpData, function (data) {
                     stopBlockUI();
                     if (data.Status == "409")
                         showToastMessage("Warning", "Username already registered !");
@@ -271,11 +243,11 @@ define([appLocation.preLogin], function (app) {
 
                         location.href = "/?email=" + $scope.UserFormData.EmailId + "#/showmessage/1/";
                     }
-                }).error(function (data, status, headers, config) {
+                }, function (error) {
                     stopBlockUI();
                     showToastMessage("Error", "Internal Server Error Occured !");
                 });
-
+                
             } else {
                 $scope.showErrors = true;
                 //showToastMessage("Error", "Some Fields are Invalid !!!");
@@ -292,51 +264,30 @@ define([appLocation.preLogin], function (app) {
             });
         });
 
+
         $scope.openFacebookAuthWindow = function () {
-            var url = '/SocialAuth/FBLoginGetRedirectUri';
+
             startBlockUI('wait..', 3);
-            $http({
-                url: url,
-                method: "GET",
-                headers: { 'Content-Type': 'application/json' }
-            }).success(function (data, status, headers, config) {
-                //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
+
+            OrbitPageApi.FBLoginGetRedirectUri.get({}, function (data) {
+
                 stopBlockUI();
                 if (data.Status == "199") {
                     location.href = data.Message;
                 }
                 else {
-                    alert("some error occured");
+                    showToastMessage("Warning", "some error occured");
                 }
-
-            }).error(function (data, status, headers, config) {
-                alert("internal server error occured");
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
-            //            var win = window.open("/SocialAuth/FBLogin/facebook", "Ratting", "width=" + popWindow.width + ",height=" + popWindow.height + ",0,status=0,scrollbars=1");
-            //            win.onunload = onun;
-
-            //            function onun() {
-            //                if (win.location != "about:blank") // This is so that the function 
-            //                // doesn't do anything when the 
-            //                // window is first opened.
-            //                {
-            //                    //$route.reload();
-            //                    //alert("working");
-            //                    //location.reload();
-            //                    //alert("closed");
-            //                }
-            //            }
         }
 
         $scope.openLinkedinAuthWindow = function () {
-            var url = '/SocialAuth/LinkedinLoginGetRedirectUri';
+
             startBlockUI('wait..', 3);
-            $http({
-                url: url,
-                method: "GET",
-                headers: { 'Content-Type': 'application/json' }
-            }).success(function (data, status, headers, config) {
-                //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
+            OrbitPageApi.LinkedinLoginGetRedirectUri.get({}, function (data) {
+
                 stopBlockUI();
                 if (data.Status == "199") {
                     location.href = data.Message;
@@ -344,35 +295,16 @@ define([appLocation.preLogin], function (app) {
                 else {
                     alert("some error occured");
                 }
-
-            }).error(function (data, status, headers, config) {
-                alert("internal server error occured");
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
-            //            var win = window.open("/SocialAuth/LinkedinLogin", "Ratting", "width=" + popWindow.width + ",height=" + popWindow.height + ",0,status=0,scrollbars=1");
-            //            win.onunload = onun;
-
-            //            function onun() {
-            //                if (win.location != "about:blank") // This is so that the function 
-            //                // doesn't do anything when the 
-            //                // window is first opened.
-            //                {
-            //                    //$route.reload();
-            //                    //alert("working");
-            //                    //location.reload();
-            //                    //alert("closed");
-            //                }
-            //            }
         }
 
         $scope.openGoogleAuthWindow = function () {
-            var url = '/SocialAuth/GoogleLoginGetRedirectUri';
+
             startBlockUI('wait..', 3);
-            $http({
-                url: url,
-                method: "GET",
-                headers: { 'Content-Type': 'application/json' }
-            }).success(function (data, status, headers, config) {
-                //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
+            OrbitPageApi.GoogleLoginGetRedirectUri.get({}, function (data) {
+
                 stopBlockUI();
                 if (data.Status == "199") {
                     location.href = data.Message;
@@ -380,24 +312,9 @@ define([appLocation.preLogin], function (app) {
                 else {
                     alert("some error occured");
                 }
-
-            }).error(function (data, status, headers, config) {
-                alert("internal server error occured");
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
-            //            var win = window.open("/SocialAuth/GoogleLogin/", "Ratting", "width=" + popWindow.width + ",height=" + popWindow.height + ",0,status=0,scrollbars=1");
-            //            win.onunload = onun;
-
-            //            function onun() {
-            //                if (win.location != "about:blank") // This is so that the function 
-            //                // doesn't do anything when the 
-            //                // window is first opened.
-            //                {
-            //                    //$route.reload();
-            //                    //alert("working");
-            //                    //location.reload();
-            //                    //alert("closed");
-            //                }
-            //            }
         }
 
     });

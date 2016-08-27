@@ -9,6 +9,7 @@ define([appLocation.preLogin], function (app) {
              'UTMZT': $.cookie('utmzt'),
              'UTMZK': $.cookie('utmzk'),
              'UTMZV': $.cookie('utmzv'),
+             '_ga': $.cookie('_ga')
          };
 
          return {

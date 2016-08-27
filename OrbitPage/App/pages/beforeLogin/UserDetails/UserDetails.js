@@ -21,7 +21,7 @@ define([appLocation.preLogin], function (app) {
         };
     });
 
-    app.controller('beforeLoginUserDetails', function ($scope, $http, $route, $uibModal, $log, $rootScope, $routeParams, $location, $timeout, CookieUtil) {
+    app.controller('beforeLoginUserDetails', function ($scope, $http, $route, $uibModal, $log, $rootScope, $routeParams, $location, $timeout, CookieUtil, SearchApi) {
         $('title').html("indexcd"); //TODO: change the title so cann't be tracked in log
         
         
@@ -34,86 +34,58 @@ define([appLocation.preLogin], function (app) {
         userDetailsById();
 
         function userDetailsById() {
-            var url = ServerContextPath.solrServer + '/Search/UserDetailsById?uid=' + $scope.userid;
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv')
-            };
-
-            $.ajax({
-                url: url,
-                method: "GET",
-                headers: headers
-            }).done(function (data, status) {
-                //console.log(data);
+            
+            var inputData = { uid: $scope.userid };
+            SearchApi.UserDetailsById.get(inputData, function (data) {
                 if (data.Status == "200") {
-                    //showToastMessage("Success", data.Message);
-                    $scope.userDetails = data.Payload[0];
-                    //console.log($scope.userDetails);
-                    if ($scope.userDetails.Coverpic == null || $scope.companyDetails.Coverpic == '')
-                        $scope.userDetails.Coverpic = "https://s3-ap-southeast-1.amazonaws.com/urnotice/images/companyRectangleImageNotAvailable.png";
 
-                    $scope.userDetails.fullName = $scope.userDetails.Firstname + ' '+$scope.userDetails.Lastname;
-                    //$scope.averageRatingInDoubleFormat = $scope.companyDetails.averagerating;
-                    //$scope.companyDetails.averagerating = Math.round($scope.companyDetails.averagerating);
-                    $scope.$apply();
-                    //console.log($scope.companyDetails);
+                    $timeout(function () {
+                        $scope.userDetails = data.Payload[0];
+                        if ($scope.userDetails.Coverpic == null || $scope.companyDetails.Coverpic == '')
+                            $scope.userDetails.Coverpic = "https://s3-ap-southeast-1.amazonaws.com/urnotice/images/companyRectangleImageNotAvailable.png";
+
+                        $scope.userDetails.fullName = $scope.userDetails.Firstname + ' ' + $scope.userDetails.Lastname;
+                    });
+                    
                     getUserMutualFriendsDetail($scope.Username);
                 }
                 else {
                     showToastMessage("Warning", data.Message);
                 }
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
-
         }
         
-        
-        //getUserRatingStatus();
-
         function getUserMutualFriendsDetail(username) {
-            var url = ServerContextPath.solrServer + '/Search/GetUserMutualFriendsDetail?username=' + username;
-            var headers = {
-                'Content-Type': 'application/json',
-                'UTMZT': $.cookie('utmzt'),
-                'UTMZK': $.cookie('utmzk'),
-                'UTMZV': $.cookie('utmzv'),                
-            };
-
-            $.ajax({
-                url: url,
-                method: "GET",
-                headers: headers
-            }).done(function (data, status) {
-                //console.log(data);
+            
+            var inputData = { username: username };
+            SearchApi.GetUserMutualFriendsDetail.get(inputData, function (data) {
                 if (data.Status == "200") {
-                    //showToastMessage("Success", data.Message);
-                    $scope.competitorDetails = data.Payload;
-                    /*if ($scope.companyDetails.logourl == 'tps://s3-ap-southeast-1.amazonaws.com/urnotice/company/small/LogoUploadEmpty.png')
-                        $scope.companyDetails.logourl = "http://placehold.it/350x150";*/
 
-                    $.each(data.Payload, function (i, val) {
-                        $scope.competitorDetails[i].companyname = data.Payload[i].companyname;
-                        $scope.competitorDetails[i].website = data.Payload[i].website;
+                    $timeout(function () {
+                        $scope.competitorDetails = data.Payload;
 
-                        if ($scope.competitorDetails[i].logourl == 'tps://s3-ap-southeast-1.amazonaws.com/urnotice/company/small/LogoUploadEmpty.png')
-                            $scope.competitorDetails[i].logourl = "http://placehold.it/50x50";
+                        $.each(data.Payload, function (i, val) {
+                            $scope.competitorDetails[i].companyname = data.Payload[i].companyname;
+                            $scope.competitorDetails[i].website = data.Payload[i].website;
 
-                        $scope.competitorDetails[i].linkurl = "/#companydetails/" + $scope.competitorDetails[i].companyname.replace(/ /g, "_").replace(/\//g, "_OR_") + "/" + $scope.competitorDetails[i].guid;
-                        
+                            if ($scope.competitorDetails[i].logourl == 'tps://s3-ap-southeast-1.amazonaws.com/urnotice/company/small/LogoUploadEmpty.png')
+                                $scope.competitorDetails[i].logourl = "http://placehold.it/50x50";
+
+                            $scope.competitorDetails[i].linkurl = "/#companydetails/" + $scope.competitorDetails[i].companyname.replace(/ /g, "_").replace(/\//g, "_OR_") + "/" + $scope.competitorDetails[i].guid;
+
+                        });
                     });
                     
-                    //$scope.$apply();
-                    if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-                        $scope.$apply();
-                    }
-                    //console.log($scope.competitorDetails);
                 }
                 else {
                     showToastMessage("Warning", data.Message);
                 }
+            }, function (error) {
+                showToastMessage("Error", "Internal Server Error Occured!");
             });
+
         }
 
         $scope.myFunct = function(keyEvent) {

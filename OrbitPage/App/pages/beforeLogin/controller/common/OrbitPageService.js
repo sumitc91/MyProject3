@@ -9,6 +9,7 @@ define([appLocation.preLogin], function (app) {
              'UTMZT': $.cookie('utmzt'),
              'UTMZK': $.cookie('utmzk'),
              'UTMZV': $.cookie('utmzv'),
+             '_ga': $.cookie('_ga')
          };
 
          return {
@@ -167,6 +168,14 @@ define([appLocation.preLogin], function (app) {
                     },
                 }),
 
+             CreateAccount: $resource(
+                ServerContextPath.empty + '/Auth/CreateAccount', {}, {
+                    post: {
+                        method: "POST",
+                        isArray: false,
+                        headers: headers
+                    },
+                }),
          };
      }]);
 

@@ -9,6 +9,7 @@ define([appLocation.preLogin], function (app) {
              'UTMZT': $.cookie('utmzt'),
              'UTMZK': $.cookie('utmzk'),
              'UTMZV': $.cookie('utmzv'),
+             '_ga': $.cookie('_ga')
          };
 
          return {
@@ -89,6 +90,37 @@ define([appLocation.preLogin], function (app) {
                         headers: headers
                     }
                 }),
+
+             IsUsernameExist: $resource(
+                ServerContextPath.solrServer + '/Search/IsUsernameExist?q=:q',
+                { q: '@q' },
+                {
+                    get: {
+                        method: 'GET',
+                        headers: headers
+                    }
+                }),
+
+             GetParticularWorkgraphyWithVertexId: $resource(
+                ServerContextPath.solrServer + '/Search/GetParticularWorkgraphyWithVertexId?vertexId=:vertexId',
+                { vertexId: '@vertexId' },
+                {
+                    get: {
+                        method: 'GET',
+                        headers: headers
+                    }
+                }),
+
+             GetUserMutualFriendsDetail: $resource(
+                ServerContextPath.solrServer + '/Search/GetUserMutualFriendsDetail?username=:username',
+                { username: '@username' },
+                {
+                    get: {
+                        method: 'GET',
+                        headers: headers
+                    }
+                }),
+
          };
      }]);
 
