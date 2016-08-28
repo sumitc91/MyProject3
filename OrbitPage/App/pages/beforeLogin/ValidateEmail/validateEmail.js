@@ -1,6 +1,6 @@
 'use strict';
 define([appLocation.preLogin], function(app) {
-    app.controller('validateEmailTemplate', function ($scope, $http, $routeParams, $location) {
+    app.controller('validateEmailTemplate', function ($scope, $http, $routeParams, $location, AuthApi) {
         var
             accountRequest = {
                 userName: $routeParams.userName,
@@ -19,13 +19,9 @@ define([appLocation.preLogin], function(app) {
             message: '',
             companyName: ''
         };
-        $http({
-            url: ServerContextPath.authServer + '/Auth/ValidateAccount',
-            method: "POST",
-            data: accountRequest,
-            headers: { 'Content-Type': 'application/json' }
-        }).success(function (data, status, headers, config) {
-            //$scope.persons = data; // assign  $scope.persons here as promise is resolved here
+
+        AuthApi.ValidateAccount.post(accountRequest, function (data) {
+
             if (data.Status == "200") {
                 $scope.Header.message = "Account Validated";
                 $scope.Header.className = "alert-success";
@@ -58,10 +54,11 @@ define([appLocation.preLogin], function(app) {
                 $scope.Content.header2 = "Oops! You are trying to access expired link.";
                 $scope.Content.message = "You have already used the link to validate your account.";
             }
-            console.log(data);
-        }).error(function (data, status, headers, config) {
 
+        }, function (error) {
+            showToastMessage("Error", "Internal Server Error Occured!");
         });
+        
     });
 
 

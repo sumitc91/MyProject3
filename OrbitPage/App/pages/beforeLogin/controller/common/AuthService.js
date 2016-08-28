@@ -31,6 +31,15 @@ define([appLocation.preLogin], function (app) {
                         headers: headers
                     },
                 }),
+
+             ValidateAccount: $resource(
+                ServerContextPath.authServer + '/Auth/ValidateAccount', {}, {
+                    post: {
+                        method: "POST",
+                        isArray: false,
+                        headers: headers
+                    },
+                }),
          };
      }]);
 
