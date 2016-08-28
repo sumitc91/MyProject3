@@ -70,6 +70,14 @@ define([appLocation.preLogin], function (app) {
                     }
                 }),
 
+             GetUserPost: $resource(
+                ServerContextPath.userServer + '/User/GetUserPost?from=:from&to=:to&vertexId=:vertexId', { from: '@from', to: '@to', vertexId: '@vertexId' }, {
+                    get: {
+                        method: 'GET',
+                        headers: headers
+                    }
+                }),
+
              SeenNotification: $resource(
                 ServerContextPath.userServer + '/User/SeenNotification', { }, {
                     get: {
