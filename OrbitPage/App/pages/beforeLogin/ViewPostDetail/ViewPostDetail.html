@@ -6,7 +6,7 @@
         <section class="profile-env">
 
             <div class="col-md-12">                
-                <div class="col-md-12 col-sm-12 col-xs-12 col-right">
+                <div class="col-md-10 col-sm-10 col-xs-10 col-right">
                     
                     <div class="row">
                         <!-- posts -->
@@ -112,8 +112,8 @@
 
                                                         </div>
 
-                                                        <div class="row">
-                                                            Preview : &nbsp;&nbsp; <span ng-bind-html="comment.commentInfo.PostMessageHtml"></span>
+                                                        <div class="row" ng-show="comment.commentInfo.PostMessage">
+                                                            Preview : &nbsp; <span ng-bind-html="comment.commentInfo.PostMessageHtml"></span>
                                                         </div>
                                                     </div>
                                                     <img ng-show="comment.loadingIcon" src="../../App/img/loading/loading123.gif" style="height: 20px; float: right; margin: 10px 0px 0px;" />
@@ -175,9 +175,9 @@
                                                             </a>
                                                         </span>
                                                     </div>
-                                                    <div class="row">
+                                                    <div class="row" ng-show="post.postInfo.postUserComment">
 
-                                                        &nbsp;&nbsp; <div ng-bind-html="post.postInfo.postUserCommentHtml"></div>
+                                                        Preview :&nbsp; <div ng-bind-html="post.postInfo.postUserCommentHtml"></div>
                                                     </div>
                                                 </div>
                                                 <div>
