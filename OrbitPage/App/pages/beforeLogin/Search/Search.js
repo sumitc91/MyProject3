@@ -8,7 +8,15 @@ define([appLocation.preLogin], function (app) {
             currentPage: "",
             totalMatch: "",
             perpage: "",
-            totalNumberOfPages:""
+            totalNumberOfPages: "",
+            searchType: "",
+            searchCriteria: "",
+            rating: "",
+            ratingList: [],
+            companySize: "",
+            companySizeList: [],
+            companyTurnOver: "",
+            companyTurnOverList:[]
         };
 
         $scope.pagination = {
@@ -21,8 +29,62 @@ define([appLocation.preLogin], function (app) {
         $scope.queryParam.currentPage = $location.search().page;
         $scope.queryParam.totalMatch = $location.search().totalMatch;
         $scope.queryParam.perpage = $location.search().perpage;
+        $scope.queryParam.searchType = $location.search().searchType;
+        $scope.queryParam.searchCriteria = $location.search().searchCriteria;
+        $scope.queryParam.rating = $location.search().rating;
+        $scope.queryParam.companySize = $location.search().companySize;
+        $scope.queryParam.companyTurnOver = $location.search().companyTurnOver;
+
+        if ($scope.queryParam.searchType == null)
+            $scope.queryParam.searchType = "COMPANY";
+
+        if ($scope.queryParam.searchCriteria == null)
+            $scope.queryParam.searchCriteria = "CONTAINS";
+
+        if ($scope.queryParam.rating == null)
+            $scope.queryParam.rating = "";
+
+        if ($scope.queryParam.companySize == null)
+            $scope.queryParam.companySize = "";
+
+        if ($scope.queryParam.companyTurnOver == null)
+            $scope.queryParam.companyTurnOver = "";
+
+        if ($scope.queryParam.rating)
+        {
+            $timeout(function () {
+                $scope.queryParam.ratingList = $scope.queryParam.rating.split(',');
+                for (var i = 0; i < $scope.advanceSearchCriteriaList[2].searchCriteriaOptions.length; i++) {
+                    if ($scope.queryParam.ratingList.indexOf($scope.advanceSearchCriteriaList[2].searchCriteriaOptions[i].optionKey) !== -1) {
+                        $scope.advanceSearchCriteriaList[2].searchCriteriaOptions[i].isSelected = true;
+                    }
+                }
+            });
+            
+        }
         
-        //console.log($scope.queryParam);
+        if ($scope.queryParam.companySize) {
+            $timeout(function () {
+                $scope.queryParam.companySizeList = $scope.queryParam.companySize.split(',');
+                for (var i = 0; i < $scope.advanceSearchCriteriaList[3].searchCriteriaOptions.length; i++) {
+                    if ($scope.queryParam.companySize.indexOf($scope.advanceSearchCriteriaList[3].searchCriteriaOptions[i].optionKey) !== -1) {
+                        $scope.advanceSearchCriteriaList[3].searchCriteriaOptions[i].isSelected = true;
+                    }
+                }
+            });
+        }
+
+        if ($scope.queryParam.companyTurnOver) {
+            $timeout(function () {
+                $scope.queryParam.companyTurnOverList = $scope.queryParam.companyTurnOver.split(',');
+                for (var i = 0; i < $scope.advanceSearchCriteriaList[4].searchCriteriaOptions.length; i++) {
+                    if ($scope.queryParam.companyTurnOver.indexOf($scope.advanceSearchCriteriaList[4].searchCriteriaOptions[i].optionKey) !== -1) {
+                        $scope.advanceSearchCriteriaList[4].searchCriteriaOptions[i].isSelected = true;
+                    }
+                }
+            });
+        }
+
 
         $scope.maxSize = 5;
            
@@ -89,6 +151,72 @@ define([appLocation.preLogin], function (app) {
             }
         }
 
+        $scope.changeSearchSelection = function (inputType,searchCriteriaKey,optionKey,parentIndex,index) {
+            console.log("inputType : " + inputType);
+            console.log("searchCriteriaKey : " + searchCriteriaKey);
+            console.log("optionKey : " + optionKey);
+            console.log("parentIndex : " + parentIndex);
+            console.log("index : " + index);
+
+            switch (searchCriteriaKey) {
+                case 'SEARCHTYPE':
+                    $scope.queryParam.searchType = optionKey;
+                    break;
+                case 'SEARCHCRITERIA':
+                    $scope.queryParam.searchCriteria = optionKey;
+                    break;
+                case 'RATING':
+                    if ($scope.queryParam.ratingList.indexOf(optionKey) !== -1) {
+                        var index = $scope.queryParam.ratingList.indexOf(optionKey);
+                        $scope.queryParam.ratingList.splice(index, 1);
+                    }
+                    else
+                    {
+                        $scope.queryParam.ratingList.push(optionKey);
+                    }
+                    break;
+                case 'COMPANYSIZE':
+                    if ($scope.queryParam.companySize.indexOf(optionKey) !== -1) {
+                        var index = $scope.queryParam.companySizeList.indexOf(optionKey);
+                        $scope.queryParam.companySizeList.splice(index, 1);
+                    }
+                    else {
+                        $scope.queryParam.companySizeList.push(optionKey);
+                    }
+                    break;
+                case 'COMPANYTURNOVER':
+                    if ($scope.queryParam.companyTurnOver.indexOf(optionKey) !== -1) {
+                        var index = $scope.queryParam.companyTurnOverList.indexOf(optionKey);
+                        $scope.queryParam.companyTurnOverList.splice(index, 1);
+                    }
+                    else {
+                        $scope.queryParam.companyTurnOverList.push(optionKey);
+                    }
+                    break;
+                default:
+
+            }
+
+            var url = "/#search/?" +
+                    "q=" + $scope.queryParam.q +
+                    "&page=" + $scope.queryParam.currentPage +
+                    "&perpage=10" +
+                    "&totalMatch=" + $scope.queryParam.totalMatch +
+                    "&searchType=" + $scope.queryParam.searchType +
+                    "&searchCriteria=" + $scope.queryParam.searchCriteria +
+                    "&rating=" + $scope.parseArrayForQueryString($scope.queryParam.ratingList) +
+                    "&companySize=" + $scope.parseArrayForQueryString($scope.queryParam.companySizeList) +
+                    "&companyTurnOver=" + $scope.parseArrayForQueryString($scope.queryParam.companyTurnOverList) +
+                    "";
+
+            location.href = url;
+        };
+
+        $scope.parseArrayForQueryString = function(arr)
+        {
+            return arr.join(',');
+        };
+
         $scope.SearchPageSelectPaginationId = function () {
             console.log("/#search/?q=" + $scope.queryParam.q + "&page=" + $scope.queryParam.currentPage + "&perpage=10&totalMatch=" + $scope.queryParam.totalMatch + "");
             //getCompanySearchDetail(q, $scope.currentPage, perpage);
@@ -104,7 +232,7 @@ define([appLocation.preLogin], function (app) {
                 searchCriteriaKey: "SEARCHTYPE",
                 searchCriteriaValue: "Search Type",
                 searchSelectionType: "radio",
-                searchCriteriaOptedValue: "COMPANY",
+                searchCriteriaOptedValue: $scope.queryParam.searchType,
                 searchCriteriaVisisbleWith: "ALWAYS",
                 searchCriteriaOptions: [
                     {
@@ -120,6 +248,30 @@ define([appLocation.preLogin], function (app) {
                     {
                         optionKey: "WORKGRAPHY",
                         optionValue: " Workgraphy",
+                        isSelected: false
+                    }
+                ]
+            },
+            {
+                searchCriteriaKey: "SEARCHCRITERIA",
+                searchCriteriaValue: "Search Criteria",
+                searchSelectionType: "radio",
+                searchCriteriaOptedValue: $scope.queryParam.searchCriteria,
+                searchCriteriaVisisbleWith: "ALWAYS",
+                searchCriteriaOptions: [
+                    {
+                        optionKey: "CONTAINS",
+                        optionValue: " Contains",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "STARTSWITH",
+                        optionValue: " Starts With",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "EXACTMATCH",
+                        optionValue: " Exact Match",
                         isSelected: false
                     }
                 ]

@@ -43,10 +43,9 @@
                         <ul class="list-unstyled">
                             <li ng-repeat="options in advanceSearchCriteria.searchCriteriaOptions">
                                 <label>
-                                    <input type="radio" name="{{advanceSearchCriteria.searchCriteriaKey}}" value="{{options.optionKey}}" ng-model="advanceSearchCriteria.searchCriteriaOptedValue">
+                                    <input type="radio" name="{{advanceSearchCriteria.searchCriteriaKey}}" value="{{options.optionKey}}" ng-model="advanceSearchCriteria.searchCriteriaOptedValue" ng-change="changeSearchSelection('radio',advanceSearchCriteria.searchCriteriaKey,options.optionKey,$parent.$index,$index)">
                                     <span ng-bind="options.optionValue"></span>
                                 </label>
-                                &nbsp;{{advanceSearchCriteria.searchCriteriaOptedValue}}
                             </li>
                         </ul>
                     </div>
@@ -58,10 +57,9 @@
                         <ul class="list-unstyled">
                             <li ng-repeat="options in advanceSearchCriteria.searchCriteriaOptions">
                                 <label>
-                                        <input type="checkbox" ng-model="options.isSelected">
+                                        <input type="checkbox" ng-model="options.isSelected" ng-change="changeSearchSelection('checkbox',advanceSearchCriteria.searchCriteriaKey,options.optionKey,$parent.$index,$index)">
                                         <span ng-bind="options.optionValue"></span>
                                 </label>
-                                &nbsp;{{options.isSelected}}
                             </li>
                         </ul>
                     </div>
