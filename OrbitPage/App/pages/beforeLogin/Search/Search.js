@@ -107,7 +107,14 @@ define([appLocation.preLogin], function (app) {
                 q: $scope.queryParam.q,
                 page: $scope.queryParam.currentPage,
                 perpage: $scope.queryParam.perpage,
-                totalMatch: $scope.queryParam.totalMatch
+                totalMatch: $scope.queryParam.totalMatch,
+                searchType: $scope.queryParam.searchType,
+                searchCriteria: $scope.queryParam.searchCriteria,
+                rating: $scope.queryParam.rating,
+                companySize: $scope.queryParam.companySize,
+                companyTurnOver: $scope.queryParam.companyTurnOver,
+                userMutualFriendsType: $scope.queryParam.userMutualFriendsType,
+                datePosted: $scope.queryParam.datePosted
             };
 
             startBlockUI('wait..', 3);
@@ -162,11 +169,11 @@ define([appLocation.preLogin], function (app) {
         }
 
         $scope.changeSearchSelection = function (inputType,searchCriteriaKey,optionKey,parentIndex,index) {
-            console.log("inputType : " + inputType);
-            console.log("searchCriteriaKey : " + searchCriteriaKey);
-            console.log("optionKey : " + optionKey);
-            console.log("parentIndex : " + parentIndex);
-            console.log("index : " + index);
+            //console.log("inputType : " + inputType);
+            //console.log("searchCriteriaKey : " + searchCriteriaKey);
+            //console.log("optionKey : " + optionKey);
+            //console.log("parentIndex : " + parentIndex);
+            //console.log("index : " + index);
 
             switch (searchCriteriaKey) {
                 case 'SEARCHTYPE':

@@ -83,7 +83,10 @@ define([appLocation.preLogin], function (app) {
 
              Search: $resource(
                 ServerContextPath.solrServer + '/Search/Search?q=:q&page=:page&perpage=:perpage&totalMatch=:totalMatch',
-                { q: '@q', page: '@page', perpage: '@perpage', totalMatch: '@totalMatch' },
+                { q: '@q', page: '@page', perpage: '@perpage', totalMatch: '@totalMatch',
+                searchType: '@searchType', searchCriteria: '@searchCriteria', rating: '@rating', 
+                companySize: '@companySize', companyTurnOver: '@companyTurnOver', userMutualFriendsType: '@userMutualFriendsType', 
+                datePosted: '@datePosted'},
                 {
                     get: {
                         method: 'GET',
