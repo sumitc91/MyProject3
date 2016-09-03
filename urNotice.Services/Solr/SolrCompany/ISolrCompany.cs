@@ -16,7 +16,7 @@ namespace urNotice.Services.Solr.SolrCompany
         SolrQueryResults<UnCompanySolr> GetCompanyDetailsAutocomplete(string queryText);
         SolrQueryResults<UnCompanySolr> GetAbsoluteCompanyDetailsAutocomplete(string queryText);
         SolrQueryResults<UnCompanySolr> CompanyDetailsById(string cid);
-        SolrQueryResults<UnCompanySolr> Search(string q, string page, string perpage, string totalMatch);
+        SolrQueryResults<UnCompanySolr> Search(string q, string page, string perpage, ref string totalMatch);
         SolrQueryResults<UnCompanySolr> GetCompanyCompetitorsDetail(string size, string rating, string speciality);
         List<SearchAllResponseModel> SearchAllAutocomplete(string queryText,int from,int to);
     }

@@ -36,7 +36,22 @@
             <!--blog start-->
             <div class="col-lg-2">
                 <div class="blog-side-item" ng-repeat="advanceSearchCriteria in advanceSearchCriteriaList">                    
-                    <div class="category">
+                    <div class="category" ng-if="advanceSearchCriteria.searchSelectionType=='radio'" ng-show="advanceSearchCriteria.searchCriteriaVisisbleWith=='ALWAYS' || advanceSearchCriteria.searchCriteriaVisisbleWith==advanceSearchCriteriaList[0].searchCriteriaOptedValue">
+                        <h6>
+                            <span ng-bind="advanceSearchCriteria.searchCriteriaValue"></span>
+                        </h6>
+                        <ul class="list-unstyled">
+                            <li ng-repeat="options in advanceSearchCriteria.searchCriteriaOptions">
+                                <label>
+                                    <input type="radio" name="{{advanceSearchCriteria.searchCriteriaKey}}" value="{{options.optionKey}}" ng-model="advanceSearchCriteria.searchCriteriaOptedValue">
+                                    <span ng-bind="options.optionValue"></span>
+                                </label>
+                                &nbsp;{{advanceSearchCriteria.searchCriteriaOptedValue}}
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="category" ng-if="advanceSearchCriteria.searchSelectionType=='checkbox'" ng-show="advanceSearchCriteria.searchCriteriaVisisbleWith==advanceSearchCriteriaList[0].searchCriteriaOptedValue">
                         <h6>
                             <span ng-bind="advanceSearchCriteria.searchCriteriaValue"></span>
                         </h6>
@@ -50,7 +65,7 @@
                             </li>
                         </ul>
                     </div>
-
+                    
                 </div>
             </div>
             <div class="col-lg-10 ">

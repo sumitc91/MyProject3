@@ -129,7 +129,7 @@ namespace urNotice.Services.Solr.SolrCompany
             return solrQueryExecute;
         }
 
-        public SolrQueryResults<UnCompanySolr> Search(string q, string page, string perpage, string totalMatch)
+        public SolrQueryResults<UnCompanySolr> Search(string q, string page, string perpage, ref string totalMatch)
         {
             q = string.IsNullOrEmpty(q) ? "*" : q.Replace(" ", "*");
             page = string.IsNullOrEmpty(page) ? "0" : (Convert.ToInt32(page) - 1).ToString(CultureInfo.InvariantCulture);
@@ -142,10 +142,12 @@ namespace urNotice.Services.Solr.SolrCompany
             if (string.IsNullOrEmpty(totalMatch))
                 totalMatch = solr.Query(solrQuery).Count().ToString();
 
+            int startingIndex = Convert.ToInt32(page) * Convert.ToInt32(perpage);
+
             var solrQueryExecute = solr.Query(solrQuery, new QueryOptions
             {
                 Rows = Convert.ToInt32(perpage),
-                Start = Convert.ToInt32(page),
+                Start = startingIndex,
                 Fields = new[] { "guid","companyid","companyname","rating","website","size","description","averagerating","totalratingcount","totalreviews","isprimary",
                         "logourl", "squarelogourl", "speciality", "telephone","avgnoticeperiod","buyoutpercentage","maxnoticeperiod","minnoticeperiod","avghikeperct","perclookingforchange",
                         "sublocality","city","district","state","country","postal_code","latitude","longitude","geo" }

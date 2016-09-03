@@ -103,12 +103,14 @@ define([appLocation.preLogin], function (app) {
             {
                 searchCriteriaKey: "SEARCHTYPE",
                 searchCriteriaValue: "Search Type",
-                searchSelectionType: "CHECKBOX",
+                searchSelectionType: "radio",
+                searchCriteriaOptedValue: "COMPANY",
+                searchCriteriaVisisbleWith: "ALWAYS",
                 searchCriteriaOptions: [
                     {
                         optionKey: "COMPANY",
                         optionValue: " Company",
-                        isSelected: false
+                        isSelected: true
                     },
                     {
                         optionKey: "USER",
@@ -125,7 +127,8 @@ define([appLocation.preLogin], function (app) {
             {
                 searchCriteriaKey: "RATING",
                 searchCriteriaValue: "Rating",
-                searchSelectionType: "CHECKBOX",
+                searchSelectionType: "checkbox",
+                searchCriteriaVisisbleWith: "COMPANY",
                 searchCriteriaOptions: [
                     {
                         optionKey: "RANGE4PLUS",
@@ -152,7 +155,8 @@ define([appLocation.preLogin], function (app) {
             {
                 searchCriteriaKey: "COMPANYSIZE",
                 searchCriteriaValue: "Company Size",
-                searchSelectionType: "CHECKBOX",
+                searchSelectionType: "checkbox",
+                searchCriteriaVisisbleWith: "COMPANY",
                 searchCriteriaOptions: [
                     {
                         optionKey: "RANGE10001PLUS",
@@ -199,7 +203,8 @@ define([appLocation.preLogin], function (app) {
             {
                 searchCriteriaKey: "COMPANYTURNOVER",
                 searchCriteriaValue: "Company turn over",
-                searchSelectionType: "CHECKBOX",
+                searchSelectionType: "checkbox",
+                searchCriteriaVisisbleWith: "COMPANY",
                 searchCriteriaOptions: [
                     {
                         optionKey: "RANGE10000PLUS",
@@ -234,6 +239,60 @@ define([appLocation.preLogin], function (app) {
                     {
                         optionKey: "RANGE1TO100",
                         optionValue: "1 - 100",
+                        isSelected: false
+                    }
+                ]
+            },
+
+            //Users
+
+            {
+                searchCriteriaKey: "USERMUTUALFRIENDSTYPE",
+                searchCriteriaValue: "Mutual Friends",
+                searchSelectionType: "radio",
+                searchCriteriaVisisbleWith: "USER",
+                searchCriteriaOptedValue: "ANYONE",
+                searchCriteriaOptions: [
+                    {
+                        optionKey: "ANYONE",
+                        optionValue: "  Anyone",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "FRIENDS",
+                        optionValue: " Friends",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "FRIENDSOFFRIENDS",
+                        optionValue: " Friends of your Friends",
+                        isSelected: false
+                    }
+                ]
+            },
+
+            //Users
+
+                {
+                searchCriteriaKey: "DATEPOSTED",
+                searchCriteriaValue: "Date Posted",
+                searchSelectionType: "radio",
+                searchCriteriaVisisbleWith: "WORKGRAPHY",
+                searchCriteriaOptedValue: "OPTION2016",
+                searchCriteriaOptions: [
+                    {
+                        optionKey: "OPTION2016",
+                        optionValue: "  2016",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "OPTION2015",
+                        optionValue: " 2015",
+                        isSelected: false
+                    },
+                    {
+                        optionKey: "OPTION2014",
+                        optionValue: " 2014",
                         isSelected: false
                     }
                 ]

@@ -309,7 +309,12 @@ namespace urNoticeSolr.Controllers
             var perpage = Request.QueryString["perpage"].ToString(CultureInfo.InvariantCulture);
 
             var totalMatch = "";
-            if (Request.QueryString["totalMatch"] != null && Request.QueryString["totalMatch"] != "null" && Request.QueryString["totalMatch"] != "undefined")
+            if (
+                Request.QueryString["totalMatch"] != null && 
+                Request.QueryString["totalMatch"] != "null" && 
+                Request.QueryString["totalMatch"] != "undefined" &&
+                Request.QueryString["totalMatch"] != ""
+                )
             {
                 totalMatch = Request.QueryString["totalMatch"].ToString(CultureInfo.InvariantCulture);
             }
@@ -317,7 +322,7 @@ namespace urNoticeSolr.Controllers
             try
             {
                 ISolrCompany solrCompanyModel = new SolrCompany();
-                queryResponse["result"] = solrCompanyModel.Search(q,page,perpage,totalMatch);
+                queryResponse["result"] = solrCompanyModel.Search(q,page,perpage,ref totalMatch);
                 queryResponse["count"] = totalMatch;
                 response.Payload = queryResponse;
                 response.Status = 200;
