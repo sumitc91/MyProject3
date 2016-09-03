@@ -16,7 +16,9 @@ define([appLocation.preLogin], function (app) {
             companySize: "",
             companySizeList: [],
             companyTurnOver: "",
-            companyTurnOverList:[]
+            companyTurnOverList: [],
+            userMutualFriendsType: "",
+            datePosted:""
         };
 
         $scope.pagination = {
@@ -34,6 +36,8 @@ define([appLocation.preLogin], function (app) {
         $scope.queryParam.rating = $location.search().rating;
         $scope.queryParam.companySize = $location.search().companySize;
         $scope.queryParam.companyTurnOver = $location.search().companyTurnOver;
+        $scope.queryParam.userMutualFriendsType = $location.search().userMutualFriendsType;
+        $scope.queryParam.datePosted = $location.search().datePosted;
 
         if ($scope.queryParam.searchType == null)
             $scope.queryParam.searchType = "COMPANY";
@@ -49,6 +53,12 @@ define([appLocation.preLogin], function (app) {
 
         if ($scope.queryParam.companyTurnOver == null)
             $scope.queryParam.companyTurnOver = "";
+
+        if ($scope.queryParam.userMutualFriendsType == null)
+            $scope.queryParam.userMutualFriendsType = ""
+
+        if ($scope.queryParam.datePosted == null)
+            $scope.queryParam.datePosted = ""
 
         if ($scope.queryParam.rating)
         {
@@ -165,6 +175,12 @@ define([appLocation.preLogin], function (app) {
                 case 'SEARCHCRITERIA':
                     $scope.queryParam.searchCriteria = optionKey;
                     break;
+                case 'USERMUTUALFRIENDSTYPE':
+                    $scope.queryParam.userMutualFriendsType = optionKey;
+                    break;
+                case 'DATEPOSTED':
+                    $scope.queryParam.datePosted = optionKey;
+                    break;
                 case 'RATING':
                     if ($scope.queryParam.ratingList.indexOf(optionKey) !== -1) {
                         var index = $scope.queryParam.ratingList.indexOf(optionKey);
@@ -197,7 +213,10 @@ define([appLocation.preLogin], function (app) {
 
             }
 
-            var url = "/#search/?" +
+            var url = "";
+            if ($scope.advanceSearchCriteriaList[0].searchCriteriaOptedValue == "COMPANY")
+            {
+                url = "/#search/?" +
                     "q=" + $scope.queryParam.q +
                     "&page=" + $scope.queryParam.currentPage +
                     "&perpage=10" +
@@ -208,7 +227,30 @@ define([appLocation.preLogin], function (app) {
                     "&companySize=" + $scope.parseArrayForQueryString($scope.queryParam.companySizeList) +
                     "&companyTurnOver=" + $scope.parseArrayForQueryString($scope.queryParam.companyTurnOverList) +
                     "";
-
+            }
+            else if ($scope.advanceSearchCriteriaList[0].searchCriteriaOptedValue == "USER") {
+                url = "/#search/?" +
+                    "q=" + $scope.queryParam.q +
+                    "&page=" + $scope.queryParam.currentPage +
+                    "&perpage=10" +
+                    "&totalMatch=" + $scope.queryParam.totalMatch +
+                    "&searchType=" + $scope.queryParam.searchType +
+                    "&searchCriteria=" + $scope.queryParam.searchCriteria +
+                    "&userMutualFriendsType=" + $scope.queryParam.userMutualFriendsType +
+                    "";
+            }
+            else if ($scope.advanceSearchCriteriaList[0].searchCriteriaOptedValue == "WORKGRAPHY") {
+                url = "/#search/?" +
+                    "q=" + $scope.queryParam.q +
+                    "&page=" + $scope.queryParam.currentPage +
+                    "&perpage=10" +
+                    "&totalMatch=" + $scope.queryParam.totalMatch +
+                    "&searchType=" + $scope.queryParam.searchType +
+                    "&searchCriteria=" + $scope.queryParam.searchCriteria +
+                    "&datePosted=" + $scope.queryParam.datePosted +
+                    "";
+            }
+            //console.log(url);
             location.href = url;
         };
 
@@ -397,13 +439,12 @@ define([appLocation.preLogin], function (app) {
             },
 
             //Users
-
             {
                 searchCriteriaKey: "USERMUTUALFRIENDSTYPE",
                 searchCriteriaValue: "Mutual Friends",
                 searchSelectionType: "radio",
                 searchCriteriaVisisbleWith: "USER",
-                searchCriteriaOptedValue: "ANYONE",
+                searchCriteriaOptedValue: $scope.queryParam.userMutualFriendsType,
                 searchCriteriaOptions: [
                     {
                         optionKey: "ANYONE",
@@ -423,14 +464,14 @@ define([appLocation.preLogin], function (app) {
                 ]
             },
 
-            //Users
+            //Workgraphy
 
                 {
                 searchCriteriaKey: "DATEPOSTED",
                 searchCriteriaValue: "Date Posted",
                 searchSelectionType: "radio",
                 searchCriteriaVisisbleWith: "WORKGRAPHY",
-                searchCriteriaOptedValue: "OPTION2016",
+                searchCriteriaOptedValue: $scope.queryParam.datePosted,
                 searchCriteriaOptions: [
                     {
                         optionKey: "OPTION2016",
