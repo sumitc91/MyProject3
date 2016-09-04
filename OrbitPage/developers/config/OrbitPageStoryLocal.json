@@ -328,15 +328,6 @@
       "properties": {
         "link": {
           "type": "https://s3-ap-southeast-1.amazonaws.com/urnotice/OrbitPage/User/Sumit/WallPost/5d2f2654-261d-4c62-9ae1-4bf815750330.png"
-        },
-        "link_s": {
-          "type": "https://s3-ap-southeast-1.amazonaws.com/urnotice/OrbitPage/User/Sumit/WallPost/5d2f2654-261d-4c62-9ae1-4bf815750330.png"
-        },
-        "link_m": {
-          "type": "https://s3-ap-southeast-1.amazonaws.com/urnotice/OrbitPage/User/Sumit/WallPost/5d2f2654-261d-4c62-9ae1-4bf815750330.png"
-        },
-        "link_l": {
-          "type": "https://s3-ap-southeast-1.amazonaws.com/urnotice/OrbitPage/User/Sumit/WallPost/5d2f2654-261d-4c62-9ae1-4bf815750330.png"
         }
       }
     }
