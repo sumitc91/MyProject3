@@ -51,6 +51,9 @@
 	  var parts = url.split("#");
 	  if(/Auth/i.test(parent)){
 	      //url = parts[0] + "showJsonConfigAuth";
+	      console.log(parts[0]);
+	      console.log(parts[0].indexOf("orbitpage.com"));
+	      console.log(parts[0].indexOf("orbitpage.com") !== -1);
 	      if (parts[0].indexOf("orbitpage.com") !== -1)
 	          url = parts[0] + "config/Auth.json";
           else
