@@ -43,17 +43,20 @@
   if(level==1){
       var pos, url, local;
 	 if(nickname=='')
-	 pos='list';
+	    pos='list';
 	 else{
-	 pos='full';
+	    pos='full';
 	 }
-	 if (parts[0].indexOf("orbitpage.com") !== -1)
-	     local = "";
-	 else
-	     local = "Local";
-
+	 
       url = document.URL;
-	  var parts = url.split("#");
+      var parts = url.split("#");
+
+      if (parts[0].indexOf("orbitpage.com") !== -1)
+          local = "";
+      else
+          local = "Local";
+
+
 	  if(/Auth/i.test(parent)){
 	      //url = parts[0] + "showJsonConfigAuth";
         url = parts[0] + "config/OrbitPageAuth"+local+".json";
