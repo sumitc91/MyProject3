@@ -119,10 +119,10 @@
       url = document.URL;
       var parts = url.split("#");
 
-      if (parts[0].indexOf("orbitpage.com") !== -1)
-          local = "Local";
-      else
+      if(parts[0].indexOf("orbitpage.com") !== -1)
           local = "";
+      else
+          local = "Local";
 
       if (/Logout/i.test(parent)) {
           url = parts[0] + "config/api-console-logout";
