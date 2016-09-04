@@ -52,15 +52,20 @@
 	  if(/Auth/i.test(parent)){
 	      //url = parts[0] + "showJsonConfigAuth";
 	      if (parts[0].indexOf("orbitpage.com") !== -1)
-	          url = parts[0] + "config/Auth.json";
+	          url = parts[0] + "config/OrbitPageAuth.json";
           else
-	        url = parts[0] + "config/AuthLocal.json";
+	        url = parts[0] + "config/OrbitPageAuthLocal.json";
 	  }
 	  else if(/Logout/i.test(parent)){
 	  url = parts[0] +"config/api-console-logout";
 	  }
-	  else if(/Bonus/i.test(parent)){
-	      url = parts[0] + "config/Authorization.json";
+	  else if (/OrbitPage/i.test(parent)) {
+	      if (nickname == '')
+	          url = parts[0] + "config/OrbitPageAuthLocal.json";
+	      else {
+	          url = parts[0] + "config/OrbitPage"+nickname+"Local.json";
+	      }
+	      
 	  }
 	  else if(/Loyalty/i.test(parent)){
 	  url = parts[0] +"config/api-console-loyalty";
@@ -107,7 +112,69 @@
           }
       });
     window.swaggerUi.load();
-	}
+  }
+  else if (level == 2) {
+      var pos, url,local;
+      pos = 'full';
+      url = document.URL;
+      var parts = url.split("#");
+
+      if (parts[0].indexOf("orbitpage.com") !== -1)
+          local = "Local";
+      else
+          local = "";
+
+      if (/Logout/i.test(parent)) {
+          url = parts[0] + "config/api-console-logout";
+      }
+      else if (/OrbitPage/i.test(parent)) {
+          url = parts[0] + "config/OrbitPage" + nickname + local + ".json";
+      }
+      else if (/Loyalty/i.test(parent)) {
+          url = parts[0] + "config/api-console-loyalty";
+      }
+      else if (/Wallet/i.test(parent)) {
+          url = parts[0] + "config/api-console-wallet";
+      }
+      
+      window.swaggerUi = new SwaggerUi({
+          url: url,
+          dom_id: "swagger-ui-container",
+          supportedSubmitMethods: ['get', 'post', 'put', 'delete'],
+          onComplete: function (swaggerApi, swaggerUi) {
+              log("Loaded SwaggerUI");
+
+              if (typeof initOAuth == "function") {
+                  /*
+                  initOAuth({
+                    clientId: "your-client-id",
+                    realm: "your-realms",
+                    appName: "your-app-name"
+                  });
+                  */
+              }
+              $('pre code').each(function (i, e) {
+                  hljs.highlightBlock(e);
+              });
+              $(".toggleOperation").click();
+          },
+          onFailure: function (data) {
+              log("Unable to Load SwaggerUI");
+          },
+          docExpansion: pos,
+          sorter: "method"
+      });
+
+      $('#input_apiKey').change(function () {
+          var key = $('#input_apiKey')[0].value;
+          log("key: " + key);
+          if (key && key.trim() != "") {
+              log("added key " + key);
+              window.authorizations.add("key", new ApiKeyAuthorization("api_key", key, "query"));
+          }
+      });
+      window.swaggerUi.load();
+  }
 	else{
 	Docs.collapseOperationsForResource(parent);
 	Docs.expandOperation($('#' + parent + "_" + nickname + "_content"));
@@ -239,10 +306,19 @@
             
         </a>
         <ul class="submenu level_2 hide">
-            <li>
+            <!--<li>
                 <a href="#" onclick="openSwagger('Authorization','authentication',1)" class="apiList" id="authContent">Authentication</a>            
                 
+            </li>-->
+            <li>
+                <a href="#" onclick="openSwagger('OrbitPage','',1)" class="apiList" id="authContent">OrbitPage</a>
+                <ul class="submenu level_3 hide">
+                    <li><a href="#" onclick="openSwagger('OrbitPage', 'Auth', 2)" class="apiList" id="authContent">Auth</a></li>
+                    <li><a href="#" onclick="openSwagger('OrbitPage', 'Story', 2)" class="apiList" id="authContent">Story</a></li>
+                    
+                </ul>
             </li>
+
 				 <li><a href="#"  onclick="openSwagger('Bonus','',1)" class="apiList" id="authContent">Bonus</a>
 				<ul class="submenu level_3 hide">
                 <li><a href="#" onclick="openSwagger('Bonus','bonustypes',2)"  class="apiList" id="authContent">Types</a></li>

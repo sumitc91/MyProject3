@@ -14,7 +14,7 @@
         {
           "method": "POST",
           "summary": "Create Account API",
-          "notes": "Create Account API Description. <br> This is a POST request which expects parameters in request body like Username,Email, Passowrd etc..",
+          "notes": "Create Account OrbitPage Auth API Description. <br> This is a POST request which expects parameters in request body like Username,Email, Passowrd etc..",
           "items": {
 
           },

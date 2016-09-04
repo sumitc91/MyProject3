@@ -1,7 +1,7 @@
 {
   "apiVersion": "1.0.0",
   "swaggerVersion": "1.2",
-  "basePath": "http://localhost:21902/Auth",
+  "basePath": "http://localhost:21902/Story",
   "resourcePath": "/Auth",
   "produces": [
     "application/json",
@@ -9,16 +9,16 @@
   ],
   "apis": [
     {
-      "path": "/CreateAccount/",
+      "path": "/CreateUrJobGraphy/",
       "operations": [
         {
           "method": "POST",
-          "summary": "Create Account API",
-          "notes": "Create Account API Description. <br> This is a POST request which expects parameters in request body like Username,Email, Passowrd etc..",
+          "summary": "Create New Workgraphy API",
+          "notes": "Create New Workgraphy API Description. <br> This is a POST request which expects parameters in request body..",
           "items": {
 
           },
-          "nickname": "signup",
+          "nickname": "createWorkgraphy",
           "authorizations": {
 
           },
@@ -52,9 +52,9 @@
             },
             {
               "name": "body",
-              "description": "New Account Details",
+              "description": "New Workgraphy Details",
               "required": true,
-              "type": "UserDetails",
+              "type": "WorkgraphyDetails",
               "paramType": "body",
               "allowMultiple": false,
               "defaultValue": ""
@@ -221,78 +221,122 @@
     }
   ],
   "models": {
-    "UserDetails": {
-      "id": "UserDetails",
+    "WorkgraphyDetails": {
+      "id": "WorkgraphyDetails",
       "required": [
-        "FirstName",
-        "LastName",
-        "Gender",
-        "EmailId",
-        "Username",
-        "Password",
-        "Source",
-        "Referral"
+        "Data",
+        "ImgurList",
+        "location",
+        "formatted_address"
       ],
       "properties": {
-        "FirstName": {
-          "type": "Sumit"
+        "Data": {
+          "type": "WorkgraphyDetailsData"
         },
-        "LastName": {
-          "type": "Chourasia"
+        "ImgurList": {
+          "type": "array",
+          "items": {
+            "type": "WorkgraphyDetailsImgurList"
+          }
         },
-        "Gender": {
-          "type": "Male"
+        "location": {
+          "type": null
         },
-        "EmailId": {
-          "type": "sumitchourasia91@gmail.com "
-        },
-        "Username": {
-          "type": "sumit"
-        },
-        "Password": {
-          "type": "password"
-        },
-        "Source": {
-          "type": "web"
-        },
-        "Referral": {
-          "type": "NA"
+        "formatted_address": {
+          "type": "Kariyammana Agrahara,  Bellandur, Bengaluru, Karnataka 560103, India"
         }
       }
     },
 
-    "LoginDetails": {
-      "id": "LoginDetails",
+    "WorkgraphyDetailsData": {
+      "id": "WorkgraphyDetailsData",
       "required": [
-        "Username",
-        "Password",
-        "Type",
-        "KeepMeSignedInCheckBox"
+        "heading",
+        "companyName",
+        "companyVertexId",
+        "story",
+        "name",
+        "email",
+        "designation",
+        "designationVertexId",
+        "location",
+        "shareAnonymously",
+        "employeeType",
+        "subTitle"
       ],
       "properties": {
-        "Username": {
-          "type": "sumit"
+        "heading": {
+          "type": "This is Story Heading"
         },
-        "Password": {
-          "type": "password"
+        "companyName": {
+          "type": "Accenture"
         },
-        "Type": {
-          "type": "web"
+        "companyVertexId": {
+          "type": "987296"
         },
-        "KeepMeSignedInCheckBox": {
-          "type": "boolean"
-        }
-      }
-    },
-
-    "ResendValidationCodeDetails": {
-      "id": "ResendValidationCodeDetails",
-      "required": [
-        "userName"
-      ],
-      "properties": {
-        "userName": {
+        "story": {
+          "type": "Body of the Story<br>"
+        },
+        "name": {
+          "type": ""
+        },
+        "email": {
           "type": "sumitchourasia91@gmail.com"
+        },
+        "designation": {
+          "type": "Software Developer"
+        },
+        "designationVertexId": {
+          "type": "1474728"
+        },
+        "location": {
+          "type": ""
+        },
+        "shareAnonymously": {
+          "type": "boolean"
+        },
+
+        "employeeType": {
+          "type": ""
+        },
+        "subTitle": {
+          "type": "Body  of the Story"
+        }
+      }
+    },
+
+    "WorkgraphyDetailsImgurList": {
+      "id": "WorkgraphyDetailsImgurList",
+      "required": [
+        "data"
+      ],
+      "properties": {
+        "data": {
+          "type": "WorkgraphyDetailsImgurListdata"
+        }
+      }
+    },
+
+    "WorkgraphyDetailsImgurListdata": {
+      "id": "WorkgraphyDetailsImgurListdata",
+      "required": [
+        "link",
+        "link_s",
+        "link_m",
+        "link_l"
+      ],
+      "properties": {
+        "link": {
+          "type": "https://s3-ap-southeast-1.amazonaws.com/urnotice/OrbitPage/User/Sumit/WallPost/5d2f2654-261d-4c62-9ae1-4bf815750330.png"
+        },
+        "link_s": {
+          "type": "https://s3-ap-southeast-1.amazonaws.com/urnotice/OrbitPage/User/Sumit/WallPost/5d2f2654-261d-4c62-9ae1-4bf815750330.png"
+        },
+        "link_m": {
+          "type": "https://s3-ap-southeast-1.amazonaws.com/urnotice/OrbitPage/User/Sumit/WallPost/5d2f2654-261d-4c62-9ae1-4bf815750330.png"
+        },
+        "link_l": {
+          "type": "https://s3-ap-southeast-1.amazonaws.com/urnotice/OrbitPage/User/Sumit/WallPost/5d2f2654-261d-4c62-9ae1-4bf815750330.png"
         }
       }
     }
