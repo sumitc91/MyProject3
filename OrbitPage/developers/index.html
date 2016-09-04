@@ -41,31 +41,28 @@
   <script type="text/javascript">
   function openSwagger(parent, nickname,level){
   if(level==1){
-	 var pos, url;
+      var pos, url, local;
 	 if(nickname=='')
 	 pos='list';
 	 else{
 	 pos='full';
 	 }
+	 if (parts[0].indexOf("orbitpage.com") !== -1)
+	     local = "";
+	 else
+	     local = "Local";
+
       url = document.URL;
 	  var parts = url.split("#");
 	  if(/Auth/i.test(parent)){
 	      //url = parts[0] + "showJsonConfigAuth";
-	      if (parts[0].indexOf("orbitpage.com") !== -1)
-	          url = parts[0] + "config/OrbitPageAuth.json";
-          else
-	        url = parts[0] + "config/OrbitPageAuthLocal.json";
+        url = parts[0] + "config/OrbitPageAuth"+local+".json";
 	  }
 	  else if(/Logout/i.test(parent)){
 	  url = parts[0] +"config/api-console-logout";
 	  }
 	  else if (/OrbitPage/i.test(parent)) {
-	      if (nickname == '')
-	          url = parts[0] + "config/OrbitPageAuthLocal.json";
-	      else {
-	          url = parts[0] + "config/OrbitPage"+nickname+"Local.json";
-	      }
-	      
+	      url = parts[0] + "config/OrbitPageAuth" + local + ".json";
 	  }
 	  else if(/Loyalty/i.test(parent)){
 	  url = parts[0] +"config/api-console-loyalty";
