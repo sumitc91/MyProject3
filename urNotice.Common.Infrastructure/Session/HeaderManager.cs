@@ -23,8 +23,43 @@ namespace urNotice.Common.Infrastructure.Session
             headerValues = requestHeader.Headers.GetValues("_ga");
             if(headerValues != null)
                 this.Ga = headerValues.FirstOrDefault();
+
+            if(this.AuthToken == null || this.AuthKey == null)
+            {
+                CheckAndAssignFromCookieIfHeaderIsEmpty(requestHeader);
+            }
         }
 
+        private void CheckAndAssignFromCookieIfHeaderIsEmpty(HttpRequestBase requestHeader)
+        {
+            if (requestHeader.Cookies["UTMZT"] != null)
+            {
+                this.AuthToken = DecodeHtmlCookie(requestHeader.Cookies["UTMZT"].Value);
+            }
+
+            if (requestHeader.Cookies["UTMZK"] != null)
+            {
+                this.AuthKey = DecodeHtmlCookie(requestHeader.Cookies["UTMZK"].Value);
+            }
+
+            if (requestHeader.Cookies["UTMZV"] != null)
+            {
+                this.AuthValue = DecodeHtmlCookie(requestHeader.Cookies["UTMZV"].Value);
+            }
+
+            if (requestHeader.Cookies["_ga"] != null)
+            {
+                this.Ga = DecodeHtmlCookie(requestHeader.Cookies["_ga"].Value);
+            }
+        }
+
+        private string DecodeHtmlCookie(string str)
+        {
+            return str
+                .Replace("%2F", "/")
+                .Replace("%2B", "+")
+                .Replace("%3D", "=");
+        }
         public string AuthToken { get; set; }
         public string AuthKey { get; set; }
         public string AuthValue { get; set; }

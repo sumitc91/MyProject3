@@ -181,7 +181,8 @@ namespace urNotice.Services.Management.PostManagement
 
             userPostVertexModel.userInfo.Add(userVertexModel);
 
-
+            response.Status = 200;
+            response.Message = "Successfully Posted";
             return response;
         }
 

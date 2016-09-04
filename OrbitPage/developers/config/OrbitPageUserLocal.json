@@ -1,0 +1,298 @@
+{
+  "apiVersion": "1.0.0",
+  "swaggerVersion": "1.2",
+  "basePath": "http://localhost:21902/User",
+  "resourcePath": "/User",
+  "produces": [
+    "application/json",
+    "application/xml"
+  ],
+  "apis": [
+    {
+      "path": "/UserPost/",
+      "operations": [
+        {
+          "method": "POST",
+          "summary": "Create UserPost API",
+          "notes": "Create UserPost API Description. <br> This is a POST request which expects parameters in request body like Username,Email, Passowrd etc..",
+          "items": {
+
+          },
+          "nickname": "userPost",
+          "authorizations": {
+
+          },
+          "parameters": [
+            {
+              "name": "Version",
+              "description": "API Version.",
+              "required": true,
+              "type": "string",
+              "paramType": "path",
+              "allowMultiple": false,
+              "defaultValue": "1.0",
+              "enum": [
+                "1.0",
+                "2.0"
+              ]
+            },
+            {
+              "name": "lang",
+              "description": "Locale Details.",
+              "required": true,
+              "type": "string",
+              "paramType": "path",
+              "allowMultiple": false,
+              "defaultValue": "en_US",
+              "enum": [
+                "en_US",
+                "en_UK",
+                "en_IN"
+              ]
+            },
+            {
+              "name": "body",
+              "description": "UserPost Details",
+              "required": true,
+              "type": "UserPostDetails",
+              "paramType": "body",
+              "allowMultiple": false,
+              "defaultValue": ""
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": "200",
+              "message": "The request has succeeded"
+            },
+            {
+              "code": "400",
+              "message": "Bad Request-The request could not be understood by the server due to malformed syntax."
+            },
+            {
+              "code": "500",
+              "message": "Authentication Service Exception"
+            }
+          ],
+          "deprecated": "true"
+        }
+      ]
+    },
+    {
+      "path": "/Login/",
+      "operations": [
+        {
+          "method": "POST",
+          "summary": "Login API",
+          "notes": "Login API Description. <br> This is a POST request which expects parameters in request body like Username, Passowrd..",
+          "items": {
+
+          },
+          "nickname": "login",
+          "authorizations": {
+
+          },
+          "parameters": [
+            {
+              "name": "Version",
+              "description": "API Version.",
+              "required": true,
+              "type": "string",
+              "paramType": "path",
+              "allowMultiple": false,
+              "defaultValue": "1.0",
+              "enum": [
+                "1.0",
+                "2.0"
+              ]
+            },
+            {
+              "name": "lang",
+              "description": "Locale Details.",
+              "required": true,
+              "type": "string",
+              "paramType": "path",
+              "allowMultiple": false,
+              "defaultValue": "en_US",
+              "enum": [
+                "en_US",
+                "en_UK",
+                "en_IN"
+              ]
+            },
+            {
+              "name": "body",
+              "description": "Login Details",
+              "required": true,
+              "type": "LoginDetails",
+              "paramType": "body",
+              "allowMultiple": false,
+              "defaultValue": ""
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": "200",
+              "message": "The request has succeeded"
+            },
+            {
+              "code": "400",
+              "message": "Bad Request-The request could not be understood by the server due to malformed syntax."
+            },
+            {
+              "code": "500",
+              "message": "Authentication Service Exception"
+            }
+          ],
+          "deprecated": "true"
+        }
+      ]
+    },
+
+    {
+      "path": "/ResendValidationCode/",
+      "operations": [
+        {
+          "method": "POST",
+          "summary": "Resend Validation API",
+          "notes": "Resend Validation Code API Description. <br> This is a POST request which expects parameters in request body like Username, Passowrd..",
+          "items": {
+
+          },
+          "nickname": "resendValidationCode",
+          "authorizations": {
+
+          },
+          "parameters": [
+            {
+              "name": "Version",
+              "description": "API Version.",
+              "required": true,
+              "type": "string",
+              "paramType": "path",
+              "allowMultiple": false,
+              "defaultValue": "1.0",
+              "enum": [
+                "1.0",
+                "2.0"
+              ]
+            },
+            {
+              "name": "lang",
+              "description": "Locale Details.",
+              "required": true,
+              "type": "string",
+              "paramType": "path",
+              "allowMultiple": false,
+              "defaultValue": "en_US",
+              "enum": [
+                "en_US",
+                "en_UK",
+                "en_IN"
+              ]
+            },
+            {
+              "name": "body",
+              "description": "Login Details",
+              "required": true,
+              "type": "ResendValidationCodeDetails",
+              "paramType": "body",
+              "allowMultiple": false,
+              "defaultValue": ""
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": "200",
+              "message": "The request has succeeded"
+            },
+            {
+              "code": "400",
+              "message": "Bad Request-The request could not be understood by the server due to malformed syntax."
+            },
+            {
+              "code": "500",
+              "message": "Authentication Service Exception"
+            }
+          ],
+          "deprecated": "true"
+        }
+      ]
+    }
+  ],
+  "models": {
+    "UserPostDetails": {
+      "id": "UserPostDetails",
+      "required": [
+        "Message",
+        "VertexId",
+        "TaggedVertexId"
+      ],
+      "properties": {
+        "Message": {
+          "type": "Hello @[tag:Abhinav_Srivastava|1593536|1]  this is testing post @[tag:Accenture|987296|2]"
+        },
+        "VertexId": {
+          "type": "3121368"
+        },
+        "TaggedVertexId": {
+          "type": "array",
+          "items": {
+            "type": "UserPostDetailsTaggedVertexId"
+          }
+        }
+      }
+    },
+    "UserPostDetailsTaggedVertexId": {
+      "id": "UserPostDetailsTaggedVertexId",
+      "required": [
+        "Type",
+        "VertexId"
+      ],
+      "properties": {
+        "Type": {
+          "type": "1"
+        },
+        "VertexId": {
+          "type": "1593536"
+        }
+      }
+    },
+
+    "LoginDetails": {
+      "id": "LoginDetails",
+      "required": [
+        "Username",
+        "Password",
+        "Type",
+        "KeepMeSignedInCheckBox"
+      ],
+      "properties": {
+        "Username": {
+          "type": "sumit"
+        },
+        "Password": {
+          "type": "password"
+        },
+        "Type": {
+          "type": "web"
+        },
+        "KeepMeSignedInCheckBox": {
+          "type": "boolean"
+        }
+      }
+    },
+
+    "ResendValidationCodeDetails": {
+      "id": "ResendValidationCodeDetails",
+      "required": [
+        "userName"
+      ],
+      "properties": {
+        "userName": {
+          "type": "sumitchourasia91@gmail.com"
+        }
+      }
+    }
+  }
+}

@@ -291,7 +291,7 @@ namespace urNotice.Services.Management.AccountManagement
                 {
                     // Account has been already validated.
                     response.Status = 402;
-                    response.Message = "warning";
+                    response.Message = "Account has already been validated";
                     return response;
                 }
 
@@ -314,7 +314,7 @@ namespace urNotice.Services.Management.AccountManagement
             }
             // User Doesn't Exist
             response.Status = 404;
-            response.Message = "warning";
+            response.Message = "User Doesn't Exist";
             return response;
         }
         public ResponseModel<string> ForgetPasswordService(string id, HttpRequestBase request)

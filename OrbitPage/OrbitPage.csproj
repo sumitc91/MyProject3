@@ -957,6 +957,8 @@
     <Content Include="developers\config\api-console-wallet" />
     <Content Include="developers\config\Auth" />
     <Content Include="developers\config\Auth.json" />
+    <Content Include="developers\config\api-console-orbitpage" />
+    <Content Include="developers\config\OrbitPageAuthLocal.json" />
     <None Include="developers\config\Authorization.json" />
     <Content Include="developers\config\Bonus" />
     <Content Include="developers\config\Logout" />
@@ -968,6 +970,11 @@
     <Content Include="developers\css\fonts\proximanova-reg-webfont.ttf" />
     <Content Include="developers\css\fonts\proximanova-reg-webfont.woff" />
     <Content Include="developers\config\AuthLocal.json" />
+    <Content Include="developers\config\OrbitPageStoryLocal.json" />
+    <Content Include="developers\config\OrbitPageAuth.json" />
+    <Content Include="developers\config\OrbitPageStory.json" />
+    <Content Include="developers\config\OrbitPageUserLocal.json" />
+    <Content Include="developers\config\OrbitPageUser.json" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Scripts\jquery-1.6.4.js" />
     <Content Include="Scripts\jquery-1.6.4.min.js" />

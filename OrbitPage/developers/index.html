@@ -111,7 +111,10 @@
               window.authorizations.add("key", new ApiKeyAuthorization("api_key", key, "query"));
           }
       });
-    window.swaggerUi.load();
+
+    
+      window.swaggerUi.load();
+      
   }
   else if (level == 2) {
       var pos, url,local;
@@ -315,7 +318,7 @@
                 <ul class="submenu level_3 hide">
                     <li><a href="#" onclick="openSwagger('OrbitPage', 'Auth', 2)" class="apiList" id="authContent">Auth</a></li>
                     <li><a href="#" onclick="openSwagger('OrbitPage', 'Story', 2)" class="apiList" id="authContent">Story</a></li>
-                    
+                    <li><a href="#" onclick="openSwagger('OrbitPage', 'User', 2)" class="apiList" id="authContent">User</a></li>
                 </ul>
             </li>
 
