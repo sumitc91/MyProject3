@@ -36,7 +36,7 @@ namespace urNotice.Common.Infrastructure.Common.Constants
             return new ResponseModel<T>
             {
                 Status = 409,
-                AbortProcess = false,
+                AbortProcess = true,
                 Message = message,
                 Payload = payload
             };

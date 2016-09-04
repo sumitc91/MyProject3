@@ -45,7 +45,7 @@ namespace urNotice.Services.Person.PersonContract.RegistrationOperation
         protected override ResponseModel<LoginResponse> CheckForUniqueUserName(RegisterationRequest req)
         {
             var solrUserEmail = _solrUserModel.GetPersonData(req.EmailId, req.Username, null, null, false);
-            if (solrUserEmail != null) return OrbitPageResponseModel.SetAlreadyTaken("Sorry " + req.Username + " username is already taken", new LoginResponse());
+            if (solrUserEmail != null) return OrbitPageResponseModel.SetAlreadyTaken("Sorry " + req.Username + " / " + req.EmailId + " username / email is already taken", new LoginResponse());
             return OrbitPageResponseModel.SetOk("Username is unique", new LoginResponse());
         }
 
