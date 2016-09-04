@@ -51,13 +51,16 @@
 	  var parts = url.split("#");
 	  if(/Auth/i.test(parent)){
 	      //url = parts[0] + "showJsonConfigAuth";
-	      url = parts[0] + "config/Auth.json";
+	      if (parts.indexOf("orbitpage.com")!== -1)
+	          url = parts[0] + "config/Auth.json";
+          else
+	        url = parts[0] + "config/AuthLocal.json";
 	  }
 	  else if(/Logout/i.test(parent)){
 	  url = parts[0] +"config/api-console-logout";
 	  }
 	  else if(/Bonus/i.test(parent)){
-	  url = parts[0] +"config/api-console-bonus";
+	      url = parts[0] + "config/Authorization.json";
 	  }
 	  else if(/Loyalty/i.test(parent)){
 	  url = parts[0] +"config/api-console-loyalty";
