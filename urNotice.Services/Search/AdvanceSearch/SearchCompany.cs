@@ -21,7 +21,6 @@ namespace urNotice.Services.Search.AdvanceSearch
             var fields = new[] { "description","displayname","logourl","minnoticeperiod","maxnoticeperiod","averagerating",
                         "employees","turnover","website","companyid" };
 
-            advanceSearchRequest.q = string.IsNullOrEmpty(advanceSearchRequest.q) ? "*" : advanceSearchRequest.q.Replace(" ", "*");
             advanceSearchRequest.page = string.IsNullOrEmpty(advanceSearchRequest.page) ? "0" : (Convert.ToInt32(advanceSearchRequest.page) - 1).ToString(CultureInfo.InvariantCulture);
             if (string.IsNullOrEmpty(advanceSearchRequest.perpage))
                 advanceSearchRequest.perpage = "10";
@@ -64,12 +63,27 @@ namespace urNotice.Services.Search.AdvanceSearch
 
         private string BuildAdvanceSearchQuery(AdvanceSearchRequest advanceSearchRequest)
         {
-            //advanceSearchRequest.q = string.IsNullOrEmpty(advanceSearchRequest.q) ? "*" : advanceSearchRequest.q.Replace(" ", "*");
-            //advanceSearchRequest.page = string.IsNullOrEmpty(advanceSearchRequest.page) ? "0" : (Convert.ToInt32(advanceSearchRequest.page) - 1).ToString(CultureInfo.InvariantCulture);
-            //if (string.IsNullOrEmpty(advanceSearchRequest.perpage))
-            //    advanceSearchRequest.perpage = "10";
-
-            var solrQuery = "companyname:*" + advanceSearchRequest.q + "*";
+            var solrQuery = "";
+            switch (advanceSearchRequest.searchCriteria)
+            {
+                case SearchConstants.CONTAINS:
+                    advanceSearchRequest.q = string.IsNullOrEmpty(advanceSearchRequest.q) ? "*" : advanceSearchRequest.q.Replace(" ", "*");
+                    solrQuery = "(companyname:*" + advanceSearchRequest.q + "*)";
+                    break;
+                case SearchConstants.STARTSWITH:
+                    advanceSearchRequest.q = string.IsNullOrEmpty(advanceSearchRequest.q) ? "*" : advanceSearchRequest.q.Replace(" ", "*");
+                    solrQuery = "(companyname:" + advanceSearchRequest.q + "*)";
+                    break;
+                case SearchConstants.EXACTMATCH:
+                    advanceSearchRequest.q = string.IsNullOrEmpty(advanceSearchRequest.q) ? "*" : advanceSearchRequest.q.Replace(" ", "?");
+                    solrQuery = "(companyname:" + advanceSearchRequest.q + "*)";
+                    break;
+                default:
+                    advanceSearchRequest.q = string.IsNullOrEmpty(advanceSearchRequest.q) ? "*" : advanceSearchRequest.q.Replace(" ", "*");
+                    solrQuery = "(companyname:*" + advanceSearchRequest.q + "*)";
+                    break;
+            }
+            
             return solrQuery;
         }
     }

@@ -168,7 +168,7 @@ define([appLocation.preLogin], function (app) {
             }
         }
 
-        $scope.changeSearchSelection = function (inputType,searchCriteriaKey,optionKey,parentIndex,index) {
+        $scope.changeSearchSelection = function (inputType, searchCriteriaKey, optionKey, parentIndex, index) {
             //console.log("inputType : " + inputType);
             //console.log("searchCriteriaKey : " + searchCriteriaKey);
             //console.log("optionKey : " + optionKey);
@@ -219,44 +219,10 @@ define([appLocation.preLogin], function (app) {
                 default:
 
             }
-
-            var url = "";
-            if ($scope.advanceSearchCriteriaList[0].searchCriteriaOptedValue == "COMPANY")
-            {
-                url = "/#search/?" +
-                    "q=" + $scope.queryParam.q +
-                    "&page=" + $scope.queryParam.currentPage +
-                    "&perpage=10" +
-                    "&totalMatch=" + $scope.queryParam.totalMatch +
-                    "&searchType=" + $scope.queryParam.searchType +
-                    "&searchCriteria=" + $scope.queryParam.searchCriteria +
-                    "&rating=" + $scope.parseArrayForQueryString($scope.queryParam.ratingList) +
-                    "&companySize=" + $scope.parseArrayForQueryString($scope.queryParam.companySizeList) +
-                    "&companyTurnOver=" + $scope.parseArrayForQueryString($scope.queryParam.companyTurnOverList) +
-                    "";
-            }
-            else if ($scope.advanceSearchCriteriaList[0].searchCriteriaOptedValue == "USER") {
-                url = "/#search/?" +
-                    "q=" + $scope.queryParam.q +
-                    "&page=" + $scope.queryParam.currentPage +
-                    "&perpage=10" +
-                    "&totalMatch=" + $scope.queryParam.totalMatch +
-                    "&searchType=" + $scope.queryParam.searchType +
-                    "&searchCriteria=" + $scope.queryParam.searchCriteria +
-                    "&userMutualFriendsType=" + $scope.queryParam.userMutualFriendsType +
-                    "";
-            }
-            else if ($scope.advanceSearchCriteriaList[0].searchCriteriaOptedValue == "WORKGRAPHY") {
-                url = "/#search/?" +
-                    "q=" + $scope.queryParam.q +
-                    "&page=" + $scope.queryParam.currentPage +
-                    "&perpage=10" +
-                    "&totalMatch=" + $scope.queryParam.totalMatch +
-                    "&searchType=" + $scope.queryParam.searchType +
-                    "&searchCriteria=" + $scope.queryParam.searchCriteria +
-                    "&datePosted=" + $scope.queryParam.datePosted +
-                    "";
-            }
+                    
+            $scope.queryParam.totalMatch = "";
+            var url = $scope.buildAndReturnSearchUrl();
+            
             //console.log(url);
             location.href = url;
         };
@@ -272,10 +238,53 @@ define([appLocation.preLogin], function (app) {
             //getCompanySearchDetail();
             console.log(userSession.selectedPagePagination);
             if (userSession.selectedPagePagination != '...')
-                location.href = "/#search/?q=" + $scope.queryParam.q + "&page=" + $scope.queryParam.currentPage + "&perpage=10&totalMatch=" + $scope.queryParam.totalMatch + "";
+            {
+                var url = $scope.buildAndReturnSearchUrl();
+                //console.log(url);
+                location.href = url;
+            }
+                
         };
         
-        
+        $scope.buildAndReturnSearchUrl = function () {
+            var url = "";
+            if ($scope.queryParam.searchType == "COMPANY") {
+                url = "/#search/?" +
+                    "q=" + $scope.queryParam.q +
+                    "&page=" + $scope.queryParam.currentPage +
+                    "&perpage=10" +
+                    "&totalMatch=" + $scope.queryParam.totalMatch +
+                    "&searchType=" + $scope.queryParam.searchType +
+                    "&searchCriteria=" + $scope.queryParam.searchCriteria +
+                    "&rating=" + $scope.parseArrayForQueryString($scope.queryParam.ratingList) +
+                    "&companySize=" + $scope.parseArrayForQueryString($scope.queryParam.companySizeList) +
+                    "&companyTurnOver=" + $scope.parseArrayForQueryString($scope.queryParam.companyTurnOverList) +
+                    "";
+            }
+            else if ($scope.queryParam.searchType == "USERS") {
+                url = "/#search/?" +
+                    "q=" + $scope.queryParam.q +
+                    "&page=" + $scope.queryParam.currentPage +
+                    "&perpage=10" +
+                    "&totalMatch=" + $scope.queryParam.totalMatch +
+                    "&searchType=" + $scope.queryParam.searchType +
+                    "&searchCriteria=" + $scope.queryParam.searchCriteria +
+                    "&userMutualFriendsType=" + $scope.queryParam.userMutualFriendsType +
+                    "";
+            }
+            else if ($scope.queryParam.searchType == "WORKGRAPHY") {
+                url = "/#search/?" +
+                    "q=" + $scope.queryParam.q +
+                    "&page=" + $scope.queryParam.currentPage +
+                    "&perpage=10" +
+                    "&totalMatch=" + $scope.queryParam.totalMatch +
+                    "&searchType=" + $scope.queryParam.searchType +
+                    "&searchCriteria=" + $scope.queryParam.searchCriteria +
+                    "&datePosted=" + $scope.queryParam.datePosted +
+                    "";
+            }
+            return url;
+        }
         $scope.advanceSearchCriteriaList = [
             {
                 searchCriteriaKey: "SEARCHTYPE",
@@ -290,7 +299,7 @@ define([appLocation.preLogin], function (app) {
                         isSelected: true
                     },
                     {
-                        optionKey: "USER",
+                        optionKey: "USERS",
                         optionValue: " User",
                         isSelected: false
                     },
