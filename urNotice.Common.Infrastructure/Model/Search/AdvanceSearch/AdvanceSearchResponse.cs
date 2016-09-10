@@ -8,5 +8,8 @@ namespace urNotice.Common.Infrastructure.Model.Search.AdvanceSearch
 {
     public class AdvanceSearchResponse
     {
+        public List<AdvanceSearchObject> searchResult { get; set; }
+        public string searchCount { get; set; }
+        
     }
 }

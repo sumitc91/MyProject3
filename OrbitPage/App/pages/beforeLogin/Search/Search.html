@@ -72,7 +72,7 @@
                         <div class="col-lg-2 col-sm-2">
                             <div>
                                 <span class="date">
-                                    <a href="{{result.linkurl}}"><img ng-src="{{result.logourl}}" width="80px" /></a>
+                                    <a href="{{result.linkurl}}"><img ng-src="{{result.logoUrl}}" width="80px" /></a>
                                 </span>
                             </div>
 
@@ -81,17 +81,17 @@
                             <div class="col-lg-10 col-sm-10">
 
                                 <span style="font-size:18px">
-                                    <a href="{{result.linkurl}}" ng-bind="result.companyname">
+                                    <a href="{{result.linkurl}}" ng-bind="result.heading">
 
                                     </a>
                                 </span>
                                 <div class="clear"></div>
                                 <span ng-bind="result.description | cut:true:300:' ...'"> </span>
                                 <p class="text-primary">
-                                    Website : <span ng-bind="result.website"></span> , Average Notice : <span ng-bind="result.avgnoticeperiod"></span>
+                                    Website : <span ng-bind="result.url"></span> , Average Notice : <span ng-bind="result.maxNoticeInfo"></span>
                                 </p>
                                 <p class="text-primary">
-                                    Average Rating : <span ng-bind="result.averagerating"></span>  (<span ng-bind="result.totalratingcount"></span>), Total Reviews : <span ng-bind="result.totalreviews"></span>
+                                    Average Rating : <span ng-bind="result.ratingInfo"></span>  (<span ng-bind="result.totalratingcount"></span>), Total Reviews : <span ng-bind="result.totalreviews"></span>
                                 </p>
 
                             </div>

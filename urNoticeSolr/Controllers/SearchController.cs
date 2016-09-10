@@ -25,6 +25,9 @@ using urNotice.Services.Solr.SolrDesignation;
 using urNotice.Services.Solr.SolrUser;
 using urNotice.Services.Solr.SolrWorkgraphy;
 using urNotice.Services.Workgraphy;
+using urNotice.Services.Search.AdvanceSearch;
+using urNotice.Services.Factory.SearchManagement;
+using urNotice.Common.Infrastructure.Model.Search.AdvanceSearch;
 
 namespace urNoticeSolr.Controllers
 {
@@ -302,11 +305,18 @@ namespace urNoticeSolr.Controllers
 
         public JsonResult Search()
         {
-            var response = new ResponseModel<Dictionary<String, Object>>();
-            var queryResponse = new Dictionary<String, Object>();
+            
+            var response = new ResponseModel<AdvanceSearchResponse>();
             var q = Request.QueryString["q"].ToString(CultureInfo.InvariantCulture);
             var page = Request.QueryString["page"].ToString(CultureInfo.InvariantCulture);
             var perpage = Request.QueryString["perpage"].ToString(CultureInfo.InvariantCulture);
+            var searchType = Request.QueryString["searchType"].ToString(CultureInfo.InvariantCulture);
+            var searchCriteria = Request.QueryString["searchCriteria"].ToString(CultureInfo.InvariantCulture);
+            var rating = Request.QueryString["rating"].ToString(CultureInfo.InvariantCulture);
+            var companySize = Request.QueryString["companySize"].ToString(CultureInfo.InvariantCulture);
+            var companyTurnOver = Request.QueryString["companyTurnOver"].ToString(CultureInfo.InvariantCulture);
+            var userMutualFriendsType = Request.QueryString["userMutualFriendsType"].ToString(CultureInfo.InvariantCulture);
+            var datePosted = Request.QueryString["datePosted"].ToString(CultureInfo.InvariantCulture);
 
             var totalMatch = "";
             if (
@@ -321,12 +331,13 @@ namespace urNoticeSolr.Controllers
             
             try
             {
-                ISolrCompany solrCompanyModel = new SolrCompany();
-                queryResponse["result"] = solrCompanyModel.Search(q,page,perpage,ref totalMatch);
-                queryResponse["count"] = totalMatch;
-                response.Payload = queryResponse;
-                response.Status = 200;
+                
+                IAdvanceSearch advanceSearch = SearchFactory.GetSearchInstance(searchType);
+                var advanceSearchRequest = CreateAdvanceSearchRequestObject(q, page, perpage, searchType, searchCriteria, rating, companySize, companyTurnOver, userMutualFriendsType, datePosted, totalMatch);
+
+                response.Payload = advanceSearch.AdvanceSearch(advanceSearchRequest);
                 response.Message = "Success";
+                response.Status = 200;
             }
             catch (Exception ex)
             {
@@ -336,6 +347,24 @@ namespace urNoticeSolr.Controllers
             }
 
             return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        private AdvanceSearchRequest CreateAdvanceSearchRequestObject(string q, string page, string perpage, string searchType, string searchCriteria, string rating, string companySize, string companyTurnOver, string userMutualFriendsType, string datePosted, string totalMatch)
+        {
+            return new AdvanceSearchRequest()
+            {
+                companySize = companySize,
+                companyTurnOver = companyTurnOver,
+                datePosted = datePosted,
+                page = page,
+                perpage = perpage,
+                q = q,
+                rating = rating,
+                searchCriteria = searchCriteria,
+                searchType = searchType,
+                totalMatch = totalMatch,
+                userMutualFriendsType = userMutualFriendsType
+            };
         }
 
         public JsonResult GetLatestWorkgraphy()

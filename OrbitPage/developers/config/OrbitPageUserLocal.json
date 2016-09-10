@@ -79,16 +79,16 @@
       ]
     },
     {
-      "path": "/Login/",
+      "path": "/UserNewReviewPost/",
       "operations": [
         {
           "method": "POST",
-          "summary": "Login API",
-          "notes": "Login API Description. <br> This is a POST request which expects parameters in request body like Username, Passowrd..",
+          "summary": "Create User New Review Post API",
+          "notes": "Create User New Review Post API Description. <br> This is a POST request which expects parameters in request body like Username,Email, Passowrd etc..",
           "items": {
 
           },
-          "nickname": "login",
+          "nickname": "userNewReviewPost",
           "authorizations": {
 
           },
@@ -122,9 +122,9 @@
             },
             {
               "name": "body",
-              "description": "Login Details",
+              "description": "UserNewReviewPost Details",
               "required": true,
-              "type": "LoginDetails",
+              "type": "UserNewReviewPostDetails",
               "paramType": "body",
               "allowMultiple": false,
               "defaultValue": ""
@@ -259,6 +259,31 @@
       }
     },
 
+    "UserNewReviewPostDetails": {
+      "id": "UserNewReviewPostDetails",
+      "required": [
+        "companyReview",
+        "location",
+        "companyGoodPointList",
+        "companyBadPointList",
+        "companyRatingList",
+        "formatted"
+      ],
+      "properties": {
+        "Message": {
+          "type": "Hello @[tag:Abhinav_Srivastava|1593536|1]  this is testing post @[tag:Accenture|987296|2]"
+        },
+        "VertexId": {
+          "type": "3121368"
+        },
+        "TaggedVertexId": {
+          "type": "array",
+          "items": {
+            "type": "UserPostDetailsTaggedVertexId"
+          }
+        }
+      }
+    },
     "LoginDetails": {
       "id": "LoginDetails",
       "required": [

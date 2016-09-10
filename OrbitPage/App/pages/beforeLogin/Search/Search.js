@@ -124,18 +124,18 @@ define([appLocation.preLogin], function (app) {
                 if (data.Status == "200") {
 
                     $timeout(function () {
-                        $scope.searchResult = data.Payload.result;
-                        $scope.queryParam.totalMatch = data.Payload.count;
-                        $scope.queryParam.totalNumberOfPages = Math.ceil((data.Payload.count / $scope.queryParam.perpage));
+                        $scope.searchResult = data.Payload.searchResult;
+                        $scope.queryParam.totalMatch = data.Payload.searchCount;
+                        $scope.queryParam.totalNumberOfPages = Math.ceil((data.Payload.searchCount / $scope.queryParam.perpage));
 
-                        $.each(data.Payload.result, function (i, val) {
-                            $scope.searchResult[i].companyname = data.Payload.result[i].companyname;
-                            $scope.searchResult[i].website = data.Payload.result[i].website;
+                        $.each($scope.searchResult, function (i, val) {
+                            $scope.searchResult[i].heading = data.Payload.searchResult[i].heading;
+                            $scope.searchResult[i].url = data.Payload.searchResult[i].url;
 
-                            if ($scope.searchResult[i].logourl == 'tps://s3-ap-southeast-1.amazonaws.com/urnotice/company/small/LogoUploadEmpty.png')
-                                $scope.searchResult[i].logourl = "http://placehold.it/50x50";
+                            if ($scope.searchResult[i].logoUrl == 'tps://s3-ap-southeast-1.amazonaws.com/urnotice/company/small/LogoUploadEmpty.png')
+                                $scope.searchResult[i].logoUrl = "http://placehold.it/50x50";
 
-                            $scope.searchResult[i].linkurl = "/#companydetails/" + $scope.searchResult[i].companyname.replace(/ /g, "_").replace(/\//g, "_OR_") + "/" + $scope.searchResult[i].guid;
+                            $scope.searchResult[i].linkurl = "/#companydetails/" + $scope.searchResult[i].heading.replace(/ /g, "_").replace(/\//g, "_OR_") + "/" + $scope.searchResult[i].vertexId;
                             $scope.pagination.show = true;
                         });
                     });

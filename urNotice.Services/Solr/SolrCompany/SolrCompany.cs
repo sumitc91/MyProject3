@@ -10,6 +10,8 @@ using SolrNet.Commands.Parameters;
 using urNotice.Common.Infrastructure.Model.urNoticeModel.DynamoDb;
 using urNotice.Common.Infrastructure.Model.urNoticeModel.ResponseWrapper;
 using urNotice.Common.Infrastructure.Model.urNoticeModel.Solr;
+using urNotice.Common.Infrastructure.Common.Config;
+using RestSharp;
 
 namespace urNotice.Services.Solr.SolrCompany
 {
@@ -188,6 +190,20 @@ namespace urNotice.Services.Solr.SolrCompany
             return solrQueryExecute;
         }
 
+        public SolrQueryResults<UnCompanySolr> Execute(string query, int rows, int start,string[] fields)
+        {
+            
+            var solr = ServiceLocator.Current.GetInstance<ISolrReadOnlyOperations<UnCompanySolr>>();
+            var solrQuery = new SolrQuery(query);
+            var solrQueryExecute = solr.Query(solrQuery, new QueryOptions
+            {
+                Rows = rows,
+                Start = start,
+                Fields = fields
+            });
+
+            return solrQueryExecute;
+        }
         public List<SearchAllResponseModel> SearchAllAutocomplete(string queryText,int from,int to)
         {
             queryText = queryText.Replace(" ", "*");
@@ -263,6 +279,24 @@ namespace urNotice.Services.Solr.SolrCompany
             query.Append(")");
 
             return query.ToString();
+        }
+
+        public long ExecuteFromRestApi(string query)
+        {
+            string url = SolrConfig.unCompanySolr;
+            var uri =  string.Format("/select?q={0}&rows=0&wt=json&indent=true",query);
+            url = url + uri;
+            var client = new RestClient(url);
+            var request = new RestRequest();
+
+            request.Method = Method.GET;
+            request.AddHeader("Accept", "application/json");
+            request.Parameters.Clear();
+            request.AddParameter("application/json", "", ParameterType.RequestBody);
+
+            var res = client.Execute(request);
+            dynamic content = Newtonsoft.Json.Linq.JObject.Parse(res.Content); // raw content as string 
+            return content.response.numFound;
         }
     }
 }

@@ -116,6 +116,7 @@
     <Compile Include="Factory\Email\EmailFactory.cs" />
     <Compile Include="Factory\NotificationManagement\NotificationManagementFactory.cs" />
     <Compile Include="Factory\PostManagement\PostManagementFactory.cs" />
+    <Compile Include="Factory\SearchManagement\SearchFactory.cs" />
     <Compile Include="GraphDb\GraphDbContract\GremlinServerGraphDbContract.cs" />
     <Compile Include="GraphDb\GremlinServerGraphEdgeDb.cs" />
     <Compile Include="GraphDb\GremlinServerGraphVertexDb.cs" />
