@@ -110,7 +110,7 @@
                 <div class="text-center" id="SearchPageSelectPaginationId" ng-show="pagination.show">
                     <uib-pagination total-items="queryParam.totalMatch" ng-model="queryParam.currentPage" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></uib-pagination>
 
-                    <pre>Page: <span ng-bind="queryParam.currentPage"></span> / <span ng-bind="queryParam.totalNumberOfPages"></span></pre>
+                    <pre>Page: <span ng-bind="queryParam.currentPage"></span> / <span ng-bind="queryParam.totalNumberOfPages"></span> (Total Search Results <span ng-bind="queryParam.totalMatch"></span>)</pre>
                 </div>
                 
             </div>

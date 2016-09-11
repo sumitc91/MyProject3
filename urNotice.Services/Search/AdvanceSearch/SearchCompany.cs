@@ -28,7 +28,7 @@ namespace urNotice.Services.Search.AdvanceSearch
             var query = BuildAdvanceSearchQuery(advanceSearchRequest);
 
             if (string.IsNullOrEmpty(advanceSearchRequest.totalMatch))
-                advanceSearchRequest.totalMatch = solrCompany.ExecuteFromRestApi(query).ToString();
+                advanceSearchRequest.totalMatch = solrCompany.ExecuteFromRestApi(query.Replace("+","%2B")).ToString();
 
             var response = solrCompany.Execute(query, Convert.ToInt32(advanceSearchRequest.perpage), Convert.ToInt32(advanceSearchRequest.page) * Convert.ToInt32(advanceSearchRequest.perpage), fields);
 
