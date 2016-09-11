@@ -39,6 +39,9 @@ define([appLocation.preLogin], function (app) {
         $scope.queryParam.userMutualFriendsType = $location.search().userMutualFriendsType;
         $scope.queryParam.datePosted = $location.search().datePosted;
 
+        if ($scope.queryParam.q == null)
+            $scope.queryParam.q = "";
+
         if ($scope.queryParam.searchType == null)
             $scope.queryParam.searchType = "COMPANY";
 
@@ -59,6 +62,16 @@ define([appLocation.preLogin], function (app) {
 
         if ($scope.queryParam.datePosted == null)
             $scope.queryParam.datePosted = ""
+
+
+        $scope.companyName = $scope.queryParam.q;
+
+        if ($scope.queryParam.q) {
+            $timeout(function () {
+                $scope.companyName = $scope.queryParam.q;
+            });
+
+        }
 
         if ($scope.queryParam.rating)
         {
@@ -153,8 +166,15 @@ define([appLocation.preLogin], function (app) {
             location.href = "/#companydetails/" + selected.originalObject.companyname.replace(/ /g, "_").replace(/\//g, "_OR_") + "/" + selected.originalObject.guid;
         };
 
-        $scope.searchCompany = function() {
-            location.href = "/#search/?q=" + $("#companyName_value").val() + "&page=1&perpage=10";
+        $scope.searchCompany = function () {
+            $scope.queryParam.totalMatch = "";
+            $scope.queryParam.currentPage = "1";
+            $scope.queryParam.q = $scope.companyName;
+            var url = $scope.buildAndReturnSearchUrl();
+
+            //console.log(url);
+            location.href = url;
+            //location.href = "/#search/?q=" + $("#companyName_value").val() + "&page=1&perpage=10";
         };
 
         $scope.setPage = function (pageNo) {
@@ -164,7 +184,14 @@ define([appLocation.preLogin], function (app) {
 
         $scope.myFunct = function (keyEvent) {
             if (keyEvent.which === 13) {
-                location.href = "/#search/?q=" + $("#companyName_value").val() + "&page=1&perpage=10";
+                $scope.queryParam.totalMatch = "";
+                $scope.queryParam.currentPage = "1";
+                $scope.queryParam.q = $scope.companyName;
+                var url = $scope.buildAndReturnSearchUrl();
+
+                //console.log(url);
+                location.href = url;
+                //location.href = "/#search/?q=" + $("#companyName_value").val() + "&page=1&perpage=10";
             }
         }
 
@@ -221,6 +248,7 @@ define([appLocation.preLogin], function (app) {
             }
                     
             $scope.queryParam.totalMatch = "";
+            $scope.queryParam.currentPage="1";
             var url = $scope.buildAndReturnSearchUrl();
             
             //console.log(url);
@@ -443,12 +471,12 @@ define([appLocation.preLogin], function (app) {
                     },
                     {
                         optionKey: "RANGE100TO500",
-                        optionValue: "100 - 500",
+                        optionValue: " 100 - 500",
                         isSelected: false
                     },
                     {
                         optionKey: "RANGE1TO100",
-                        optionValue: "1 - 100",
+                        optionValue: " 1 - 100",
                         isSelected: false
                     }
                 ]

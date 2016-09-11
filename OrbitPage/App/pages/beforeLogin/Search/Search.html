@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-md-10">
                     <div class="form-group">
-                        <div angucomplete-alt
+                        <!--<div angucomplete-alt
                              id="companyName"
                              placeholder="Enter Company Name"
                              pause="500"
@@ -18,7 +18,8 @@
                              input-class="form-control form-control-small"
                              ng-model="companyName"
                              image-field="logourl"
-                             match-class="highlight" ng-keypress="myFunct($event)" />
+                             match-class="highlight" ng-keypress="myFunct($event)" />-->
+                        <input type="text" id="companyName" placeholder="Enter Company Name" ng-model="companyName" ng-keydown="myFunct($event)"/>
                     </div>
                 </div>
                 <div class="col-md-2">
@@ -90,7 +91,9 @@
                                 <p class="text-primary">
                                     Website : <span ng-bind="result.url"></span> , Average Notice : <span ng-bind="result.maxNoticeInfo"></span>
                                 </p>
-                                
+                                <p class="text-primary">
+                                    Rating : <span ng-bind="result.ratingInfo"></span>
+                                </p>
                                 <p class="text-primary">
                                     Company Size : <span ng-bind="result.sizeInfo"></span>
                                 </p>
