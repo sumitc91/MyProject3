@@ -747,5 +747,10 @@ namespace urNotice.Services.Management.AccountManagement
             IDictionary<string, string> addEdgeResponse = graphEdgeDbModel.AddEdge(session.UserName, TitanGraphConfig.Graph, properties);
             return addEdgeResponse;
         }
+
+        public ResponseModel<string> GetUserAccountVerificationCode(string email)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

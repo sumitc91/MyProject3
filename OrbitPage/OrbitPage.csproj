@@ -959,6 +959,7 @@
     <Content Include="developers\config\Auth.json" />
     <Content Include="developers\config\api-console-orbitpage" />
     <Content Include="developers\config\OrbitPageAuthLocal.json" />
+    <Content Include="developers\config\OrbitPageAdminLocal.json" />
     <None Include="developers\config\Authorization.json" />
     <Content Include="developers\config\Bonus" />
     <Content Include="developers\config\Logout" />
@@ -975,6 +976,7 @@
     <Content Include="developers\config\OrbitPageStory.json" />
     <Content Include="developers\config\OrbitPageUserLocal.json" />
     <Content Include="developers\config\OrbitPageUser.json" />
+    <Content Include="developers\config\OrbitPageAdmin.json" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Scripts\jquery-1.6.4.js" />
     <Content Include="Scripts\jquery-1.6.4.min.js" />

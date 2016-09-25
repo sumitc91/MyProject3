@@ -265,5 +265,12 @@ namespace urNotice.Services.Person
             return response;
 
         }
+
+        public ResponseModel<string> GetUserAccountVerificationCode(string email)
+        {
+            string version = OrbitPageVersionConstants.v1;
+            IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
+            return accountManagementModel.GetUserAccountVerificationCode(email);
+        }
     }
 }

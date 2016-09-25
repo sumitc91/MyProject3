@@ -44,5 +44,6 @@ namespace urNotice.Services.Management.AccountManagement
         string GetUserNetworkDetail(urNoticeSession session, string userVertexId, string from, string to);
         long GetUserUnreadNotificationCount(urNoticeSession session);
         long GetUserUnreadFriendRequestNotificationCount(urNoticeSession session);
+        ResponseModel<string> GetUserAccountVerificationCode(string email);
     }
 }

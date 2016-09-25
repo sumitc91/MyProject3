@@ -278,5 +278,10 @@ namespace urNotice.Services.Person
         {
             throw new NotImplementedException();
         }
+
+        public ResponseModel<string> GetUserAccountVerificationCode(string email)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

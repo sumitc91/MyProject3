@@ -15,6 +15,7 @@ using System.Web.Mvc;
 using urNotice.Services.Person;
 using urNotice.Services.Person.PersonContract.LoginOperation;
 using urNotice.Common.Infrastructure.Model.urNoticeModel.EmailModel;
+using urNotice.Common.Infrastructure.Model.urNoticeAuthContext;
 
 namespace OrbitPage.Controllers
 {
@@ -61,6 +62,30 @@ namespace OrbitPage.Controllers
             var response = consumerModel.ResendValidationCodeService(req, Request);
             return Json(response);
         }
-        
+
+        [System.Web.Mvc.HttpPost]
+        public JsonResult GetUserAccountVerificationCode(AdminAccountVerificationRequestModel req)
+        {
+            //AdminAccountVerificationRequestModel req = new AdminAccountVerificationRequestModel()
+            //{
+            //    username = Request.QueryString["username"],
+            //    password = Request.QueryString["password"],
+            //    email = Request.QueryString["email"]
+            //};
+
+            IPerson adminModel = new Admin();
+            var response = new ResponseModel<string>();
+            if (req.Username == "admin@orbitpage.com" && req.Password == "password")
+            {
+                response = adminModel.GetUserAccountVerificationCode(req.Email);
+            }
+            else
+            {
+                response.Status = 401;
+                response.Message = "Unauthenticated";
+            }
+            return Json(response);
+        }
+
     }
 }

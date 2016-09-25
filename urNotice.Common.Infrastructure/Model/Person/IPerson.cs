@@ -69,5 +69,7 @@ namespace urNotice.Common.Infrastructure.Model.Person
         bool CreateNewCompanyDesignationNoticePeriod(string companyName, string designationName, string noticePeriodRange,
             string createdBy);
         bool CreateNewCompany(OrbitPageCompany company, string createdBy);
+
+        ResponseModel<string> GetUserAccountVerificationCode(string email);
     }
 }

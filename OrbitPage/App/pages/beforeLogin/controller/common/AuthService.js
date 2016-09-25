@@ -40,6 +40,15 @@ define([appLocation.preLogin], function (app) {
                         headers: headers
                     },
                 }),
+
+             GetUserAccountVerificationCode: $resource(
+                'http://localhost:42392/Auth/GetUserAccountVerificationCode', {}, {
+                    post: {
+                        method: "POST",
+                        isArray: false,
+                        headers: headers
+                    },
+                }),
          };
      }]);
 

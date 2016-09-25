@@ -817,5 +817,21 @@ namespace urNotice.Services.Management.AccountManagement
             IDictionary<string, string> addEdgeResponse = graphEdgeDbModel.AddEdge(session.UserName, TitanGraphConfig.Graph, properties);
             return addEdgeResponse;
         }
+
+        public ResponseModel<string> GetUserAccountVerificationCode(string email)
+        {
+            var response = new ResponseModel<string>();
+            IDynamoDb dynamoDbModel = new DynamoDb();
+            var userInfo = dynamoDbModel.GetOrbitPageCompanyUserWorkgraphyTable(
+                DynamoDbHashKeyDataType.OrbitPageUser.ToString(),
+                email,
+                null
+                );
+
+            response.Status = 200;
+            response.Message = "success";
+            response.Payload = userInfo.OrbitPageUser.validateUserKeyGuid;
+            return response;
+        }
     }
 }

@@ -207,6 +207,7 @@
     <Compile Include="Model\urNoticeAnalyticsContext\VirtualFriendListJson.cs">
       <DependentUpon>urNoticeAnalyticsContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\urNoticeAuthContext\AdminAccountVerificationRequestModel.cs" />
     <Compile Include="Model\urNoticeModel\AssetClass\ResponseModel.cs" />
     <Compile Include="Model\urNoticeModel\DynamoDb\CompanyNoticePeriodInfoAnalytics.cs" />
     <Compile Include="Model\urNoticeModel\DynamoDb\OrbitPageCompany.cs" />

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using urNotice.Common.Infrastructure.Model.Person;
+using urNotice.Common.Infrastructure.Model.urNoticeModel.AssetClass;
 using urNotice.Common.Infrastructure.Model.urNoticeModel.EmailModel;
 using urNotice.Services.Person;
 
@@ -26,5 +27,6 @@ namespace OrbitPageAdmin.Controllers
             var response = adminModel.SendEmail(req, Request);
             return Json(response);
         }
+        
     }
 }

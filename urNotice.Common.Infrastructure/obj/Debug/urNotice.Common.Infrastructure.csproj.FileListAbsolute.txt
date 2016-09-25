@@ -121,6 +121,6 @@ C:\POC\orbitpage\urNotice.Common.Infrastructure\bin\Debug\System.Web.Http.xml
 C:\POC\orbitpage\urNotice.Common.Infrastructure\bin\Debug\System.Web.Http.WebHost.xml
 C:\POC\orbitpage\urNotice.Common.Infrastructure\bin\Debug\System.Web.Razor.xml
 C:\POC\orbitpage\urNotice.Common.Infrastructure\bin\Debug\Microsoft.Web.Infrastructure.xml
-C:\POC\orbitpage\urNotice.Common.Infrastructure\obj\Debug\urNotice.Common.Infrastructure.csprojResolveAssemblyReference.cache
 C:\POC\orbitpage\urNotice.Common.Infrastructure\obj\Debug\urNotice.Common.Infrastructure.dll
 C:\POC\orbitpage\urNotice.Common.Infrastructure\obj\Debug\urNotice.Common.Infrastructure.pdb
+C:\POC\orbitpage\urNotice.Common.Infrastructure\obj\Debug\urNotice.Common.Infrastructure.csprojResolveAssemblyReference.cache
