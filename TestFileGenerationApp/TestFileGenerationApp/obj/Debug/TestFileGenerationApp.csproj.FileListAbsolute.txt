@@ -31,3 +31,35 @@ c:\users\611067140\documents\visual studio 2015\Projects\TestFileGenerationApp\T
 c:\users\611067140\documents\visual studio 2015\Projects\TestFileGenerationApp\TestFileGenerationApp\obj\Debug\TestFileGenerationApp.csprojResolveAssemblyReference.cache
 c:\users\611067140\documents\visual studio 2015\Projects\TestFileGenerationApp\TestFileGenerationApp\obj\Debug\TestFileGenerationApp.dll
 c:\users\611067140\documents\visual studio 2015\Projects\TestFileGenerationApp\TestFileGenerationApp\obj\Debug\TestFileGenerationApp.pdb
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\roslyn\csc.exe
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\roslyn\System.Collections.Immutable.dll
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\roslyn\System.Reflection.Metadata.dll
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\roslyn\vbc.exe
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\roslyn\VBCSCompiler.exe
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\roslyn\VBCSCompiler.exe.config
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\TestFileGenerationApp.dll.config
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\TestFileGenerationApp.dll
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\TestFileGenerationApp.pdb
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\Microsoft.Web.Infrastructure.dll
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\System.Web.Helpers.dll
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\System.Web.Mvc.dll
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\System.Web.Razor.dll
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\System.Web.Webpages.Deployment.dll
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\System.Web.Webpages.dll
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\System.Web.Webpages.Razor.dll
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\System.Web.Razor.xml
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\System.Web.Webpages.xml
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\System.Web.Webpages.Deployment.xml
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\System.Web.Webpages.Razor.xml
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\System.Web.Helpers.xml
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\bin\System.Web.Mvc.xml
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\obj\Debug\TestFileGenerationApp.dll
+C:\POC\orbitpage\TestFileGenerationApp\TestFileGenerationApp\obj\Debug\TestFileGenerationApp.pdb
