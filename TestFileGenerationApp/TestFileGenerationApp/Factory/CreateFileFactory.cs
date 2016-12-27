@@ -17,7 +17,10 @@ namespace TestFileGenerationApp.Factory
             {
                 case FileTypeEnum.CSharp:
                     return new CreateCsharpFile();
-                    
+
+                case FileTypeEnum.Javascript:
+                    return new CreateJavascriptFile();
+
                 default:
                     return new CreateCsharpFile();
             }

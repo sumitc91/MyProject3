@@ -1,4 +1,5 @@
-﻿using BT.SaaS.HD.Mobility.Modules;
+﻿using BT.SaaS.Core.UI.Framework.ServiceEntities;
+using BT.SaaS.HD.Mobility.Modules;
 using BT.SaaS.HD.Mobility.Modules.SimReplacement.Configuration.Implementation;
 using BT.SaaS.HD.Mobility.Modules.SimReplacement.Configuration.Interfaces;
 using BT.SaaS.HD.Mobility.ViewModels.SimReplacement;
@@ -71,10 +72,7 @@ namespace BT.SaaS.HD.Mobility.Controllers.SimReplacement
         public ContentResult Update(SimReplacementViewModel simReplacementViewModel)
         {
             _simReplacementInvoker.Update(simReplacementViewModel);
-           var url = _simReplacementInvoker.Navigate();
-            //return new  RedirectResult(url);
-            //return default(JsonResult);
-            return Content(url, RedirectionType.Url.ToString());
+            return Content(_simReplacementInvoker.Navigate(NavigationStepsEnum.DeliveryDetails), RedirectionType.Url.ToString());
         }
         public ContentResult ReloadSimReplacement()
         {
@@ -84,6 +82,12 @@ namespace BT.SaaS.HD.Mobility.Controllers.SimReplacement
             resetServiceHandler.MergeSessionBasket();
             resetServiceHandler.SetJourneyScenario();
             return Content(SimTypeModuleHandler.GenerateUrlForSimType(context), RedirectionType.Url.ToString());
+        }
+
+        public ContentResult Cancel()
+        {
+            _simReplacementInvoker.Cancel();
+            return Content(_simReplacementInvoker.Navigate(NavigationStepsEnum.ModifyConfiguration), RedirectionType.Url.ToString());
         }  
 
     }

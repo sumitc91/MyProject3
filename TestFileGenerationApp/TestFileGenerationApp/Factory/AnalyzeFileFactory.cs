@@ -17,7 +17,10 @@ namespace TestFileGenerationApp.Factory
             {
                 case FileTypeEnum.CSharp:
                     return new AnalyzeCsFile();
-                    
+
+                case FileTypeEnum.Javascript:
+                    return new AnalyzeJavascriptFile();
+
                 default:
                     return new AnalyzeCsFile();
             }

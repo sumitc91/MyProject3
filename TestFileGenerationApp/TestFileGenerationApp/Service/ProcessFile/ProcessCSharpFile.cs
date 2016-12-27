@@ -28,7 +28,7 @@ namespace TestFileGenerationApp.Service.ProcessFile
 
         public ClassAnalyzedModel analyzeFile(string path, IAnalyzeFile analyzeFileService)
         {
-            this.analyzeFileService = new AnalyzeCsFile();
+            this.analyzeFileService = analyzeFileService;
             return this.analyzeFileService.execute(path);
         }
     }

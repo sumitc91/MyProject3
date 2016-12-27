@@ -29,16 +29,20 @@ namespace TestFileGenerationApp.Controllers
         {
             var respone = new CreateFileResponseModel();
 
+            var fileType = Request.Files.Count>0 ? Request.Files[0].FileName : "File Not Available";
 
-            IProcessFile processFile = ProcessFileFactory.CreateInstance(FileTypeEnum.CSharp);
+            FileTypeEnum fileTypeEnum = fileType.Contains(".js") ? FileTypeEnum.Javascript : FileTypeEnum.CSharp;
 
-            IUploadFile uploadFile = UploadFileFactory.CreateInstance(FileTypeEnum.CSharp);
+            respone.extension = fileType.Contains(".js") ? "js" : "cs";
+            IProcessFile processFile = ProcessFileFactory.CreateInstance(fileTypeEnum);
+
+            IUploadFile uploadFile = UploadFileFactory.CreateInstance(fileTypeEnum);
             var uploadedPath = processFile.uploadFile(uploadFile,Request,Server);
 
-            IAnalyzeFile analyzeFile = AnalyzeFileFactory.CreateInstance(FileTypeEnum.CSharp);
+            IAnalyzeFile analyzeFile = AnalyzeFileFactory.CreateInstance(fileTypeEnum);
             var classAnalyzedData = processFile.analyzeFile(uploadedPath,analyzeFile);
 
-            ICreateFile createFile = CreateFileFactory.CreateInstance(FileTypeEnum.CSharp);
+            ICreateFile createFile = CreateFileFactory.CreateInstance(fileTypeEnum);
             var createdPath = processFile.createFile(classAnalyzedData, Server,createFile); 
 
             respone.createdFile = System.IO.File.ReadAllText(createdPath);

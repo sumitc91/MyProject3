@@ -1,3 +1,4 @@
+using BT.SaaS.Core.UI.Framework.ServiceEntities;
 using BT.SaaS.HD.Mobility.Modules;
 using BT.SaaS.HD.Mobility.Modules.SimReplacement.Configuration.Implementation;
 using BT.SaaS.HD.Mobility.Modules.SimReplacement.Configuration.Interfaces;
@@ -23,8 +24,8 @@ namespace BT.SaaS.HD.Mobility.Tests.Controllers.SimReplacement
 		private Mock<ISimModuleHandler> _simModuleHandler;
 		private Mock<ISimReplacementWaivingChargeModuleHandler> _simReplacementWaivingChargeModuleHandler;
 		private Mock<ConfigurationContextBuilder> _configurationContextBuilder;
-		private Mock<Modules.Modify.IResetBasketHandler> _modules.Modify.IResetBasketHandler;
-		private Mock<Modules.Modify.ISimTypeModuleHandler> _modules.Modify.ISimTypeModuleHandler;
+		private Mock<Modules.Modify.IResetBasketHandler> _modules_Modify_IResetBasketHandler;
+		private Mock<Modules.Modify.ISimTypeModuleHandler> _modules_Modify_ISimTypeModuleHandler;
 
 		[NUnitFw.SetUp]
 		public void Setup()
@@ -55,7 +56,8 @@ namespace BT.SaaS.HD.Mobility.Tests.Controllers.SimReplacement
 			var isReadOnly = new bool();
 			//_mockObj.Setup(a => a.methodName(It.IsAny<inputParamType>())).Returns(returnObj);
 			var response = _simReplacementController.Object.Index(isReadOnly);
-			//Assert.AreEqual("compareFrom", "compareTo");
+			_simReplacementController.VerifyAll();
+			//NUnitFw.Assert.AreEqual("compareFrom", "compareTo");
 		}
 
 
@@ -67,7 +69,8 @@ namespace BT.SaaS.HD.Mobility.Tests.Controllers.SimReplacement
 			var parentProductCode = "";
 			//_mockObj.Setup(a => a.methodName(It.IsAny<inputParamType>())).Returns(returnObj);
 			var response = _simReplacementController.Object.AddProductForSimType(productCode,parentProductCode);
-			//Assert.AreEqual("compareFrom", "compareTo");
+			_simReplacementController.VerifyAll();
+			//NUnitFw.Assert.AreEqual("compareFrom", "compareTo");
 		}
 
 
@@ -79,7 +82,8 @@ namespace BT.SaaS.HD.Mobility.Tests.Controllers.SimReplacement
 			var isSimReplacementChargedWaived = new bool();
 			//_mockObj.Setup(a => a.methodName(It.IsAny<inputParamType>())).Returns(returnObj);
 			var response = _simReplacementController.Object.WaiveSimReplacementCharge(chargeTypeProductCode,isSimReplacementChargedWaived);
-			//Assert.AreEqual("compareFrom", "compareTo");
+			_simReplacementController.VerifyAll();
+			//NUnitFw.Assert.AreEqual("compareFrom", "compareTo");
 		}
 
 
@@ -90,7 +94,8 @@ namespace BT.SaaS.HD.Mobility.Tests.Controllers.SimReplacement
 			var simReplacementViewModel = new SimReplacementViewModel();
 			//_mockObj.Setup(a => a.methodName(It.IsAny<inputParamType>())).Returns(returnObj);
 			var response = _simReplacementController.Object.Update(simReplacementViewModel);
-			//Assert.AreEqual("compareFrom", "compareTo");
+			_simReplacementController.VerifyAll();
+			//NUnitFw.Assert.AreEqual("compareFrom", "compareTo");
 		}
 
 
@@ -100,7 +105,19 @@ namespace BT.SaaS.HD.Mobility.Tests.Controllers.SimReplacement
 
 			//_mockObj.Setup(a => a.methodName(It.IsAny<inputParamType>())).Returns(returnObj);
 			var response = _simReplacementController.Object.ReloadSimReplacement();
-			//Assert.AreEqual("compareFrom", "compareTo");
+			_simReplacementController.VerifyAll();
+			//NUnitFw.Assert.AreEqual("compareFrom", "compareTo");
+		}
+
+
+		[NUnitFw.Test]
+		public void Cancel_Test()
+		{
+
+			//_mockObj.Setup(a => a.methodName(It.IsAny<inputParamType>())).Returns(returnObj);
+			var response = _simReplacementController.Object.Cancel();
+			_simReplacementController.VerifyAll();
+			//NUnitFw.Assert.AreEqual("compareFrom", "compareTo");
 		}
 	}
 }

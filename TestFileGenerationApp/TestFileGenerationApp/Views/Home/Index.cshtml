@@ -86,6 +86,7 @@
 
             $(".isFileUploaded").prop("disabled", true);
 
+            $scope.extension = "cs";
             $('#btnUpload').click(function () {
 
                 // Checking whether FormData is available in browser  
@@ -125,10 +126,10 @@
                             $(".isFileUploaded").prop("disabled", false);
                             $('#uploadedFileStr').html(EncodeHtml(result.uploadedFile));
                             $('#createdFileStr').html(EncodeHtml(result.createdFile));
-                            $('#fileNameLeftSide').html(result.fileName + ".cs");
-                            $('#fileNameRightSide').html(result.fileName + "Tests.cs");
+                            $('#fileNameLeftSide').html(result.fileName + "." + result.extension);
+                            $('#fileNameRightSide').html(result.fileName + "Tests." + result.extension);
                             $('.comparisonDiv').show();
-
+                            $scope.extension = result.extension;
                             hljs.initHighlighting.called = false;
                             hljs.initHighlighting();
                         },
@@ -143,7 +144,7 @@
 
             $('#btnDownload').click(function () {
 
-                var win = window.open('/Home/Download?fileName=' + $scope.fileName + 'Tests.cs', '_blank');
+                var win = window.open('/Home/Download?fileName=' + $scope.fileName + 'Tests.' + $scope.extension, '_blank');
                 if (win) {
                     //Browser has allowed it to be opened
                     win.focus();

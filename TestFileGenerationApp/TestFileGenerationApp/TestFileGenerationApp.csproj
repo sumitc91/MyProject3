@@ -225,13 +225,16 @@
     <Compile Include="Models\CreateFileResponseModel.cs" />
     <Compile Include="Models\Enum\FileTypeEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\AnalyzeFile\AnalyzeJavascriptFile.cs" />
     <Compile Include="Service\AnalyzeFile\AnalyzeCsFile.cs" />
     <Compile Include="Service\AnalyzeFile\IAnalyzeFile.cs" />
+    <Compile Include="Service\CreateFile\CreateJavascriptFile.cs" />
     <Compile Include="Service\CreateFile\CreateCsharpFile.cs" />
     <Compile Include="Service\CreateFile\ICreateFile.cs" />
     <Compile Include="Service\ProcessFile\IProcessFile.cs" />
     <Compile Include="Service\ProcessFile\ProcessCSharpFile.cs" />
     <Compile Include="Service\UploadFile\IUploadFile.cs" />
+    <Compile Include="Service\UploadFile\UploadJavascriptFile.cs" />
     <Compile Include="Service\UploadFile\UploadCSharpFile.cs" />
   </ItemGroup>
   <ItemGroup>

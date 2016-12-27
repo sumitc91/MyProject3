@@ -11,5 +11,6 @@ namespace TestFileGenerationApp.Models
         public string createdFile { get; set; }
 
         public string fileName { get; set; }
+        public string extension { get; set; }
     }
 }
