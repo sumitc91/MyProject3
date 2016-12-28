@@ -68,20 +68,7 @@ namespace TestFileGenerationApp.Service.CreateFile
         }
         private static void declareBeforeEachSetup(ClassAnalyzedModel classAnalyzedModel, TextWriter tw)
         {
-            //beforeEach(function() {
-            //    module("pageApp");
-            //    inject(function($injector) {
-            //        rootScope = $injector.get("$rootScope");
-            //        scope = rootScope.$new();
-            //        q = $injector.get("$q");
-            //        cacheFactory = $injector.get("CacheFactory");
-            //        deffered = q.defer();
-            //        moduleHandleAggregrator = $injector.get("moduleAggregator");
-
-            //$injector.get("$controller")("simReplacementFooterController", { $scope: scope, $rootScope: rootScope,  cacheFactory: cacheFactory, moduleAggregator: moduleHandleAggregrator });
-            //    });
-            //});
-
+            
             tw.WriteLine(tab(1) + "beforeEach(function() {");
             tw.WriteLine(tab(2) + "module(\"pageApp\");");
             tw.WriteLine(tab(2) + "inject(function($injector) {");
@@ -91,7 +78,7 @@ namespace TestFileGenerationApp.Service.CreateFile
             tw.WriteLine(tab(3) + "cacheFactory = $injector.get(\"CacheFactory\");", tw);
             tw.WriteLine(tab(3) + "deffered = q.defer();");
             tw.WriteLine(tab(3) + "moduleHandleAggregrator = $injector.get(\"moduleAggregator\");");
-            tw.WriteLine(tab(3) + "$injector.get(\"$controller\")(\"simReplacementFooterController\", { $scope: scope, $rootScope: rootScope,  cacheFactory: cacheFactory, moduleAggregator: moduleHandleAggregrator });");
+            tw.WriteLine(tab(3) + "$injector.get(\"$controller\")(\""+ classAnalyzedModel.classNameStr + "\", { $scope: scope, $rootScope: rootScope,  cacheFactory: cacheFactory, moduleAggregator: moduleHandleAggregrator });");
             tw.WriteLine(tab(2) + "});");
             tw.WriteLine(tab(1) + "});");
         }
