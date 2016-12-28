@@ -59,12 +59,12 @@ namespace TestFileGenerationApp.Service.CreateFile
             addEmptyLineInClass(tw);
             addEmptyLineInClass(tw);
             
-            tw.WriteLine(tab(2) + "it(\"should test "+ method + " function\", function() {");
-            tw.WriteLine(tab(3) + "//scope.pageResetConfirmationPopupModel.showPopup = false;");
-            tw.WriteLine(tab(3) + "scope." + method + "();");
-            tw.WriteLine(tab(3) + "//expect(scope.pageResetConfirmationPopupModel.showPopup).toEqual(true);");
+            tw.WriteLine(tab(1) + "it(\"should test "+ method + " function\", function() {");
+            tw.WriteLine(tab(2) + "//scope.pageResetConfirmationPopupModel.showPopup = false;");
+            tw.WriteLine(tab(2) + "scope." + method + "();");
+            tw.WriteLine(tab(2) + "//expect(scope.pageResetConfirmationPopupModel.showPopup).toEqual(true);");
             
-            tw.WriteLine(tab(2) + "});");
+            tw.WriteLine(tab(1) + "});");
         }
         private static void declareBeforeEachSetup(ClassAnalyzedModel classAnalyzedModel, TextWriter tw)
         {
