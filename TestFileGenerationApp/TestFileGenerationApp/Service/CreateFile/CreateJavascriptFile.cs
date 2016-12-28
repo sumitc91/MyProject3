@@ -49,13 +49,7 @@ namespace TestFileGenerationApp.Service.CreateFile
         }
         private static void declareClassMethod(String method, ClassAnalyzedModel classAnalyzedModel, TextWriter tw)
         {
-            //it("should test showPageResetConfirmationPopup function", function() {
-
-            //    scope.pageResetConfirmationPopupModel.showPopup = false;
-            //    scope.showPageResetConfirmationPopup();
-            //    expect(scope.pageResetConfirmationPopupModel.showPopup).toEqual(true);
-            //});
-
+            
             addEmptyLineInClass(tw);
             addEmptyLineInClass(tw);
             
@@ -82,57 +76,7 @@ namespace TestFileGenerationApp.Service.CreateFile
             tw.WriteLine(tab(2) + "});");
             tw.WriteLine(tab(1) + "});");
         }
-        private static void setupMockGlobalVariables(ClassAnalyzedModel classAnalyzedModel, TextWriter tw)
-        {
-            //instantiate Global variables.
-            foreach (var item in classAnalyzedModel.instancesStr)
-            {
-                if (item.Contains("<"))
-                {
-                    tw.WriteLine(tab(3) + "_moduleHandlerAggregator.Setup(a => a.TryCreateOrGet<" + item + ">()).Returns(_" + GetVariableNameForGenericModuleHandler(item) + ".Object);");
-                }
-                else
-                {
-                    if (item[0] == 'I')
-                    {
-                        tw.WriteLine(tab(3) + "_moduleHandlerAggregator.Setup(a => a.TryCreateOrGet<" + item + ">()).Returns(_" + (Char.ToLowerInvariant(item[1]) + item.Substring(2)).Replace(".", "_") + ".Object);");
-                    }
-                    else
-                    {
-                        tw.WriteLine(tab(3) + "_moduleHandlerAggregator.Setup(a => a.TryCreateOrGet<" + item + ">()).Returns(_" + (Char.ToLowerInvariant(item[0]) + item.Substring(1)).Replace(".", "_") + ".Object);");
-                    }
-                }
-
-            }
-        }
-        private static void instantiateGlobalVariables(ClassAnalyzedModel classAnalyzedModel, TextWriter tw)
-        {
-            instantiateExtraGlobalVariables(classAnalyzedModel, tw);
-            //instantiate Global variables.
-            foreach (var item in classAnalyzedModel.instancesStr)
-            {
-                if (item.Contains("<"))
-                {
-                    tw.WriteLine(tab(3) + "_" + GetVariableNameForGenericModuleHandler(item) + " = new Mock<" + item + ">();");
-                }
-                else
-                {
-                    if (item[0] == 'I')
-                    {
-                        tw.WriteLine(tab(3) + "_" + (Char.ToLowerInvariant(item[1]) + item.Substring(2)).Replace(".","_") + " = new Mock<" + item + ">();");
-                    }
-                    else
-                    {
-                        tw.WriteLine(tab(3) + "_" + (Char.ToLowerInvariant(item[0]) + item.Substring(1)).Replace(".", "_") + " = new Mock<" + item + ">();");
-                    }
-                }
-            }
-        }
-
-        private static string GetVariableNameForGenericModuleHandler(string item)
-        {
-            return (Char.ToLowerInvariant(item[1]) + item.Split('<')[0].Substring(2) + "" + item.Split('<')[1].Split(',')[0]).Replace(".", "_");
-        }
+        
         private static void declareGlobalVariables(ClassAnalyzedModel classAnalyzedModel, TextWriter tw)
         {
             //declare variables.
@@ -161,10 +105,7 @@ namespace TestFileGenerationApp.Service.CreateFile
         {
             tw.WriteLine();
         }
-        private static void addAnnotationInClass(string annotationStr, TextWriter tw)
-        {
-            tw.WriteLine(annotationStr);
-        }
+        
         private static string tab(int count)
         {
             string str = "";
@@ -184,10 +125,6 @@ namespace TestFileGenerationApp.Service.CreateFile
         {
             tw.WriteLine("}");
         }
-        private static void closeClassClass(ClassAnalyzedModel classAnalyzedModel, TextWriter tw)
-        {
-            tw.WriteLine(tab(1) + "}");
-        }
         
         private static void declareExtraGlobalVariables(ClassAnalyzedModel classAnalyzedModel, TextWriter tw)
         {
@@ -198,14 +135,6 @@ namespace TestFileGenerationApp.Service.CreateFile
             tw.WriteLine(tab(1) + "var deffered;");
             tw.WriteLine(tab(1) + "var cacheFactory;");
         }
-        private static void instantiateExtraGlobalVariables(ClassAnalyzedModel classAnalyzedModel, TextWriter tw)
-        {
-            tw.WriteLine(tab(3) + "_moduleHandlerAggregator = new Mock<ModuleHandlerAggregator>();");
-        }
-        private static void instantiateGivenClassVariable(ClassAnalyzedModel classAnalyzedModel, TextWriter tw)
-        {
-            addEmptyLineInClass(tw);
-            tw.WriteLine(tab(3) + "_" + Char.ToLowerInvariant(classAnalyzedModel.classNameStr[0]) + classAnalyzedModel.classNameStr.Substring(1) + " = new Mock<" + classAnalyzedModel.classNameStr + ">(_moduleHandlerAggregator.Object){ CallBase = true };");
-        }
+        
     }
 }
