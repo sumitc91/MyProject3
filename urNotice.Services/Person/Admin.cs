@@ -272,5 +272,10 @@ namespace urNotice.Services.Person
             IAccountManagement accountManagementModel = AccountManagementFactory.GetAccountManagementInstance(version);
             return accountManagementModel.GetUserAccountVerificationCode(email);
         }
+
+        public ResponseModel<string> GetUserAccountVerificationCode(object email)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

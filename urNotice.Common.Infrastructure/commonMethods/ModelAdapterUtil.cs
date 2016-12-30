@@ -458,5 +458,38 @@ namespace urNotice.Common.Infrastructure.commonMethods
             return companyDesignationInfoVertexModelList;
         }
 
+        public static CompanyWorkgraphyVertexModelResponse GetCompanyWorkgraphyModelResponse(CompanyWorkgraphyVertexModelV1Response getCompanyWorkgraphyInfoResponseDeserialized)
+        {
+            var response = new CompanyWorkgraphyVertexModelResponse();
+            var companyWorkgraphyVertexModel = new CompanyWorkgraphyVertexModel();
+            //companyWorkgraphyVertexModel.count = item.count.ToString();
+            //companyWorkgraphyVertexModel.userCount = item.userCount.ToString();
+            response.results = new List<CompanyWorkgraphyVertexModel>();
+            companyWorkgraphyVertexModel.workgraphyInfo = new List<CompanyWorkgraphyInfoVertexModel>();
+            foreach (var item in getCompanyWorkgraphyInfoResponseDeserialized.result.data)
+            {
+
+                var companyWorkgraphyInfoVertexModel = new CompanyWorkgraphyInfoVertexModel();
+                companyWorkgraphyInfoVertexModel.id = item.workgraphystoryinfo.id.ToString();
+
+                if (item.workgraphystoryinfo.properties.ContainsKey(VertexPropertyEnum.CreatedTime.ToString()))
+                {
+                    companyWorkgraphyInfoVertexModel.CreatedTime = item.workgraphystoryinfo.properties[VertexPropertyEnum.CreatedTime.ToString()][0].value;
+                }
+                if (item.workgraphystoryinfo.properties.ContainsKey(VertexPropertyEnum.Email.ToString()))
+                {
+                    companyWorkgraphyInfoVertexModel.Email = item.workgraphystoryinfo.properties[VertexPropertyEnum.Email.ToString()][0].value;
+                }
+                if (item.workgraphystoryinfo.properties.ContainsKey(VertexPropertyEnum.Heading.ToString()))
+                {
+                    companyWorkgraphyInfoVertexModel.label = item.workgraphystoryinfo.properties[VertexPropertyEnum.Heading.ToString()][0].value;
+                }
+                
+                companyWorkgraphyVertexModel.workgraphyInfo.Add(companyWorkgraphyInfoVertexModel);
+                
+            }
+            response.results.Add(companyWorkgraphyVertexModel);
+            return response;
+        }
     }
 }

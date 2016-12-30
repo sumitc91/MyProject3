@@ -157,11 +157,17 @@ namespace urNotice.Services.GraphDb.GraphDbContract
         public string CompanyWorkgraphyInfo(string companyVertexId, string username, string @from, string to)
         {
             //TODO: Query need to be changed.
-            string gremlinQuery = "g.v(" + companyVertexId + ").transform{[workgraphyInfo:it.out('WorkgraphyStory').order{it.b.CreatedTime <=> it.a.CreatedTime}[" + from + ".." + to + "],count:it.in('Visited').count(),userCount:it.in('Visited').has('Username','" + username + "').count()]}";
+            //string gremlinQuery = "g.v(" + companyVertexId + ").transform{[workgraphyInfo:it.out('WorkgraphyStory').order{it.b.CreatedTime <=> it.a.CreatedTime}[" + from + ".." + to + "],count:it.in('Visited').count(),userCount:it.in('Visited').has('Username','" + username + "').count()]}";
+
+            string gremlinQuery = "g.V(" + companyVertexId + ").as('workgraphyinfo').match(";
+            gremlinQuery += "__.as('workgraphyinfo').out('WorkgraphyStory').order().by('CreatedTime', decr).range(" + from + ", " + to + ").as('workgraphystoryinfo'),";
+            gremlinQuery += "__.as('workgraphyinfo').in('Visited').count().as('count'),";
+            gremlinQuery += "__.as('workgraphyinfo').in('Visited').has('Username', '" + username + "').count().as('userCount')";
+            gremlinQuery += ").select('workgraphyinfo', 'workgraphystoryinfo', 'count', 'userCount')";
             //string gremlinQuery1 = "g.v(" + companyVertexId + ").order{it.b.CreatedTime <=> it.a.CreatedTime}[" + from + ".." + to + "].transform{[workgraphyInfo:it.out('WorkgraphyStory')]}";
 
             IGraphVertexDb graphVertexDb = new GremlinServerGraphVertexDb();
-            string response = graphVertexDb.GetVertexDetail(gremlinQuery, companyVertexId, TitanGraphConfig.Graph, null);
+            string response = graphVertexDb.ExecuteGremlinQuery(gremlinQuery);
 
             return response;
         }

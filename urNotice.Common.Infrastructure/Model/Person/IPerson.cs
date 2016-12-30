@@ -42,7 +42,7 @@ namespace urNotice.Common.Infrastructure.Model.Person
         HashSet<string> SendNotificationToUser(urNoticeSession session, string userWallVertexId, string postVertexId, string commentVertexId, string postPostedByVertexId, string notificationType, List<TaggedVertexIdModel> taggedVertexId);
 
         SolrQueryResults<UnCompanySolr> CompanyDetailsById(string userVertexId, string cid);
-
+        ResponseModel<string> GetUserAccountVerificationCode(object email);
         string GetUserNotification(urNoticeSession session, string from, string to);
         string GetUserFriendRequestNotification(urNoticeSession session, string from, string to);
         string GetUserPost(string userVertexId, string @from, string to, string userEmail);

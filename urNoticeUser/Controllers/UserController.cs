@@ -586,8 +586,10 @@ namespace urNoticeUser.Controllers
                     IGraphDbContract graphDbContractModel = new GremlinServerGraphDbContract();
                     var getCompanyWorkgraphyInfoResponse = graphDbContractModel.CompanyWorkgraphyInfo(vertexId,username, from, to);
                     var getCompanyWorkgraphyInfoResponseDeserialized =
-                        JsonConvert.DeserializeObject<CompanyWorkgraphyVertexModelResponse>(getCompanyWorkgraphyInfoResponse);
-                    return Json(getCompanyWorkgraphyInfoResponseDeserialized, JsonRequestBehavior.AllowGet);
+                        JsonConvert.DeserializeObject<CompanyWorkgraphyVertexModelV1Response>(getCompanyWorkgraphyInfoResponse);
+
+                    CompanyWorkgraphyVertexModelResponse response = ModelAdapterUtil.GetCompanyWorkgraphyModelResponse(getCompanyWorkgraphyInfoResponseDeserialized);
+                    return Json(response, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
